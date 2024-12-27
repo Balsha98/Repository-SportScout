@@ -105,9 +105,9 @@ const warnInputs = function (data, message) {
         if (message === "fail") {
             if (value === "") {
                 $(`#${key}`)?.closest(".div-input-container").addClass("red-container");
-
-                continue;
             }
+
+            continue;
         }
 
         $(`#${key}`)?.closest(".div-input-container").removeClass("red-container");

@@ -24,11 +24,11 @@ if (isset($_COOKIE['new_role_id'])) {
 
 // User data.
 $username = Session::getSessionVar('username');
-$user_data = $db->get_current_user_data($username);
-$role_id = (int) Session::getSessionVar('role_id');
-$role_name = $user_data['role_name'];
-$league_id = (int) $user_data['league_id'];
-$team_id = (int) $user_data['team_id'];
+$userData = $db->get_current_user_data($username);
+$roleID = (int) Session::getSessionVar('role_id');
+$roleName = $userData['role_name'];
+$leagueID = (int) $userData['league_id'];
+$teamID = (int) $userData['team_id'];
 
 // Fetching the head.
 echo Template::generate_page_head($pageData);
@@ -36,7 +36,7 @@ echo Template::generate_page_head($pageData);
     <!-- GRID CONTAINER -->
     <div class="grid-container">
         <?php
-        echo Template::generate_admin_popups($role_id);
+        echo Template::generate_admin_popups($roleID);
         ?>
 
         <!-- POPUP OVERLAY -->
@@ -48,7 +48,7 @@ echo Template::generate_page_head($pageData);
             <nav class="sidebar-nav">
                 <ul class="sidebar-nav-list">
                     <?php
-                    echo Template::generate_admin_links($role_id);
+                    echo Template::generate_admin_links($roleID);
                     ?>
                 </ul>
             </nav>
@@ -74,7 +74,7 @@ echo Template::generate_page_head($pageData);
                     <?php
                     echo Template::generate_none_selected_div($noneSelected);
 
-                    switch ($role_id) {
+                    switch ($roleID) {
                         case 1:
                             $all_users = $db->get_all_users();
                             echo Template::generate_admin_users_data_container($all_users);
@@ -83,42 +83,42 @@ echo Template::generate_page_head($pageData);
                             echo Template::generate_admin_sports_data_container($all_sports);
 
                             $all_leagues = $db->get_all_leagues();
-                            echo Template::generate_admin_leagues_data_container($all_leagues, $role_id);
+                            echo Template::generate_admin_leagues_data_container($all_leagues, $roleID);
 
                             $all_seasons = $db->get_all_seasons();
-                            echo Template::generate_admin_seasons_data_container($all_seasons, $role_id);
+                            echo Template::generate_admin_seasons_data_container($all_seasons, $roleID);
 
                             $all_teams = $db->get_all_teams();
-                            echo Template::generate_admin_teams_data_container($all_teams, $role_id);
+                            echo Template::generate_admin_teams_data_container($all_teams, $roleID);
 
                             $all_positions = $db->get_all_positions();
-                            echo Template::generate_admin_positions_data_container($all_positions, $role_id);
+                            echo Template::generate_admin_positions_data_container($all_positions, $roleID);
                             break;
                         case 2:
-                            $leagues_data = $db->get_league_data_by_league_id($league_id);
-                            echo Template::generate_admin_leagues_data_container($leagues_data, $role_id);
+                            $leagues_data = $db->get_league_data_by_league_id($leagueID);
+                            echo Template::generate_admin_leagues_data_container($leagues_data, $roleID);
 
-                            $seasons_data = $db->get_seasons_by_league_id($league_id);
-                            echo Template::generate_admin_seasons_data_container($seasons_data, $role_id);
+                            $seasons_data = $db->get_seasons_by_league_id($leagueID);
+                            echo Template::generate_admin_seasons_data_container($seasons_data, $roleID);
 
-                            $teams_data = $db->get_teams_by_league_id($league_id);
-                            echo Template::generate_admin_teams_data_container($teams_data, $role_id);
+                            $teams_data = $db->get_teams_by_league_id($leagueID);
+                            echo Template::generate_admin_teams_data_container($teams_data, $roleID);
 
                             if (count($leagues_data) > 0) {
                                 $sport_id = $leagues_data[0]['sport_id'];
                                 $positions_data = $db->get_positions_by_sport_id($sport_id);
-                                echo Template::generate_admin_positions_data_container($positions_data, $role_id);
+                                echo Template::generate_admin_positions_data_container($positions_data, $roleID);
                             }
                             break;
                         case 3:
                         case 4:
-                            $team_data = $db->get_team_data_by_team_id('*', $team_id);
-                            echo Template::generate_admin_teams_data_container($team_data, $role_id);
+                            $team_data = $db->get_team_data_by_team_id('*', $teamID);
+                            echo Template::generate_admin_teams_data_container($team_data, $roleID);
 
                             if (count($team_data) > 0) {
                                 $sport_id = $team_data[0]['sport_id'];
                                 $positions_data = $db->get_positions_by_sport_id($sport_id);
-                                echo Template::generate_admin_positions_data_container($positions_data, $role_id);
+                                echo Template::generate_admin_positions_data_container($positions_data, $roleID);
                             }
                     }
                     ?>
