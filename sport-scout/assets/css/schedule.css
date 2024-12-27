@@ -75,6 +75,10 @@
     width: 75%;
 }
 
+.popup .grid-btn-container {
+    margin-top: 1.2rem;
+}
+
 /* OVERLAY */
 .popup-overlay {
     backdrop-filter: blur(2.4rem);
@@ -200,10 +204,6 @@
     display: grid;
     column-gap: 2.4rem;
     row-gap: 1.2rem;
-}
-
-.grid-btn-container {
-    margin-top: 1.2rem;
 }
 
 .btn-delete:hover {

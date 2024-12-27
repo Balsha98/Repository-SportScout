@@ -1,6 +1,5 @@
 /* DASHBOARD SECTION */
 .grid-layout {
-    position: relative;
     display: grid;
     grid-template-columns: 40fr 60fr;
     grid-template-rows: 15fr 85fr;

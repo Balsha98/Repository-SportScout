@@ -552,8 +552,8 @@ class AdminTemplate
                             <div class='div-multi-input-containers {$span_across}'>
                                 {$submit_btns}
                                 <div class='grid-btn-container'>
-                                    <a class='btn btn-full btn-view' href='team.php?team_id={$team_id}'>View Team</a>
-                                    <a class='btn btn-full btn-view' href='schedule.php?team_id={$team_id}'>View Schedule</a>
+                                    <a class='btn btn-full btn-view' href='/team/{$team_id}'>View Team</a>
+                                    <a class='btn btn-full btn-view' href='/schedule/{$team_id}'>View Schedule</a>
                                 </div>
                             </div>
                         </form>

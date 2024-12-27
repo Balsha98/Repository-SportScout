@@ -13,16 +13,16 @@ if (isset($_COOKIE['new_username'])) {
 
 // User data.
 $username = Session::getSessionVar('username');
-$user_data = $db->get_current_user_data($username);
-$role_id = (int) $user_data['role_id'];
-Session::setSessionVar('role_id', $role_id);
-Cookie::setCookie('role_id', $role_id);
+$userData = $db->get_current_user_data($username);
+$roleID = (int) $userData['role_id'];
+Session::setSessionVar('role_id', $roleID);
+Cookie::setCookie('role_id', $roleID);
 
 // Fetching the head.
 echo Template::generate_page_head($pageData);
 
 // Fetching the navigation.
-echo Template::generate_page_header($pageData['active'], $role_id);
+echo Template::generate_page_header($pageData['active'], $roleID);
 ?>
     <!-- CENTERED CONTAINER -->
     <div class="div-centered-container">
@@ -92,7 +92,7 @@ echo Template::generate_page_header($pageData['active'], $role_id);
                     <h2 class="heading-secondary">Available Pages</h2>
                     <ul class="pages-list">
                         <?php
-                        echo Template::generate_dashboard_links($role_id);
+                        echo Template::generate_dashboard_links($roleID);
                         ?>
                     </ul>
                     <p class="date-text">&nbsp;</p>

@@ -117,7 +117,7 @@
 
 /* SIDEBAR NAV */
 .sidebar-nav {
-    margin: 0 0 auto 2.4rem;
+    margin-bottom: auto;
 }
 
 .sidebar-nav-list {

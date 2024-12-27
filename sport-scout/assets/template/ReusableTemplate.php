@@ -7,7 +7,7 @@ class ReusableTemplate
      * @param mixed $data - assoc. array of data.
      * @return string the message div.
      */
-    static function generate_none_selected_div($data)
+    public static function generate_none_selected_div($data)
     {
         return "
             <div class='div-none-selected-container'>
@@ -25,7 +25,7 @@ class ReusableTemplate
      * @param mixed $text - text to be displayed.
      * @return string the message div.
      */
-    static function generate_none_available_div($text, $target)
+    public static function generate_none_available_div($text, $target)
     {
         return "
             <div class='div-none-available-container'>
@@ -44,7 +44,7 @@ class ReusableTemplate
      * @param mixed $index - popup index.
      * @return string the + button.
      */
-    static function generate_popup_add_btn($index = 0)
+    public static function generate_popup_add_btn($index = 0)
     {
         return "
             <div class='div-btn-add'>
@@ -59,7 +59,7 @@ class ReusableTemplate
      * Display button for showing the popup for editing.
      * @return string the edit button.
      */
-    static function generate_popup_edit_btn()
+    public static function generate_popup_edit_btn()
     {
         return '
             <div class="div-btn-edit">
@@ -74,7 +74,7 @@ class ReusableTemplate
      * Display buttons for submitting the form.
      * @return string the form submission buttons.
      */
-    static function generate_form_submit_btns($target)
+    public static function generate_form_submit_btns($target)
     {
         return "
             <div class='grid-btn-container'>

@@ -1,79 +1,65 @@
 <?php declare(strict_types=1);
 
-// Page data.
-$data = [
-    'active' => 'team',
-    'title' => 'Team'
+$noneSelected = [
+    'section' => $pageData['active'],
+    'message' => 'teams from the <a href="/admin">Admin</a> page'
 ];
-
-$none = [
-    'section' => $data['active'],
-    'message' => 'teams from the <a href="admin.php">Admin</a> page'
-];
-
-// Required classes.
-require_once '../class/Redirect.php';
-require_once '../class/Session.php';
-require_once '../class/Database.php';
-require_once '../class/Template.php';
 
 Session::commence();
-
-if (!Session::is_logged_in()) {
-    Redirect::redirect_to('login');
+if (!Session::isSessionVarSet('login')) {
+    Redirect::toPage('login');
 }
 
 // Check if the username was changed.
 if (isset($_COOKIE['new_username'])) {
-    Session::set_username($_COOKIE['new_username']);
-    Cookie::unset_cookie('new_username');
+    Session::setSessionVar('username', $_COOKIE['new_username']);
+    Cookie::unsetCookie('new_username');
 }
 
 // User data.
-$username = Session::get_username();
-$user_data = $db->get_current_user_data($username);
-$role_id = (int) Session::get_role_id();
+$username = Session::getSessionVar('username');
+$userData = $db->get_current_user_data($username);
+$roleID = (int) Session::getSessionVar('role_id');
 
 // Making sure a team exists,
 // or was selected for viewing.
-$team_name = 'Team';
-$team_id = (int) $user_data['team_id'];
-if ($role_id < 3) {
-    if (isset($_GET['team_id'])) {
-        if (!empty($_GET['team_id'])) {
-            $team_id = (int) $_GET['team_id'];
+$teamName = 'Team';
+$teamID = (int) $userData['team_id'];
+if ($roleID < 3) {
+    if (isset($url[1])) {
+        if (is_numeric($url[1])) {
+            $teamID = (int) $url[1];
         }
     } else if (isset($_COOKIE['view_team_by_id'])) {
-        $team_id = (int) $_COOKIE['view_team_by_id'];
+        $teamID = (int) $_COOKIE['view_team_by_id'];
     }
 }
 
-$league_name = '';
-if ($team_id !== 0) {
-    $team_data = $db->get_team_data_by_team_id('*', $team_id);
+$leagueName = '';
+if ($teamID !== 0) {
+    $teamData = $db->get_team_data_by_team_id('*', $teamID);
 
     // In case the team was deleted.
-    if (count($team_data) > 0) {
-        $team_name = $team_data[0]['team_name'];
-        $league_name = $team_data[0]['league_name'];
+    if (count($teamData) > 0) {
+        $teamName = $teamData[0]['team_name'];
+        $leagueName = $teamData[0]['league_name'];
     } else {
-        $team_id = 0;
+        $teamID = 0;
     }
 }
 
 // Fetching the head.
-echo Template::generate_page_head($data);
+echo Template::generate_page_head($pageData);
 
-if ($role_id !== 5) {
-    if ($team_id !== 0) {
-        echo Template::generate_team_popups($team_data);
+if ($roleID !== 5) {
+    if ($teamID !== 0) {
+        echo Template::generate_team_popups($teamData);
         echo Template::generate_popup_overlay();
     }
 }
 
 // Fetching the navigation.
-echo Template::generate_page_header($data['active'], $role_id);
-
+echo Template::generate_page_header($pageData['active'], $roleID);
 ?>
     <!-- CENTERED CONTAINER -->
     <div class="div-centered-container">
@@ -83,7 +69,7 @@ echo Template::generate_page_header($data['active'], $role_id);
             <div class="div-data-container div-team-info-container">
                 <header class="data-container-header">
                     <ion-icon class="team-icon" name="people-circle-outline"></ion-icon>
-                    <h2 class="heading-secondary"><?php echo $team_name; ?></h2>
+                    <h2 class="heading-secondary"><?php echo $teamName; ?></h2>
                 </header>
             </div>
             <!-- PLAYERS CONTAINER (RIGHT) -->
@@ -93,12 +79,12 @@ echo Template::generate_page_header($data['active'], $role_id);
                     <h2 class="heading-tertiary">Players</h2>
                 </header>
                 <?php
-                    if ($team_id === 0)
-                        echo Template::generate_none_selected_div($none);
-                    else {
-                        $players = $db->get_players_by_team_id($team_id);
-                        echo Template::generate_team_players_data($players, $role_id, $league_name);
-                    }
+                if ($teamID === 0)
+                    echo Template::generate_none_selected_div($noneSelected);
+                else {
+                    $players = $db->get_players_by_team_id($teamID);
+                    echo Template::generate_team_players_data($players, $roleID, $leagueName);
+                }
                 ?>
             </div>
             <!-- STAFF CONTAINER (BOTTOM LEFT) -->
@@ -108,20 +94,22 @@ echo Template::generate_page_header($data['active'], $role_id);
                     <h2 class="heading-tertiary">Staff & Fans</h2>
                 </header>
                 <?php
-                    if ($team_id === 0)
-                        echo Template::generate_none_selected_div($none);
-                    else {
-                        $staff = $db->get_staff_by_team_id($team_id);
-                        echo Template::generate_team_staff_data($staff, $role_id, $league_name);
-                    }
+                if ($teamID === 0)
+                    echo Template::generate_none_selected_div($noneSelected);
+                else {
+                    $staff = $db->get_staff_by_team_id($teamID);
+                    echo Template::generate_team_staff_data($staff, $roleID, $leagueName);
+                }
                 ?>
             </div>
+            <?php if ($teamID !== 0) { ?>
             <div class="div-btn-schedule">
                 <span class="btn-schedule-span">View Schedule</span>
-                <a class="btn-schedule" href="schedule.php?team_id=<?php echo $team_id; ?>">
+                <a class="btn-schedule" href="schedule.php?team_id=<?php echo $teamID; ?>">
                     <ion-icon class="btn-schedule-icon" name="calendar-outline"></ion-icon>
                 </a>
             </div>
+            <?php } ?>
         </main>
     </div>
     

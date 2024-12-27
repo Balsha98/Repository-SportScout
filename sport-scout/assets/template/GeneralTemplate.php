@@ -16,12 +16,12 @@ class GeneralTemplate
                 <head>
                     <meta charset='UTF-8'>
                     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-                    <link rel='icon' href='assets/media/site-icon.ico'>
-                    <link rel='stylesheet' href='assets/css/general.css?ts={$timestamp}'>
-                    <link rel='stylesheet' href='assets/css/{$data['active']}.css?ts={$timestamp}'>
-                    <script src='assets/js/jQuery.js' defer></script>
-                    <script src='assets/js/cookie.js' defer></script>
-                    <script src='assets/js/{$data['active']}.js' defer></script>
+                    <link rel='icon' href='" . SERVER . "/assets/media/site-icon.ico'>
+                    <link rel='stylesheet' href='" . SERVER . "/assets/css/general.css?ts={$timestamp}'>
+                    <link rel='stylesheet' href='" . SERVER . "/assets/css/{$data['active']}.css?ts={$timestamp}'>
+                    <script src='" . SERVER . "/assets/js/jQuery.js' defer></script>
+                    <script src='" . SERVER . "/assets/js/cookie.js' defer></script>
+                    <script src='" . SERVER . "/assets/js/{$data['active']}.js' defer></script>
                     <title>SportScout | {$data['title']}</title>
                 </head>
 
