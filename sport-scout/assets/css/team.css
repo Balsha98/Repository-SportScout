@@ -1,0 +1,405 @@
+/* DASHBOARD SECTION */
+.grid-layout {
+    position: relative;
+    display: grid;
+    grid-template-columns: 40fr 60fr;
+    grid-template-rows: 15fr 85fr;
+    gap: 3.2rem;
+    height: var(--main);
+    padding: 5.6rem 6.4rem;
+}
+
+/* ADD POPUP */
+.popup-add {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3.2rem;
+    width: 50%;
+    padding: 3.2rem 0 4.8rem;
+    background-color: var(--dark-gray);
+    box-shadow: 0 0 6.4rem var(--shadow-lg);
+    border-radius: 1.2rem;
+    transform: translate(-50%, -50%);
+    overflow: hidden;
+    z-index: 3;
+}
+
+/* POPUP-ADD HEADER */
+.popup-add-header {
+    text-align: center;
+}
+
+.popup-add-header h2 {
+    margin-bottom: 0.4rem;
+    /* Breaking the chain. */
+    font-size: 4rem;
+    color: var(--white-gray);
+}
+
+.popup-add-header p {
+    font-size: 1.6rem;
+    color: var(--white-gray);
+}
+
+.popup-add-header span {
+    color: var(--light-gray);
+    font-weight: 600;
+}
+
+/* FORM-ADD NEW */
+.form-add {
+    display: grid;
+    column-gap: 2.4rem;
+    row-gap: 1.2rem;
+    width: 75%;
+}
+
+.grid-btn-container {
+    margin-top: 1.2rem;
+}
+
+/* OVERLAY */
+.popup-overlay {
+    backdrop-filter: blur(2.4rem);
+    z-index: 2;
+}
+
+/* DATA CONTAINER DIVS */
+.div-data-container {
+    position: relative;
+    padding: 3.2rem;
+    background-color: var(--black-gray);
+    border-radius: 1.2rem;
+    transition: box-shadow 0.5s;
+    overflow: hidden;
+}
+
+.div-data-container:not(:first-of-type) {
+    display: flex;
+    flex-direction: column;
+    gap: 2.4rem;
+}
+
+.div-data-container:not(:first-of-type):hover {
+    box-shadow: 0 0.4rem 0.8rem var(--black-gray);
+}
+
+.data-container-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.data-container-header h2::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    /* Breaking the chain. */
+    width: 0.3rem;
+    height: 100%;
+    background-color: currentColor;
+    border-radius: 1.2rem 0 0 1.2rem;
+}
+
+.data-container-header .team-icon {
+    /* Breaking the chain.*/
+    font-size: 4rem;
+    color: var(--white-gray);
+}
+
+.header-tertiary .team-icon {
+    font-size: 3.2rem;
+}
+
+/* SCROLL CONTAINER */
+.div-scroll-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.6rem;
+    height: 100%;
+    border-radius: inherit;
+    overflow-y: scroll;
+}
+
+.div-scroll-container::-webkit-scrollbar {
+    display: none;
+}
+
+/* DIV ROW CONTAINER */
+.div-row-container {
+    display: flex;
+    flex-direction: column;
+    border-radius: inherit;
+}
+
+.row-header-list {
+    display: grid;
+    align-items: center;
+    gap: 4.8rem;
+    font-size: 1.8rem;
+    color: var(--white-gray);
+    background-color: var(--dark-gray);
+    border-radius: inherit;
+    transition: opacity 0.3s;
+    cursor: pointer;
+}
+
+.row-header-list-item {
+    position: relative;
+    padding: 2.4rem 0;
+    border-radius: 1.2rem 0 0 1.2rem;
+    overflow: hidden;
+}
+
+.row-header-list-item:first-child {
+    padding-left: 2.4rem;
+    background-color: var(--light-gray);
+    box-shadow: 0.8rem 0 1.6rem var(--shadow-sm);
+}
+
+.row-header-list-item:first-child::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0.8rem;
+    height: 100%;
+    background-color: var(--white-gray);
+}
+
+.row-header-list-item p {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.row-header-list-item:last-child {
+    justify-self: end;
+    padding-right: 2.4rem;
+}
+
+.open-icon {
+    transition: transform 0.3s;
+}
+
+.rotate {
+    transform: rotate(-180deg);
+}
+
+.row-header-list:hover {
+    opacity: 0.75;
+}
+
+.form-info {
+    position: relative;
+    display: grid;
+    background-color: var(--dark-gray);
+    border-radius: inherit;
+}
+
+.div-multi-input-containers {
+    display: grid;
+    column-gap: 2.4rem;
+    row-gap: 1.2rem;
+}
+
+/* TEAM INFO CONTAINER */
+.div-team-info-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 3.2rem;
+}
+
+/* PLAYERS INFO CONTAINER */
+.div-players-container {
+    grid-column: 2;
+    grid-row: span 2;
+}
+
+.div-players-container .div-none-selected-container,
+.div-players-container .div-none-available-container {
+    gap: 1.6rem;
+}
+
+.div-players-container .none-selected-text h2,
+.div-players-container .none-available-text h2 {
+    font-size: 3.2rem;
+}
+
+.div-players-container .none-selected-text p,
+.div-players-container .none-available-text p {
+    font-size: 1.6rem;
+}
+
+.div-players-container .none-selected-icon,
+.div-players-container .none-available-icon {
+    font-size: 9.8rem;
+}
+
+.players-scroll .div-row-container {
+    gap: 1.6rem;
+}
+
+.players-scroll .row-header-list {
+    font-size: 1.8rem;
+}
+
+.players-scroll .row-header-list-item {
+    padding: 2.4rem;
+}
+
+.players-scroll .row-header-list-item:last-child .open-icon {
+    font-size: 1.6rem;
+}
+
+.players-scroll .form-info {
+    column-gap: 2.4rem;
+    row-gap: 1.2rem;
+    padding: 3.2rem;
+}
+
+.players-scroll .div-multi-input-containers {
+    column-gap: 2.4rem;
+    row-gap: 1.2rem;
+}
+
+.players-scroll label {
+    font-size: 1.4rem;
+}
+
+.players-scroll input {
+    padding: 0.8rem;
+    font-size: 1.6rem;
+}
+
+.players-scroll .grid-btn-container {
+    margin-top: 1.2rem;
+}
+
+/* STAFF INFO CONTAINER */
+.div-staff-container .div-none-selected-container,
+.div-staff-container .div-none-available-container {
+    gap: 1.2rem;
+}
+
+.div-staff-container .none-selected-text h2,
+.div-staff-container .none-available-text h2 {
+    font-size: 2.4rem;
+}
+
+.div-staff-container .none-selected-text p,
+.div-staff-container .none-available-text p {
+    font-size: 1.4rem;
+}
+
+.div-staff-container .none-selected-icon,
+.div-staff-container .none-available-icon {
+    font-size: 8.6rem;
+}
+
+.staff-scroll {
+    gap: 1.2rem;
+}
+
+.staff-scroll .div-row-container {
+    gap: inherit;
+}
+
+.staff-scroll .row-header-list {
+    font-size: 1.4rem;
+}
+
+.staff-scroll .row-header-list-item {
+    /* Breaking the chain. */
+    padding: 2rem;
+}
+
+.staff-scroll .row-header-list-item:last-child .open-icon {
+    font-size: 1.4rem;
+}
+
+.staff-scroll .form-info {
+    column-gap: 1.6rem;
+    row-gap: 0.8rem;
+    padding: 2.4rem;
+}
+
+.staff-scroll .div-multi-input-containers {
+    column-gap: 1.6rem;
+    row-gap: 0.8rem;
+}
+
+.staff-scroll label {
+    font-size: 1.2rem;
+}
+
+.staff-scroll input {
+    /* Breaking the chain. */
+    padding: 0.6rem;
+    font-size: 1.4rem;
+}
+
+.staff-scroll .grid-btn-container {
+    grid-column: 1 / -1;
+    column-gap: 1.6rem;
+    margin-top: 0.8rem;
+}
+
+.staff-scroll .btn {
+    font-size: 1.4rem;
+    padding: 0.8rem;
+}
+
+/* BOTTOM BUTTON SCHEDULE */
+.div-btn-schedule {
+    position: absolute;
+    bottom: 0.8rem;
+    right: 0.8rem;
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    align-items: center;
+    justify-items: center;
+    gap: 0.8rem;
+    transition: opacity 0.5s;
+}
+
+.div-btn-schedule:hover {
+    opacity: 0.75;
+}
+
+.div-btn-schedule:hover .btn-schedule-span {
+    transform: translateY(0);
+}
+
+.btn-schedule-span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 0 2.4rem;
+    font-size: 1.2rem;
+    background-color: var(--white-gray);
+    border-radius: 0.4rem;
+    transform: translateY(200%);
+    transition: transform 0.5s;
+}
+
+.btn-schedule {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.2rem;
+    height: 3.2rem;
+    font-size: 2rem;
+    color: var(--black-gray);
+    background-color: var(--white-gray);
+    border-radius: 0.4rem;
+}

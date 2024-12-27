@@ -1,0 +1,548 @@
+/***** IMPORTS *****/
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+/* 
+// ***** COMMONLY USED VALUES ***** //
+
+Spacing System (px)
+2 / 4 / 8 / 12 / 16 / 24 / 32 / 48 / 64 / 80 / 96 / 128
+
+Font Size System (px)
+10 / 12/ 14 / 16 (DEFAULT) / 18/ 20 / 24 / 30 / 36 / 44 / 52 / 62 / 74 / 86 / 98
+*/
+
+/* ***** VARIABLES ***** */
+:root {
+    --main: 87.5vh;
+    --header: 12.5vh;
+    --white-gray: #f8f9fa;
+    --light-gray: #868e96;
+    --dark-gray: #495057;
+    --black-gray: #212529;
+    --shadow-sm: rgba(0, 0, 0, 0.1);
+    --shadow-md: rgba(0, 0, 0, 0.25);
+    --shadow-lg: rgba(0, 0, 0, 0.5);
+    --red: #c92a2a;
+    --yellow: #e67700;
+    --green: #2b8a3e;
+}
+
+/* ***** GENERAL SELECTORS ***** */
+* {
+    margin: 0;
+    padding: 0;
+    font-family: "Inter", sans-serif;
+    text-decoration: none;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 62.5%;
+}
+
+body {
+    height: 100vh;
+    /* prettier-ignore */
+    background: linear-gradient(
+        to bottom left, var(--light-gray), var(--dark-gray)
+    );
+    overflow: hidden;
+}
+
+ul {
+    list-style: none;
+}
+
+input::placeholder {
+    color: var(--light-gray);
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    background-image: url(../media/input-date-icon.png);
+    background-size: 1.6rem;
+    cursor: pointer;
+}
+
+/* ***** REUSABLE CLASSES ***** */
+/* DISPLAY */
+.hide-element {
+    display: none !important;
+}
+
+/* BORDER */
+.border-white {
+    border: 0.2rem solid var(--white-gray);
+}
+
+/* SHADOW */
+.in-shadow-md {
+    box-shadow: inset 0 0 0 0.2rem var(--white-gray);
+}
+
+.out-shadow-sm {
+    box-shadow: 0 0.4rem 0.8rem var(--black-gray);
+}
+
+/* GRID LAYOUTS */
+.grid-2-columns {
+    grid-template-columns: repeat(2, 1fr) !important;
+}
+
+.custom-2-column-grid {
+    grid-template-columns: 75fr 25fr !important;
+}
+
+.grid-3-columns {
+    grid-template-columns: repeat(3, 1fr) !important;
+}
+
+.custom-3-column-grid {
+    grid-template-columns: 50fr repeat(2, 25fr) !important;
+}
+
+.custom-3-column-grid {
+    grid-template-columns: 50fr repeat(2, 25fr) !important;
+}
+
+.custom-3-column-grid-reverse {
+    grid-template-columns: 20fr repeat(2, 40fr) !important;
+}
+
+.custom-auto-3-column-grid {
+    grid-template-columns: repeat(2, 1fr) auto !important;
+}
+
+.grid-4-columns {
+    grid-template-columns: repeat(4, 1fr) !important;
+}
+
+.custom-4-column-grid {
+    grid-template-columns: 40fr repeat(3, 20fr) !important;
+}
+
+.grid-5-columns {
+    grid-template-columns: repeat(5, 1fr) !important;
+}
+
+/* FLEX LAYOUT */
+.flex-center {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* CENTERED CONTAINER */
+.div-centered-container {
+    max-width: 150rem;
+    max-height: 75rem;
+    margin: 0 auto;
+}
+
+/* PAGE HEADER */
+.page-header {
+    display: flex;
+    align-items: center;
+    height: var(--header);
+    background-color: var(--black-gray);
+}
+
+.page-header .div-centered-container {
+    display: inherit;
+    align-items: inherit;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+    padding: 0 6.4rem;
+}
+
+.div-logo-container {
+    display: flex;
+    align-items: center;
+}
+
+.div-logo-container a:link,
+.div-logo-container a:visited {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.2rem;
+    color: var(--white-gray);
+}
+
+.logo-icon {
+    font-size: 3.2rem;
+}
+
+.div-logo-container h2 {
+    font-size: 2.4rem;
+}
+
+.top-navbar {
+    height: 100%;
+}
+
+.top-navbar-list {
+    display: flex;
+    align-items: center;
+    gap: 6.4rem;
+    height: inherit;
+}
+
+.top-navbar-list-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: inherit;
+    transition: opacity 0.3s;
+}
+
+.top-navbar-list-item::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 0;
+    height: 0.2rem;
+    background-color: var(--white-gray);
+    border-radius: 0 0 0.2rem 0.2rem;
+    transition: all 0.3s;
+}
+
+.active-page {
+    opacity: 0.75;
+}
+
+.active-page::before {
+    width: 100%;
+}
+
+.page-icon-text {
+    position: absolute;
+    /* Breaking the chain. */
+    bottom: -4.6rem;
+    left: 50%;
+    /* Breaking the chain. */
+    width: 8.4rem;
+    padding: 1.2rem 0;
+    font-size: 1.2rem;
+    font-weight: 500;
+    text-align: center;
+    color: var(--white-gray);
+    background-color: var(--black-gray);
+    border-radius: 0.4rem;
+    transform: translate(-50%, 0);
+    transition: all 0.5s;
+    opacity: 0;
+}
+
+.top-navbar-icon {
+    font-size: 2.4rem;
+    color: var(--white-gray);
+}
+
+.top-navbar-list-item:hover {
+    opacity: 0.75;
+}
+
+.top-navbar-list-item:hover::before {
+    left: 0;
+    right: unset;
+    width: 100%;
+}
+
+.top-navbar-list-item:hover .page-icon-text {
+    transform: translate(-50%, 0);
+    opacity: 1;
+}
+
+/* POPUP */
+.popup-btn-close,
+.dropdown-btn-close {
+    position: absolute;
+    top: 1.2rem;
+    right: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.close-icon {
+    font-size: 2.4rem;
+    color: var(--white-gray);
+    transition: opacity 0.3s;
+}
+
+.close-icon:hover {
+    opacity: 0.75;
+}
+
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    backdrop-filter: blur(0.8rem);
+    z-index: 1;
+}
+
+/* HEADINGS */
+.heading-primary,
+.heading-secondary,
+.heading-tertiary {
+    position: relative;
+    color: var(--white-gray);
+}
+
+.heading-secondary,
+.heading-tertiary {
+    padding: 0 1.2rem;
+    font-weight: 500;
+}
+
+.heading-primary {
+    font-size: 8rem;
+}
+
+.heading-secondary {
+    font-size: 2.4rem;
+}
+
+.heading-tertiary {
+    font-size: 2rem;
+}
+
+/* INPUT CONTAINER */
+.div-input-container {
+    position: relative;
+    width: 100%;
+}
+
+.div-input-container::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 0.2rem;
+    background-color: var(--white-gray);
+    border-radius: 1.2rem 1.2rem 0 0;
+}
+
+.red-container::after {
+    background-color: var(--red);
+}
+
+.required-container::before {
+    content: "*";
+    position: absolute;
+    top: -0.4rem;
+    left: -1.2rem;
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: var(--red);
+}
+
+.div-input-container label {
+    display: inline-block;
+    /* Breaking the chain. */
+    margin-bottom: 0.6rem;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--white-gray);
+    cursor: pointer;
+}
+
+.div-input-container input,
+.div-input-container select {
+    outline: none;
+    display: block;
+    width: 100%;
+    padding: 0.8rem;
+    font-size: 1.6rem;
+    color: var(--white-gray);
+    background-color: transparent;
+    border: none;
+    border-radius: 0.4rem;
+}
+
+.div-input-container option {
+    color: var(--black-gray);
+}
+
+.div-input-container select {
+    appearance: none;
+    background-image: url(../media/select-down-icon.png);
+    background-position: 97.5% 50%;
+    background-repeat: no-repeat;
+    background-size: 1.8rem;
+    cursor: pointer;
+}
+
+.grid-btn-container {
+    /* grid-column: 1 / -1; */
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 2.4rem;
+}
+
+.span-across-all {
+    grid-column: 1 / -1;
+}
+
+/* BUTTONS */
+.btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 1.2rem 0;
+    font-size: 1.6rem;
+    text-align: center;
+    color: var(--white-gray);
+    background-color: var(--dark-gray);
+    border: none;
+    border-radius: 0.4rem;
+    transition: all 0.3s;
+    cursor: pointer;
+}
+
+.btn:hover {
+    opacity: 0.75;
+}
+
+.arrow-icon {
+    position: absolute;
+    transition: all 0.3s;
+    opacity: 0;
+}
+
+.btn-full .arrow-icon {
+    right: 1.6rem;
+}
+
+.btn-full:hover {
+    box-shadow: inset 0 0 0 0.2rem var(--white-gray);
+}
+
+.btn-full:hover .arrow-icon {
+    transform: translateX(0.4rem);
+    opacity: 1;
+}
+
+.btn-hollow {
+    background-color: transparent;
+    box-shadow: inset 0 0 0 0.2rem var(--white-gray);
+    opacity: 0.5;
+}
+
+.btn-hollow .arrow-icon {
+    left: 1.6rem;
+}
+
+.btn-hollow:hover {
+    color: var(--black-gray);
+    background-color: var(--white-gray);
+    box-shadow: none;
+    opacity: 1;
+}
+
+.btn-hollow:hover .arrow-icon {
+    transform: translateX(-0.4rem);
+    opacity: 1;
+}
+
+.btn-update,
+.btn-add-new {
+    background-color: var(--black-gray);
+}
+
+.btn-delete:hover {
+    color: var(--white-gray);
+    background-color: var(--red);
+}
+
+/* BOTTOM-LEFT BUTTON ADD (+) */
+.div-btn-add,
+.div-btn-edit {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    color: var(--white-gray);
+    border-radius: 0.2rem;
+    transition: opacity 0.3s;
+}
+
+.btn-add,
+.btn-edit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.4rem;
+    font-size: 2.4rem;
+    color: inherit;
+    background-color: transparent;
+    border: none;
+    border-radius: 0.2rem;
+    transition: all 0.5s;
+    cursor: pointer;
+}
+
+.div-btn-add:hover,
+.div-btn-edit:hover {
+    opacity: 0.75;
+}
+
+/* NONE SELECTED DIV */
+.div-none-selected-container,
+.div-none-available-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.6rem;
+    height: 100%;
+    text-align: center;
+    color: var(--white-gray);
+}
+
+.none-selected-text h2,
+.none-available-text h2 {
+    margin-bottom: 0.4rem;
+    font-size: 3.2rem;
+}
+
+.none-selected-text p,
+.none-available-text p {
+    font-size: 1.6rem;
+}
+
+.none-selected-text a:link,
+.none-selected-text a:visited,
+.none-available-text a:link,
+.none-available-text a:visited {
+    color: var(--light-gray);
+    transition: color 0.3s;
+}
+
+.none-selected-text a:hover,
+.none-selected-text a:active,
+.none-available-text a:hover,
+.none-available-text a:active {
+    color: var(--dark-gray);
+}
+
+.none-selected-text span,
+.none-available-text span {
+    font-weight: 600;
+}
+
+.none-selected-icon,
+.none-available-icon {
+    font-size: 9.8rem;
+}
