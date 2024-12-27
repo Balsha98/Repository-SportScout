@@ -105,7 +105,7 @@ echo Template::generate_page_header($pageData['active'], $roleID);
             <?php if ($teamID !== 0) { ?>
             <div class="div-btn-schedule">
                 <span class="btn-schedule-span">View Schedule</span>
-                <a class="btn-schedule" href="schedule.php?team_id=<?php echo $teamID; ?>">
+                <a class="btn-schedule" href="/schedule/<?php echo $teamID; ?>">
                     <ion-icon class="btn-schedule-icon" name="calendar-outline"></ion-icon>
                 </a>
             </div>

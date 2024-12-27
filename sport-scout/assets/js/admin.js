@@ -52,7 +52,7 @@ const attachAjaxEvent = function (btns, callback) {
 const attachViewBtnEvent = function (btns) {
     btns.each((_, btn) => {
         $(btn).click(function () {
-            setCookie("view_team_by_id", +$(this).attr("href").split("=")[1]);
+            setCookie("view_team_by_id", +$(this).attr("href").split("/")[2]);
         });
     });
 };

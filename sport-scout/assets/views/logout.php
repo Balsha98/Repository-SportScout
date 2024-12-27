@@ -6,7 +6,7 @@ Session::commence();
 Session::logout();
 
 // Let cookies expire.
-Cookie::unset_all();
+Cookie::unsetAllCookies();
 
 // Redirect user to login page.
-Redirect::redirect_to('login');
+Redirect::toPage('login');

@@ -48,7 +48,10 @@ class Router
             $page = $url[0];
         }
 
-        $pageData = self::$validViews[$page];
+        $pageData = [];
+        if (array_key_exists($page, self::$validViews)) {
+            $pageData = self::$validViews[$page];
+        }
 
         ob_start();
 
