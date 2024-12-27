@@ -1,2 +1,2 @@
-# Repository-SportScout
-SportScout - Sports League Managing Website
+# SportScout - Sports League Managing Website
+The README file will soon be updated.
