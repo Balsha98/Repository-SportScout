@@ -13,14 +13,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Verify user credentials.
     if ($db->verify_user($username, $password)) {
-        Session::login(true);
-        Session::set_username($username);
+        Session::setSessionVar('login', true);
+        Session::setSessionVar('username', $username);
 
-        $user_id = $db->get_current_user_data($username)['user_id'];
+        $userID = $db->get_current_user_data($username)['user_id'];
 
         $data = [
             'status' => 'success',
-            'user_id' => $user_id
+            'user_id' => $userID
         ];
     }
 

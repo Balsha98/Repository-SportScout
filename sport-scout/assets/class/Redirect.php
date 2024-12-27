@@ -2,7 +2,7 @@
 
 class Redirect
 {
-    public static function redirect_to($page)
+    public static function toPage($page)
     {
         header("location:{$page}");
     }

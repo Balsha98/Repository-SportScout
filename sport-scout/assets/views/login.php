@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
 Session::commence();
-if (Session::is_logged_in()) {
-    Redirect::redirect_to('dashboard');
+if (Session::isSessionVarSet('login')) {
+    Redirect::toPage('dashboard');
 }
 
 // Fetching the head.

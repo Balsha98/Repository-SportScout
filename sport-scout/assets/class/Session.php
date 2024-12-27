@@ -9,13 +9,6 @@ class Session
         }
     }
 
-    public static function login($value)
-    {
-        if (!isset($_SESSION['login'])) {
-            $_SESSION['login'] = $value;
-        }
-    }
-
     public static function logout()
     {
         foreach ($_SESSION as $key => $value) {
@@ -25,28 +18,18 @@ class Session
         session_destroy();
     }
 
-    public static function is_logged_in()
+    public static function getSessionVar($key)
     {
-        return isset($_SESSION['login']);
+        return $_SESSION[$key];
     }
 
-    public static function get_username()
+    public static function setSessionVar($key, $value)
     {
-        return $_SESSION['username'];
+        $_SESSION[$key] = $value;
     }
 
-    public static function set_username($username)
+    public static function isSessionVarSet($key)
     {
-        $_SESSION['username'] = $username;
-    }
-
-    public static function get_role_id()
-    {
-        return $_SESSION['role_id'];
-    }
-
-    public static function set_role_id($role_id)
-    {
-        $_SESSION['role_id'] = $role_id;
+        return isset($_SESSION[$key]);
     }
 }

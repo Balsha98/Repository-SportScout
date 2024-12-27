@@ -4,12 +4,12 @@ require_once 'Debug.php';
 
 class Sanitize
 {
-    static function strip_string($input)
+    public static function strip_string($input)
     {
         return strip_tags(stripslashes(trim($input)));
     }
 
-    static function is_year_formatted($year)
+    public static function is_year_formatted($year)
     {
         if (str_contains($year, '/')) {
             $array = explode('/', $year);
@@ -31,22 +31,22 @@ class Sanitize
         return false;
     }
 
-    static function is_exactly($input, $limit)
+    public static function is_exactly($input, $limit)
     {
         return (int) strlen($input) === $limit;
     }
 
-    static function is_shorter($input, $limit)
+    public static function is_shorter($input, $limit)
     {
         return (int) strlen($input) <= $limit;
     }
 
-    static function contains($pattern, $input)
+    public static function contains($pattern, $input)
     {
         return (bool) preg_match($pattern, $input);
     }
 
-    static function full_string_search(&$message, &$input, $limit)
+    public static function full_string_search(&$message, &$input, $limit)
     {
         if ($input === '') {
             $message = 'fail';
@@ -78,7 +78,7 @@ class Sanitize
         return false;
     }
 
-    static function full_color_search(&$message, &$colors, $limit)
+    public static function full_color_search(&$message, &$colors, $limit)
     {
         if ($colors === '') {
             $message = 'fail';

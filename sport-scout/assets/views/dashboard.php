@@ -1,22 +1,22 @@
 <?php declare(strict_types=1);
 
 Session::commence();
-if (!Session::is_logged_in()) {
-    Redirect::redirect_to('login');
+if (!Session::isSessionVarSet('login')) {
+    Redirect::toPage('login');
 }
 
 // Check if the username was changed.
 if (isset($_COOKIE['new_username'])) {
-    Session::set_username($_COOKIE['new_username']);
-    Cookie::unset_cookie('new_username');
+    Session::setSessionVar('username', $_COOKIE['new_username']);
+    Cookie::unsetCookie('new_username');
 }
 
 // User data.
-$username = Session::get_username();
+$username = Session::getSessionVar('username');
 $user_data = $db->get_current_user_data($username);
 $role_id = (int) $user_data['role_id'];
-Session::set_role_id($role_id);
-Cookie::set_cookie('role_id', $role_id);
+Session::setSessionVar('role_id', $role_id);
+Cookie::setCookie('role_id', $role_id);
 
 // Fetching the head.
 echo Template::generate_page_head($pageData);
