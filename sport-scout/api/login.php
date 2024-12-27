@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-require_once '../class/Session.php';
-require_once '../class/Database.php';
-require_once '../class/Sanitize.php';
+require_once '../assets/class/Session.php';
+require_once '../assets/class/Database.php';
+require_once '../assets/class/Sanitize.php';
 
 Session::commence();
 

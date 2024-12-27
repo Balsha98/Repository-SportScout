@@ -1,3 +1,4 @@
 <?php
 
-header('location:assets/views/login.php');
+require_once 'assets/class/Router.php';
+echo Router::renderPage($_GET['request'] ?? '/');

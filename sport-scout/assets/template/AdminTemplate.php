@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 
 require_once 'ReusableTemplate.php';
-require_once '../data/AdminData.php';
+require_once 'assets/data/AdminData.php';
 
 class AdminTemplate
 {

@@ -6,15 +6,7 @@ $data = [
     'title' => 'Dashboard'
 ];
 
-// Required classes.
-require_once '../class/Session.php';
-require_once '../class/Cookie.php';
-require_once '../class/Redirect.php';
-require_once '../class/Database.php';
-require_once '../class/Template.php';
-
 Session::commence();
-
 if (!Session::is_logged_in()) {
     Redirect::redirect_to('login');
 }
@@ -74,7 +66,7 @@ echo Template::generate_page_header($data['active'], $role_id);
                     <p>Any <span>sport</span> imaginable.</p>
                 </div>
                 <div class="grid-btn-container">
-                    <a class="btn btn-hollow btn-logout" href="logout.php">
+                    <a class="btn btn-hollow btn-logout" href="/logout">
                         <ion-icon class="arrow-icon" name="arrow-back-outline"></ion-icon>
                         <span>Log Out</span>
                     </a>
@@ -107,7 +99,7 @@ echo Template::generate_page_header($data['active'], $role_id);
                     <h2 class="heading-secondary">Available Pages</h2>
                     <ul class="pages-list">
                         <?php
-                            echo Template::generate_dashboard_links($role_id);
+                        echo Template::generate_dashboard_links($role_id);
                         ?>
                     </ul>
                     <p class="date-text">&nbsp;</p>

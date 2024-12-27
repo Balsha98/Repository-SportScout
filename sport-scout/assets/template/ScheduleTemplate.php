@@ -1,15 +1,13 @@
 <?php declare(strict_types=1);
 
 require_once 'ReusableTemplate.php';
-require_once '../data/ScheduleData.php';
-require_once '../class/Cookie.php';
-require_once '../class/Database.php';
+require_once 'assets/data/ScheduleData.php';
 
 class ScheduleTemplate
 {
     private static Database $db;
 
-    static function set_database($db)
+    public static function set_database($db)
     {
         if (!isset(self::$db)) {
             self::$db = $db;
@@ -34,7 +32,7 @@ class ScheduleTemplate
         ];
     }
 
-    static function generate_popups($team_id)
+    public static function generate_popups($team_id)
     {
         $return = '';
         $team_data = self::$db->get_team_data_by_team_id('*', $team_id);
@@ -58,7 +56,7 @@ class ScheduleTemplate
         return $return;
     }
 
-    static function generate_team_data($data, $role_id)
+    public static function generate_team_data($data, $role_id)
     {
         $return = '';
         ['is_empty' => $is_empty] = self::is_data_available($data);
@@ -149,7 +147,7 @@ class ScheduleTemplate
         }
     }
 
-    static function generate_game($data, $role_id)
+    public static function generate_game($data, $role_id)
     {
         [
             'is_empty' => $is_empty,

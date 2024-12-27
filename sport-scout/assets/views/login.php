@@ -5,10 +5,6 @@ $data = [
     'title' => 'Login'
 ];
 
-require_once '../class/Session.php';
-require_once '../class/Redirect.php';
-require_once '../class/Template.php';
-
 Session::commence();
 if (Session::is_logged_in()) {
     Redirect::redirect_to('dashboard');
@@ -61,7 +57,7 @@ echo Template::generate_page_head($data);
                 </header>
                 <form 
                     class="form form-login" 
-                    action="../api/login.php" 
+                    action="/api/login.php" 
                     method="POST"
                 >
                     <div class="div-inputs">

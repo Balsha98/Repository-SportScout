@@ -1,7 +1,5 @@
 <?php declare(strict_types=1);
 
-require_once '../class/Debug.php';
-
 class Database
 {
     private $db;

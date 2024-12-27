@@ -1,9 +1,5 @@
 <?php
 
-require_once '../class/Session.php';
-require_once '../class/Cookie.php';
-require_once '../class/Redirect.php';
-
 Session::commence();
 
 // Kill session.

@@ -38,6 +38,7 @@ loginBtn.click(function (event) {
         type: form.attr("method"),
         data: form.serialize(),
         success: function (response) {
+            console.log(response);
             const data = JSON.parse(response);
             const message = data["message"];
 
@@ -48,7 +49,7 @@ loginBtn.click(function (event) {
             }
 
             setCookie("user_id", data["user_id"]);
-            window.open("dashboard.php", "_self");
+            window.open("dashboard", "_self");
         },
     });
 });

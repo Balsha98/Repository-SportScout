@@ -3,7 +3,8 @@
 class GeneralData
 {
     // ***** GENERAL PAGE NAV LINKS ***** //
-    const NAV_LINKS = [
+
+    public const NAV_LINKS = [
         'dashboard',
         'team',
         'schedule',

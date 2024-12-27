@@ -1,13 +1,13 @@
 <?php declare(strict_types=1);
 
-require_once '../data/GeneralData.php';
+require_once 'assets/data/GeneralData.php';
 
 class GeneralTemplate
 {
-    static function generate_page_head($data)
+    public static function generate_page_head($data)
     {
         // Timestamp.
-        $ts = time();
+        $timestamp = time();
 
         return "
             <!DOCTYPE html>
@@ -16,12 +16,12 @@ class GeneralTemplate
                 <head>
                     <meta charset='UTF-8'>
                     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-                    <link rel='icon' href='../media/page-icon.ico'>
-                    <link rel='stylesheet' href='../css/general.css?ts={$ts}'>
-                    <link rel='stylesheet' href='../css/{$data['active']}.css?ts={$ts}'>
-                    <script src='../js/jQuery.js?ts={$ts}' defer></script>
-                    <script src='../js/cookie.js?ts={$ts}' defer></script>
-                    <script src='../js/{$data['active']}.js?ts={$ts}' defer></script>
+                    <link rel='icon' href='assets/media/site-icon.ico'>
+                    <link rel='stylesheet' href='assets/css/general.css?ts={$timestamp}'>
+                    <link rel='stylesheet' href='assets/css/{$data['active']}.css?ts={$timestamp}'>
+                    <script src='assets/js/jQuery.js' defer></script>
+                    <script src='assets/js/cookie.js' defer></script>
+                    <script src='assets/js/{$data['active']}.js' defer></script>
                     <title>SportScout | {$data['title']}</title>
                 </head>
 
@@ -29,7 +29,7 @@ class GeneralTemplate
         ";
     }
 
-    static function generate_popup_overlay()
+    public static function generate_popup_overlay()
     {
         return '
             <!-- POPUP OVERLAY -->
@@ -37,7 +37,7 @@ class GeneralTemplate
         ';
     }
 
-    static function generate_page_header($page, $role_id)
+    public static function generate_page_header($page, $role_id)
     {
         $target = '';
         $list_items = '';
@@ -55,7 +55,7 @@ class GeneralTemplate
             $list_items .= "
                 <li class='top-navbar-list-item {$active[$index]}'>
                     <p class='page-icon-text'>{$page_name}</p>
-                    <a href='{$link}.php'>
+                    <a href='/{$link}'>
                         <ion-icon class='top-navbar-icon' name='{$icon}-outline'></ion-icon>
                     </a>
                 </li>
@@ -77,7 +77,7 @@ class GeneralTemplate
                             {$list_items}
                             <li class='top-navbar-list-item'>
                                 <p class='page-icon-text'>Log Out</p>
-                                <a href='logout.php'>
+                                <a href='/logout'>
                                     <ion-icon class='top-navbar-icon' name='log-out-outline'></ion-icon>
                                 </a>
                             </li>
@@ -96,7 +96,7 @@ class GeneralTemplate
         return $result;
     }
 
-    static function generate_dashboard_links($role_id)
+    public static function generate_dashboard_links($role_id)
     {
         $return = '';
         $dashboard_links = GeneralData::NAV_LINKS;
@@ -151,7 +151,7 @@ class GeneralTemplate
      * Display the footer.
      * @return string - page's footer.
      */
-    static function generate_page_footer()
+    public static function generate_page_footer()
     {
         return "
                 <!-- ION-ICONS SCRIPT -->
