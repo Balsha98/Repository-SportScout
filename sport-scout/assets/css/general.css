@@ -13,8 +13,8 @@ Font Size System (px)
 
 /* ***** VARIABLES ***** */
 :root {
-    --main: 87.5vh;
-    --header: 12.5vh;
+    --main: 64rem;
+    --header: 8rem;
     --white-gray: #f8f9fa;
     --light-gray: #868e96;
     --dark-gray: #495057;
@@ -184,7 +184,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .top-navbar-list {
     display: flex;
     align-items: center;
-    gap: 6.4rem;
+    gap: 4.8rem;
     height: inherit;
 }
 

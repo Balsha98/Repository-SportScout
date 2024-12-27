@@ -1,11 +1,5 @@
 <?php declare(strict_types=1);
 
-// Page data.
-$data = [
-    'active' => 'dashboard',
-    'title' => 'Dashboard'
-];
-
 Session::commence();
 if (!Session::is_logged_in()) {
     Redirect::redirect_to('login');
@@ -25,11 +19,10 @@ Session::set_role_id($role_id);
 Cookie::set_cookie('role_id', $role_id);
 
 // Fetching the head.
-echo Template::generate_page_head($data);
+echo Template::generate_page_head($pageData);
 
 // Fetching the navigation.
-echo Template::generate_page_header($data['active'], $role_id);
-
+echo Template::generate_page_header($pageData['active'], $role_id);
 ?>
     <!-- CENTERED CONTAINER -->
     <div class="div-centered-container">

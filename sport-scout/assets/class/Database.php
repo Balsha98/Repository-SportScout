@@ -90,6 +90,11 @@ class Database
     {
         $user = $this->get_current_user_data($username);
 
+        // Guard clause.
+        if (!$user) {
+            return false;
+        }
+
         // Hash pass for search.
         $hashed_password = hash('sha256', $password);
         if ($user['username'] === $username) {

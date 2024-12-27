@@ -38,11 +38,10 @@ loginBtn.click(function (event) {
         type: form.attr("method"),
         data: form.serialize(),
         success: function (response) {
-            console.log(response);
             const data = JSON.parse(response);
-            const message = data["message"];
+            const status = data["status"];
 
-            if (message === "fail") {
+            if (status === "fail") {
                 resetInput(data);
                 togglePopup();
                 return;

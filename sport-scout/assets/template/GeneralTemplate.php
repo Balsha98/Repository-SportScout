@@ -39,7 +39,6 @@ class GeneralTemplate
 
     public static function generate_page_header($page, $role_id)
     {
-        $target = '';
         $list_items = '';
         $active = self::is_page_active($page);
         $header_links = GeneralData::NAV_LINKS;
@@ -67,7 +66,7 @@ class GeneralTemplate
             <header class='page-header'>
                 <div class='div-centered-container'>
                     <div class='div-logo-container'>
-                        <a href='dashboard.php'>
+                        <a href='/dashboard'>
                             <ion-icon class='logo-icon' name='glasses-outline'></ion-icon>
                             <h2>SportScout</h2>
                         </a>
@@ -90,25 +89,24 @@ class GeneralTemplate
 
     private static function is_page_active($curr_page)
     {
-        foreach (GeneralData::NAV_LINKS as $page)
+        foreach (GeneralData::NAV_LINKS as $page) {
             $result[] = $page === $curr_page ? 'active-page' : '';
+        }
 
         return $result;
     }
 
     public static function generate_dashboard_links($role_id)
     {
-        $return = '';
         $dashboard_links = GeneralData::NAV_LINKS;
-
-        // Remove dashboard.
-        array_shift($dashboard_links);
+        array_shift($dashboard_links);  // Remove dashboard.
 
         // Remove admin.
         if ($role_id === 5) {
             array_pop($dashboard_links);
         }
 
+        $return = '';
         foreach ($dashboard_links as $link) {
             $page_name = ucfirst($link);
             $icon = self::get_link_icon($link);
@@ -117,7 +115,7 @@ class GeneralTemplate
                 <li class='pages-list-item'>
                     <div class='div-pages-list-link'>
                         <ion-icon class='pages-icon' name='{$icon}-outline'></ion-icon>
-                        <a class='page-link' href='{$link}.php'>{$page_name}</a>
+                        <a class='page-link' href='/{$link}'>{$page_name}</a>
                     </div>
                     <ion-icon class='caret-right-icon' name='caret-forward-outline'></ion-icon>
                 </li>

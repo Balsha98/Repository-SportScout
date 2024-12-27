@@ -1,17 +1,12 @@
 <?php declare(strict_types=1);
 
-$data = [
-    'active' => 'login',
-    'title' => 'Login'
-];
-
 Session::commence();
 if (Session::is_logged_in()) {
     Redirect::redirect_to('dashboard');
 }
 
 // Fetching the head.
-echo Template::generate_page_head($data);
+echo Template::generate_page_head($pageData);
 ?>
     <div class="grid-container">
         <!-- WARNING POPUP -->
