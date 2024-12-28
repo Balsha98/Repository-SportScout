@@ -13,20 +13,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($clicked === 'ADD_USER') {
         $last_user_id = $db->get_last_user_id()['user_id'];
 
-        $username = Sanitize::strip_string($_POST['new_username']);
-        Sanitize::full_string_search($message, $username, 25);
+        $username = Sanitize::stripString($_POST['new_username']);
+        Sanitize::fullStringSearch($message, $username, 25);
 
-        $password = Sanitize::strip_string($_POST['new_password']);
+        $password = Sanitize::stripString($_POST['new_password']);
         if ($password === '') {
             $message = 'fail';
-        } else if (!Sanitize::is_shorter($password, 64)) {
+        } else if (!Sanitize::isShorter($password, 64)) {
             $message = 'fail';
             $password = '';
         }
 
         $role_id = '';
         $role_name = '';
-        Helper::set_role_id_and_name(
+        Helper::setRoleIdAndName(
             $message,
             $role_id,
             $role_name,
@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $league_name = '';
         $team_id = '';
         $team_name = '';
-        Helper::set_league_and_team_names(
+        Helper::setLeagueAndTeamNames(
             $db,
             $message,
             $league_id,
@@ -68,8 +68,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else if ($clicked === 'ADD_SPORT') {
         $last_sport_id = (int) $db->get_last_sport_id()['sport_id'];
 
-        $sport_name = Sanitize::strip_string($_POST['new_sport_name']);
-        Sanitize::full_string_search($message, $sport_name, 50);
+        $sport_name = Sanitize::stripString($_POST['new_sport_name']);
+        Sanitize::fullStringSearch($message, $sport_name, 50);
 
         $data = [
             'message' => $message,
@@ -84,12 +84,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else if ($clicked === 'ADD_LEAGUE') {
         $last_league_id = $db->get_last_league_id()['league_id'];
 
-        $league_name = Sanitize::strip_string($_POST['new_league_name']);
-        Sanitize::full_string_search($message, $league_name, 50);
+        $league_name = Sanitize::stripString($_POST['new_league_name']);
+        Sanitize::fullStringSearch($message, $league_name, 50);
 
         $sport_id = '';
         $sport_name = '';
-        Helper::set_sport_name(
+        Helper::setSportName(
             $db,
             $message,
             $sport_id,
@@ -115,17 +115,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $season_year = $_POST['new_season_year'];
         if ($season_year === '') {
             $message = 'fail';
-        } else if (!Sanitize::is_exactly($season_year, 7)) {
+        } else if (!Sanitize::isExactly($season_year, 7)) {
             $message = 'fail';
             $season_year = '';
-        } else if (!Sanitize::is_year_formatted($season_year)) {
+        } else if (!Sanitize::isYearFormatted($season_year)) {
             $message = 'fail';
             $season_year = '';
         }
 
         $sport_name = '';
         $sport_id = '';
-        Helper::set_sport_name(
+        Helper::setSportName(
             $db,
             $message,
             $sport_id,
@@ -135,7 +135,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $league_name = '';
         $league_id = '';
-        Helper::set_league_name(
+        Helper::setLeagueName(
             $db,
             $message,
             $sport_id,
@@ -144,10 +144,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'league_id'
         );
 
-        $season_desc = Sanitize::strip_string($_POST['new_season_desc']);
+        $season_desc = Sanitize::stripString($_POST['new_season_desc']);
         if ($season_desc === '') {
             $message = 'fail';
-        } else if (!Sanitize::is_shorter($season_desc, 50)) {
+        } else if (!Sanitize::isShorter($season_desc, 50)) {
             $message = 'fail';
             $season_desc = '';
         }
@@ -170,12 +170,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else if ($clicked === 'ADD_TEAM') {
         $last_team_id = $db->get_last_team_id()['team_id'];
 
-        $team_name = Sanitize::strip_string($_POST['new_team_name']);
-        Sanitize::full_string_search($message, $team_name, 50);
+        $team_name = Sanitize::stripString($_POST['new_team_name']);
+        Sanitize::fullStringSearch($message, $team_name, 50);
 
         $sport_id = '';
         $sport_name = '';
-        Helper::set_sport_name(
+        Helper::setSportName(
             $db,
             $message,
             $sport_id,
@@ -185,7 +185,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $league_id = '';
         $league_name = '';
-        Helper::set_league_name(
+        Helper::setLeagueName(
             $db,
             $message,
             $sport_id,
@@ -196,7 +196,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $season_id = '';
         $season_year = '';
-        Helper::set_season_year(
+        Helper::setSeasonYear(
             $db,
             $message,
             $league_id,
@@ -213,11 +213,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $max_players = '';
         }
 
-        $home_color = Sanitize::strip_string($_POST['new_team_home_color']);
-        Sanitize::full_color_search($message, $home_color, 25);
+        $home_color = Sanitize::stripString($_POST['new_team_home_color']);
+        Sanitize::fullColorSearch($message, $home_color, 25);
 
-        $away_color = Sanitize::strip_string($_POST['new_team_away_color']);
-        Sanitize::full_color_search($message, $away_color, 25);
+        $away_color = Sanitize::stripString($_POST['new_team_away_color']);
+        Sanitize::fullColorSearch($message, $away_color, 25);
 
         $data = [
             'message' => $message,
@@ -241,12 +241,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else if ($clicked === 'ADD_POSITION') {
         $last_position_id = (int) $db->get_last_position_id()['position_id'];
 
-        $position_name = Sanitize::strip_string($_POST['new_position_name']);
-        Sanitize::full_string_search($message, $position_name, 50);
+        $position_name = Sanitize::stripString($_POST['new_position_name']);
+        Sanitize::fullStringSearch($message, $position_name, 50);
 
         $sport_id = '';
         $sport_name = '';
-        Helper::set_sport_name(
+        Helper::setSportName(
             $db,
             $message,
             $sport_id,
@@ -272,12 +272,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($clicked === 'UPDATE_USER') {
         $user_id = (int) $_POST['user_id'];
 
-        $username = Sanitize::strip_string($_POST['username']);
-        Sanitize::full_string_search($message, $username, 25);
+        $username = Sanitize::stripString($_POST['username']);
+        Sanitize::fullStringSearch($message, $username, 25);
 
         $role_id = '';
         $role_name = '';
-        Helper::set_role_id_and_name(
+        Helper::setRoleIdAndName(
             $message,
             $role_id,
             $role_name,
@@ -288,7 +288,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $league_name = '';
         $team_id = '';
         $team_name = '';
-        Helper::set_league_and_team_names(
+        Helper::setLeagueAndTeamNames(
             $db,
             $message,
             $league_id,
@@ -317,8 +317,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else if ($clicked === 'UPDATE_SPORT') {
         $sport_id = (int) $_POST['sport_id'];
 
-        $sport_name = Sanitize::strip_string($_POST['sport_name']);
-        Sanitize::full_string_search($message, $sport_name, 50);
+        $sport_name = Sanitize::stripString($_POST['sport_name']);
+        Sanitize::fullStringSearch($message, $sport_name, 50);
 
         $data = [
             'message' => $message,
@@ -332,12 +332,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else if ($clicked === 'UPDATE_LEAGUE') {
         $league_id = (int) $_POST['league_id'];
 
-        $league_name = Sanitize::strip_string($_POST['league_name']);
-        Sanitize::full_string_search($message, $league_name, 50);
+        $league_name = Sanitize::stripString($_POST['league_name']);
+        Sanitize::fullStringSearch($message, $league_name, 50);
 
         $sport_id = '';
         $sport_name = '';
-        Helper::set_sport_name(
+        Helper::setSportName(
             $db,
             $message,
             $sport_id,
@@ -362,25 +362,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $season_year = $_POST['season_year'];
         if ($season_year === '') {
             $message = 'fail';
-        } else if (!Sanitize::is_exactly($season_year, 7)) {
+        } else if (!Sanitize::isExactly($season_year, 7)) {
             $message = 'fail';
             $season_year = '';
-        } else if (!Sanitize::is_year_formatted($season_year)) {
+        } else if (!Sanitize::isYearFormatted($season_year)) {
             $message = 'fail';
             $season_year = '';
         }
 
-        $season_desc = Sanitize::strip_string($_POST['season_desc']);
+        $season_desc = Sanitize::stripString($_POST['season_desc']);
         if ($season_desc === '') {
             $message = 'fail';
-        } else if (!Sanitize::is_shorter($season_desc, 50)) {
+        } else if (!Sanitize::isShorter($season_desc, 50)) {
             $message = 'fail';
             $season_desc = '';
         }
 
         $sport_id = '';
         $sport_name = '';
-        Helper::set_sport_name(
+        Helper::setSportName(
             $db,
             $message,
             $sport_id,
@@ -390,7 +390,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $league_id = '';
         $league_name = '';
-        Helper::set_league_name(
+        Helper::setLeagueName(
             $db,
             $message,
             $sport_id,
@@ -416,15 +416,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else if ($clicked === 'UPDATE_TEAM') {
         $team_id = (int) $_POST['team_id'];
 
-        $team_name = Sanitize::strip_string($_POST['team_name']);
-        Sanitize::full_string_search($message, $team_name, 50);
+        $team_name = Sanitize::stripString($_POST['team_name']);
+        Sanitize::fullStringSearch($message, $team_name, 50);
 
         // Get sport for validation.
         $sport_id = (int) $_POST['sport_id'];
 
         $league_id = '';
         $league_name = '';
-        Helper::set_league_name(
+        Helper::setLeagueName(
             $db,
             $message,
             $sport_id,
@@ -435,7 +435,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $season_id = '';
         $season_year = '';
-        Helper::set_season_year(
+        Helper::setSeasonYear(
             $db,
             $message,
             $league_id,
@@ -452,11 +452,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $max_players = '';
         }
 
-        $home_color = Sanitize::strip_string($_POST['team_home_color']);
-        Sanitize::full_color_search($message, $home_color, 25);
+        $home_color = Sanitize::stripString($_POST['team_home_color']);
+        Sanitize::fullColorSearch($message, $home_color, 25);
 
-        $away_color = Sanitize::strip_string($_POST['team_away_color']);
-        Sanitize::full_color_search($message, $away_color, 25);
+        $away_color = Sanitize::stripString($_POST['team_away_color']);
+        Sanitize::fullColorSearch($message, $away_color, 25);
 
         $data = [
             'message' => $message,
@@ -477,12 +477,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else if ($clicked === 'UPDATE_POSITION') {
         $position_id = (int) $_POST['position_id'];
 
-        $position_name = Sanitize::strip_string($_POST['position_name']);
-        Sanitize::full_string_search($message, $position_name, 50);
+        $position_name = Sanitize::stripString($_POST['position_name']);
+        Sanitize::fullStringSearch($message, $position_name, 50);
 
         $sport_id = '';
         $sport_name = '';
-        Helper::set_sport_name(
+        Helper::setSportName(
             $db,
             $message,
             $sport_id,

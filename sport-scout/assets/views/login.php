@@ -6,7 +6,7 @@ if (Session::isSessionVarSet('login')) {
 }
 
 // Fetching the head.
-echo Template::generate_page_head($pageData);
+echo Template::generatePageHead($pageData);
 ?>
     <div class="grid-container">
         <!-- WARNING POPUP -->
@@ -94,5 +94,5 @@ echo Template::generate_page_head($pageData);
 
 <?php
 // Fetching the footer.
-echo Template::generate_page_footer();
+echo Template::generatePageFooter();
 ?>

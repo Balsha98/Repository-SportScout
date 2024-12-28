@@ -19,10 +19,10 @@ Session::setSessionVar('role_id', $roleID);
 Cookie::setCookie('role_id', $roleID);
 
 // Fetching the head.
-echo Template::generate_page_head($pageData);
+echo Template::generatePageHead($pageData);
 
 // Fetching the navigation.
-echo Template::generate_page_header($pageData['active'], $roleID);
+echo Template::generatePageHeader($pageData['active'], $roleID);
 ?>
     <!-- CENTERED CONTAINER -->
     <div class="div-centered-container">
@@ -92,7 +92,7 @@ echo Template::generate_page_header($pageData['active'], $roleID);
                     <h2 class="heading-secondary">Available Pages</h2>
                     <ul class="pages-list">
                         <?php
-                        echo Template::generate_dashboard_links($roleID);
+                        echo Template::generateDashboardLinks($roleID);
                         ?>
                     </ul>
                     <p class="date-text">&nbsp;</p>
@@ -106,5 +106,5 @@ echo Template::generate_page_header($pageData['active'], $roleID);
 
 <?php
 // Fetching the footer.
-echo Template::generate_page_footer();
+echo Template::generatePageFooter();
 ?>

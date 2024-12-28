@@ -1,10 +1,5 @@
 <?php declare(strict_types=1);
 
-$noneSelected = [
-    'section' => $pageData['active'],
-    'message' => 'teams from the <a href="/admin">Admin</a> page'
-];
-
 Session::commence();
 if (!Session::isSessionVarSet('login')) {
     Redirect::toPage('login');
@@ -48,18 +43,23 @@ if ($teamID !== 0) {
     }
 }
 
+$noneSelected = [
+    'section' => $pageData['active'],
+    'message' => 'teams from the <a href="/admin">Admin</a> page'
+];
+
 // Fetching the head.
-echo Template::generate_page_head($pageData);
+echo Template::generatePageHead($pageData);
 
 if ($roleID !== 5) {
     if ($teamID !== 0) {
-        echo Template::generate_team_popups($teamData);
-        echo Template::generate_popup_overlay();
+        echo Template::generateTeamPopups($teamData);
+        echo Template::generatePopupOverlay();
     }
 }
 
 // Fetching the navigation.
-echo Template::generate_page_header($pageData['active'], $roleID);
+echo Template::generatePageHeader($pageData['active'], $roleID);
 ?>
     <!-- CENTERED CONTAINER -->
     <div class="div-centered-container">
@@ -80,10 +80,10 @@ echo Template::generate_page_header($pageData['active'], $roleID);
                 </header>
                 <?php
                 if ($teamID === 0)
-                    echo Template::generate_none_selected_div($noneSelected);
+                    echo Template::generateNoneSelectedDiv($noneSelected);
                 else {
                     $players = $db->get_players_by_team_id($teamID);
-                    echo Template::generate_team_players_data($players, $roleID, $leagueName);
+                    echo Template::generateTeamPlayersData($players, $roleID, $leagueName);
                 }
                 ?>
             </div>
@@ -95,10 +95,10 @@ echo Template::generate_page_header($pageData['active'], $roleID);
                 </header>
                 <?php
                 if ($teamID === 0)
-                    echo Template::generate_none_selected_div($noneSelected);
+                    echo Template::generateNoneSelectedDiv($noneSelected);
                 else {
                     $staff = $db->get_staff_by_team_id($teamID);
-                    echo Template::generate_team_staff_data($staff, $roleID, $leagueName);
+                    echo Template::generateTeamStaffData($staff, $roleID, $leagueName);
                 }
                 ?>
             </div>
@@ -115,5 +115,5 @@ echo Template::generate_page_header($pageData['active'], $roleID);
     
 <?php
 // Fetching the footer.
-echo Template::generate_page_footer();
+echo Template::generatePageFooter();
 ?>

@@ -1,10 +1,5 @@
 <?php declare(strict_types=1);
 
-$noneSelected = [
-    'section' => $pageData['active'],
-    'message' => 'teams from the <a href="admin.php">Admin</a> page'
-];
-
 Session::commence();
 if (!Session::isSessionVarSet('login')) {
     Redirect::toPage('login');
@@ -46,18 +41,23 @@ if ($teamID !== 0) {
     }
 }
 
+$noneSelected = [
+    'section' => $pageData['active'],
+    'message' => 'teams from the <a href="admin.php">Admin</a> page'
+];
+
 // Fetching the head.
-echo Template::generate_page_head($pageData);
+echo Template::generatePageHead($pageData);
 
 if ($roleID !== 5) {
     if ($teamID !== 0) {
-        echo Template::generate_schedule_popups($teamID);
-        echo Template::generate_popup_overlay();
+        echo Template::generateSchedulePopups($teamID);
+        echo Template::generatePopupOverlay();
     }
 }
 
 // Fetching the navigation.
-echo Template::generate_page_header($pageData['active'], $roleID);
+echo Template::generatePageHeader($pageData['active'], $roleID);
 ?>
 
     <!-- CENTERED CONTAINER -->
@@ -71,10 +71,10 @@ echo Template::generate_page_header($pageData['active'], $roleID);
                 </header>
                 <?php
                 if ($teamID === 0)
-                    echo Template::generate_none_selected_div($noneSelected);
+                    echo Template::generateNoneSelectedDiv($noneSelected);
                 else {
                     $teamData = $db->get_team_data_by_team_id('*', $teamID);
-                    echo Template::generate_schedule_team_data($teamData, $roleID);
+                    echo Template::generateScheduleTeamData($teamData, $roleID);
                 }
                 ?>
             </div>
@@ -85,10 +85,10 @@ echo Template::generate_page_header($pageData['active'], $roleID);
                 </header>
                 <?php
                 if ($teamID === 0)
-                    echo Template::generate_none_selected_div($noneSelected);
+                    echo Template::generateNoneSelectedDiv($noneSelected);
                 else {
                     $schedule_data = $db->get_schedule_by_team_id($teamID);
-                    echo Template::generate_schedule_game($schedule_data, $roleID);
+                    echo Template::generateScheduleGame($schedule_data, $roleID);
                 }
                 ?>
             </div>
@@ -97,5 +97,5 @@ echo Template::generate_page_header($pageData['active'], $roleID);
 
 <?php
 // Fetching the footer.
-echo Template::generate_page_footer();
+echo Template::generatePageFooter();
 ?>

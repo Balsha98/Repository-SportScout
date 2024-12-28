@@ -17,11 +17,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $league_name = $_POST['league_name'];
         $team_id = $_POST['team_id'];
 
-        $player_first = Sanitize::strip_string($_POST['new_player_first']);
-        Sanitize::full_string_search($message, $player_first, 50);
+        $player_first = Sanitize::stripString($_POST['new_player_first']);
+        Sanitize::fullStringSearch($message, $player_first, 50);
 
-        $player_last = Sanitize::strip_string($_POST['new_player_last']);
-        Sanitize::full_string_search($message, $player_last, 50);
+        $player_last = Sanitize::stripString($_POST['new_player_last']);
+        Sanitize::fullStringSearch($message, $player_last, 50);
 
         $player_dob = $_POST['new_player_dob'];
         if ($player_dob === '') {
@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $position_id = '';
         $position_name = '';
-        Helper::set_position_name(
+        Helper::setPositionName(
             $db,
             $message,
             $sport_id,
@@ -67,13 +67,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else if ($clicked === 'ADD_STAFF') {
         $last_user_id = (int) $db->get_last_user_id()['user_id'];
 
-        $username = Sanitize::strip_string($_POST['new_username']);
-        Sanitize::full_string_search($message, $username, 25);
+        $username = Sanitize::stripString($_POST['new_username']);
+        Sanitize::fullStringSearch($message, $username, 25);
 
-        $password = Sanitize::strip_string($_POST['new_password']);
+        $password = Sanitize::stripString($_POST['new_password']);
         if ($password === '') {
             $message = 'fail';
-        } else if (!Sanitize::is_shorter($password, 64)) {
+        } else if (!Sanitize::isShorter($password, 64)) {
             $message = 'fail';
             $password = '';
         }
@@ -115,11 +115,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $sport_id = (int) $_POST['sport_id'];
         $player_id = (int) $_POST['player_id'];
 
-        $player_first = Sanitize::strip_string($_POST['player_first']);
-        Sanitize::full_string_search($message, $player_first, 50);
+        $player_first = Sanitize::stripString($_POST['player_first']);
+        Sanitize::fullStringSearch($message, $player_first, 50);
 
-        $player_last = Sanitize::strip_string($_POST['player_last']);
-        Sanitize::full_string_search($message, $player_last, 50);
+        $player_last = Sanitize::stripString($_POST['player_last']);
+        Sanitize::fullStringSearch($message, $player_last, 50);
 
         $player_dob = $_POST['player_dob'];
         if ($player_dob === '') {
@@ -128,7 +128,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $position_id = '';
         $position_name = '';
-        Helper::set_position_name(
+        Helper::setPositionName(
             $db,
             $message,
             $sport_id,
@@ -162,8 +162,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else if ($clicked === 'UPDATE_STAFF') {
         $staff_id = (int) $_POST['staff_id'];
 
-        $username = Sanitize::strip_string($_POST['username']);
-        Sanitize::full_string_search($message, $username, 50);
+        $username = Sanitize::stripString($_POST['username']);
+        Sanitize::fullStringSearch($message, $username, 50);
 
         $role_id = '';
         $role_name = '';

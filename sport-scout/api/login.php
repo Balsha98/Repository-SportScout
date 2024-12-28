@@ -7,8 +7,8 @@ require_once '../assets/class/Sanitize.php';
 Session::commence();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = Sanitize::strip_string($_POST['login_username']);
-    $password = Sanitize::strip_string($_POST['login_password']);
+    $username = Sanitize::stripString($_POST['login_username']);
+    $password = Sanitize::stripString($_POST['login_password']);
     $data = ['status' => 'fail'];
 
     // Verify user credentials.

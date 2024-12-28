@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $home_team_id = '';
         $home_team_name = '';
-        Helper::set_team_name(
+        Helper::setTeamName(
             $db,
             $message,
             $home_team_id,
@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $away_team_id = '';
         $away_team_name = '';
-        Helper::set_team_name(
+        Helper::setTeamName(
             $db,
             $message,
             $away_team_id,
@@ -68,13 +68,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (count($season_data) > 0) {
                 $team_data = $db->get_teams_by_season_id($season_id);
                 if (count($team_data) > 0) {
-                    Helper::validate_season(
+                    Helper::validateSeason(
                         $team_data,
                         $message,
                         $home_team_id,
                     );
 
-                    Helper::validate_season(
+                    Helper::validateSeason(
                         $team_data,
                         $message,
                         $away_team_id,
@@ -153,14 +153,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($clicked === 'UPDATE_TEAM') {
         $team_id = (int) $_POST['team_id'];
 
-        $team_name = Sanitize::strip_string($_POST['team_name']);
-        Sanitize::full_string_search($message, $team_name, 50);
+        $team_name = Sanitize::stripString($_POST['team_name']);
+        Sanitize::fullStringSearch($message, $team_name, 50);
 
-        $home_color = Sanitize::strip_string($_POST['home_color']);
-        Sanitize::full_color_search($message, $home_color, 25);
+        $home_color = Sanitize::stripString($_POST['home_color']);
+        Sanitize::fullColorSearch($message, $home_color, 25);
 
-        $away_color = Sanitize::strip_string($_POST['away_color']);
-        Sanitize::full_color_search($message, $away_color, 25);
+        $away_color = Sanitize::stripString($_POST['away_color']);
+        Sanitize::fullColorSearch($message, $away_color, 25);
 
         $data = [
             'message' => $message,
