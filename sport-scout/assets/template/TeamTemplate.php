@@ -26,9 +26,9 @@ class TeamTemplate
     public static function generatePopups($teamData)
     {
         [['sport_id' => $sportID]] = $teamData;
-        $leagueID = $teamData[0]['league_id'];
-        $leagueName = $teamData[0]['league_name'];
-        $teamID = $teamData[0]['team_id'];
+        [['league_id' => $leagueID]] = $teamData;
+        [['league_name' => $leagueName]] = $teamData;
+        [['team_id' => $teamID]] = $teamData;
 
         $return = '';
         foreach (TeamData::POPUPS as $index => $popup) {
@@ -104,7 +104,10 @@ class TeamTemplate
                                 </p>
                             </li>
                         </ul>
-                        <form class='form form-info form-{$playerID} hide-element' action='../process/process-team.php'>
+                        <form 
+                            class='form form-info form-{$playerID} hide-element' 
+                            action='" . SERVER . "/api/team.php'
+                        >
                             <input type='hidden' name='team_id' value='{$teamID}'>
                             <input type='hidden' name='sport_id' value='{$sportID}'>
                             <input type='hidden' name='player_id' value='{$playerID}'>
@@ -212,7 +215,10 @@ class TeamTemplate
                                 </p>
                             </li>
                         </ul>
-                        <form class='form form-info form-{$staffID} hide-element' action='../process/process-team.php'>
+                        <form 
+                            class='form form-info form-{$staffID} hide-element' 
+                            action='" . SERVER . "/api/team.php'
+                        >
                             <input type='hidden' name='staff_id' value='{$staffID}'>
                             <input type='hidden' name='league_id' value='{$leagueID}'>
                             <div class='div-multi-input-containers grid-2-columns'>

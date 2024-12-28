@@ -36,10 +36,10 @@ class ScheduleTemplate
     {
         $teamData = self::$db->get_team_data_by_team_id('*', $teamID);
 
-        $sportName = $teamData[0]['sport_name'];
-        $sportID = $teamData[0]['sport_id'];
-        $leagueName = $teamData[0]['league_name'];
-        $leagueID = $teamData[0]['league_id'];
+        [['sport_name' => $sportName]] = $teamData;
+        [['sport_id' => $sportID]] = $teamData;
+        [['league_name' => $leagueName]] = $teamData;
+        [['league_id' => $leagueID]] = $teamData;
 
         $return = '';
         foreach (ScheduleData::POPUPS as $popup) {
