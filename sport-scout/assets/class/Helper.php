@@ -2,25 +2,25 @@
 
 class Helper
 {
-    static function set_role_id_and_name(&$message, &$role_id, &$role_name, $key)
+    public static function setRoleIdAndName(&$status, &$role_id, &$role_name, $key)
     {
         $role = explode('|', $_POST[$key]);
 
         if (count($role) < 2) {
-            $message = 'fail';
+            $status = 'fail';
         } else {
             $role_id = $role[0];
             $role_name = $role[1];
         }
     }
 
-    static function set_sport_name($db, &$message, &$sport_id, &$sport_name, $key)
+    public static function setSportName($db, &$status, &$sport_id, &$sport_name, $key)
     {
         $sport_id = (int) $_POST[$key];
         if ($sport_id === '') {
-            $message = 'fail';
+            $status = 'fail';
         } else if ($sport_id <= 0) {
-            $message = '';
+            $status = '';
             $sport_id = '';
         } else {
             $sports = $db->get_all_sports();
@@ -37,20 +37,20 @@ class Helper
 
         // If sport does not exist.
         if ($sport_name === '') {
-            $message = 'fail';
+            $status = 'fail';
             $sport_id = '';
         }
     }
 
-    static function set_league_and_team_names($db, &$message, &$league_id, &$league_name, &$team_id, &$team_name, $key1, $key2)
+    public static function setLeagueAndTeamNames($db, &$status, &$league_id, &$league_name, &$team_id, &$team_name, $key1, $key2)
     {
         $league_id = (int) $_POST[$key1];
         if ($league_id === '') {
-            $message = 'fail';
+            $status = 'fail';
         } else if ($league_id === 0) {
             $league_name = 'All';
         } else if ($league_id < 0) {
-            $message = 'fail';
+            $status = 'fail';
             $league_id = '';
         } else {
             $leagues = $db->get_all_leagues();
@@ -66,19 +66,19 @@ class Helper
         }
 
         if ($league_name === '') {
-            $message = 'fail';
+            $status = 'fail';
             $league_id = '';
         }
 
         $team_id = (int) $_POST[$key2];
         if ($team_id === '') {
-            $message = 'fail';
+            $status = 'fail';
         } else if ($league_id === 0 && $team_id === 0) {
             $team_name = 'All';
         } else if ($league_id !== '' && $league_id >= 0 && $team_id === 0) {
             $team_name = "All Within The {$league_name}";
         } else if ($team_id < 0) {
-            $message = 'fail';
+            $status = 'fail';
             $team_id = '';
         } else {
             $teams = $db->get_teams_by_league_id($league_id);
@@ -94,18 +94,18 @@ class Helper
         }
 
         if ($team_name === '') {
-            $message = 'fail';
+            $status = 'fail';
             $team_id = '';
         }
     }
 
-    static function set_league_name($db, &$message, &$sport_id, &$league_id, &$league_name, $key)
+    public static function setLeagueName($db, &$status, &$sport_id, &$league_id, &$league_name, $key)
     {
         $league_id = (int) $_POST[$key];
         if ($league_id === '') {
-            $message = 'fail';
+            $status = 'fail';
         } else if ($league_id <= 0) {
-            $message = 'fail';
+            $status = 'fail';
             $league_id = '';
         } else if ($sport_id > 0) {
             $leagues = $db->get_leagues_by_sport_id($sport_id);
@@ -122,18 +122,18 @@ class Helper
 
         // If sport does not exist.
         if ($league_name === '') {
-            $message = 'fail';
+            $status = 'fail';
             $league_id = '';
         }
     }
 
-    static function set_team_name($db, &$message, &$team_id, &$team_name, $key)
+    public static function setTeamName($db, &$status, &$team_id, &$team_name, $key)
     {
         $team_id = (int) $_POST[$key];
         if ($team_id === '') {
-            $message = 'fail';
+            $status = 'fail';
         } else if ($team_id <= 0) {
-            $message = 'fail';
+            $status = 'fail';
             $team_id = '';
         } else {
             $team_data = $db->get_team_data_by_team_id('team_name', $team_id);
@@ -144,12 +144,12 @@ class Helper
         }
 
         if ($team_name === '') {
-            $message = 'fail';
+            $status = 'fail';
             $team_id = '';
         }
     }
 
-    static function validate_season($team_data, &$message, &$team_id)
+    public static function validateSeason($team_data, &$status, &$team_id)
     {
         $is_valid = false;
         foreach ($team_data as $team) {
@@ -160,18 +160,18 @@ class Helper
         }
 
         if (!$is_valid) {
-            $message = 'fail';
+            $status = 'fail';
             $team_id = '';
         }
     }
 
-    static function set_season_year($db, &$message, &$league_id, &$season_id, &$season_year, $key)
+    public static function setSeasonYear($db, &$status, &$league_id, &$season_id, &$season_year, $key)
     {
         $season_id = (int) $_POST[$key];
         if ($season_id === '') {
-            $message = 'fail';
+            $status = 'fail';
         } else if ($season_id <= 0) {
-            $message = 'fail';
+            $status = 'fail';
             $season_id = '';
         } else if ($season_id > 0) {
             $seasons = $db->get_seasons_by_league_id($league_id);
@@ -188,18 +188,18 @@ class Helper
 
         // If sport does not exist.
         if ($season_year === '') {
-            $message = 'fail';
+            $status = 'fail';
             $season_id = '';
         }
     }
 
-    static function set_position_name($db, &$message, &$sport_id, &$position_id, &$position_name, $key)
+    public static function setPositionName($db, &$status, &$sport_id, &$position_id, &$position_name, $key)
     {
         $position_id = (int) $_POST[$key];
         if ($position_id === '') {
-            $message = 'fail';
+            $status = 'fail';
         } else if ($position_id <= 0) {
-            $message = 'fail';
+            $status = 'fail';
             $position_id = '';
         } else {
             $positions = $db->get_positions_by_sport_id($sport_id);
@@ -215,7 +215,7 @@ class Helper
         }
 
         if ($position_name === '') {
-            $message = 'fail';
+            $status = 'fail';
             $position_id = '';
         }
     }

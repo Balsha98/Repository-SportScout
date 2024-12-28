@@ -4,12 +4,12 @@ require_once 'Debug.php';
 
 class Sanitize
 {
-    public static function strip_string($input)
+    public static function stripString($input)
     {
         return strip_tags(stripslashes(trim($input)));
     }
 
-    public static function is_year_formatted($year)
+    public static function isYearFormatted($year)
     {
         if (str_contains($year, '/')) {
             $array = explode('/', $year);
@@ -31,12 +31,12 @@ class Sanitize
         return false;
     }
 
-    public static function is_exactly($input, $limit)
+    public static function isExactly($input, $limit)
     {
         return (int) strlen($input) === $limit;
     }
 
-    public static function is_shorter($input, $limit)
+    public static function isShorter($input, $limit)
     {
         return (int) strlen($input) <= $limit;
     }
@@ -46,20 +46,20 @@ class Sanitize
         return (bool) preg_match($pattern, $input);
     }
 
-    public static function full_string_search(&$message, &$input, $limit)
+    public static function fullStringSearch(&$status, &$input, $limit)
     {
         if ($input === '') {
-            $message = 'fail';
-        } else if (!self::is_shorter($input, $limit)) {
-            $message = 'fail';
+            $status = 'fail';
+        } else if (!self::isShorter($input, $limit)) {
+            $status = 'fail';
             $input = '';
         } else if (self::contains('/[^a-zA-Z]/', $input)) {
-            $message = 'fail';
+            $status = 'fail';
             $input = '';
         }
     }
 
-    private static function are_colors_formatted($colors)
+    private static function areColorsFormatted($colors)
     {
         if (str_contains($colors, '/')) {
             $array = explode('/', $colors);
@@ -78,15 +78,15 @@ class Sanitize
         return false;
     }
 
-    public static function full_color_search(&$message, &$colors, $limit)
+    public static function fullColorSearch(&$status, &$colors, $limit)
     {
         if ($colors === '') {
-            $message = 'fail';
-        } else if (!self::is_shorter($colors, $limit)) {
-            $message = 'fail';
+            $status = 'fail';
+        } else if (!self::isShorter($colors, $limit)) {
+            $status = 'fail';
             $colors = '';
-        } else if (!self::are_colors_formatted($colors)) {
-            $message = 'fail';
+        } else if (!self::areColorsFormatted($colors)) {
+            $status = 'fail';
             $colors = '';
         }
     }

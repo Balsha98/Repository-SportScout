@@ -313,8 +313,8 @@ CREATE TABLE users(
 );
 
 INSERT INTO users VALUES
-(1, 1, "Balsha", "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918", 0, 0);
+(1, 1, "Admin", "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918", 0, 0);
 
 -- SELECT * FROM users;
 
-SHOW TABLES;
+-- SHOW TABLES;

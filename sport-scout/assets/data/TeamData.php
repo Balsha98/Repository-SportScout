@@ -3,14 +3,15 @@
 class TeamData
 {
     // ***** TEAM PAGE STAFF SELECT OPTIONS ***** //
-    const STAFF_SELECT_OPTIONS = [
+
+    public const STAFF_SELECT_OPTIONS = [
         'Team Manager' => '3|Team Manager',
         'Team Coach' => '4|Team Coach',
         'Fan' => '5|Fan',
     ];
 
     // ***** TEAM PAGE POPUPS ***** //
-    const POPUPS = [
+    public const POPUPS = [
         '
             <!-- NEW PLAYER POPUP -->
             <div class="popup-add popup-show popup-player hide-element" data-popup-index="1">

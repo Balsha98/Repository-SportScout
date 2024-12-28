@@ -4,7 +4,7 @@ require_once 'assets/data/GeneralData.php';
 
 class GeneralTemplate
 {
-    public static function generate_page_head($data)
+    public static function generatePageHead($data)
     {
         // Timestamp.
         $timestamp = time();
@@ -29,7 +29,7 @@ class GeneralTemplate
         ";
     }
 
-    public static function generate_popup_overlay()
+    public static function generatePopupOverlay()
     {
         return '
             <!-- POPUP OVERLAY -->
@@ -37,10 +37,10 @@ class GeneralTemplate
         ';
     }
 
-    public static function generate_page_header($page, $role_id)
+    public static function generatePageHeader($page, $role_id)
     {
         $list_items = '';
-        $active = self::is_page_active($page);
+        $active = self::isPageActive($page);
         $header_links = GeneralData::NAV_LINKS;
 
         if ($role_id === 5) {
@@ -49,7 +49,7 @@ class GeneralTemplate
 
         foreach ($header_links as $index => $link) {
             $page_name = ucfirst($link);
-            $icon = self::get_link_icon($link);
+            $icon = self::getLinkIcon($link);
 
             $list_items .= "
                 <li class='top-navbar-list-item {$active[$index]}'>
@@ -87,7 +87,7 @@ class GeneralTemplate
         ";
     }
 
-    private static function is_page_active($curr_page)
+    private static function isPageActive($curr_page)
     {
         foreach (GeneralData::NAV_LINKS as $page) {
             $result[] = $page === $curr_page ? 'active-page' : '';
@@ -96,7 +96,7 @@ class GeneralTemplate
         return $result;
     }
 
-    public static function generate_dashboard_links($role_id)
+    public static function generateDashboardLinks($role_id)
     {
         $dashboard_links = GeneralData::NAV_LINKS;
         array_shift($dashboard_links);  // Remove dashboard.
@@ -109,7 +109,7 @@ class GeneralTemplate
         $return = '';
         foreach ($dashboard_links as $link) {
             $page_name = ucfirst($link);
-            $icon = self::get_link_icon($link);
+            $icon = self::getLinkIcon($link);
 
             $return .= "
                 <li class='pages-list-item'>
@@ -125,7 +125,7 @@ class GeneralTemplate
         return $return;
     }
 
-    private static function get_link_icon($link)
+    private static function getLinkIcon($link)
     {
         $icon = '';
         switch ($link) {
@@ -149,7 +149,7 @@ class GeneralTemplate
      * Display the footer.
      * @return string - page's footer.
      */
-    public static function generate_page_footer()
+    public static function generatePageFooter()
     {
         return "
                 <!-- ION-ICONS SCRIPT -->

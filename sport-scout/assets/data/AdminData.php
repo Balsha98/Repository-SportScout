@@ -3,7 +3,8 @@
 class AdminData
 {
     // ***** ADMIN PAGE USER SELECT OPTIONS ***** //
-    const USER_SELECT_OPTIONS = [
+
+    public const USER_SELECT_OPTIONS = [
         'Administrator' => '1|Administrator',
         'League Manager' => '2|League Manager',
         'Team Manager' => '3|Team Manager',
@@ -12,7 +13,7 @@ class AdminData
     ];
 
     // ***** ADMIN PAGE SIDEBAR LINKS ***** //
-    const SIDEBAR_LINKS = [
+    public const SIDEBAR_LINKS = [
         [
             'container' => 1,
             'name' => 'Users',
@@ -46,7 +47,7 @@ class AdminData
     ];
 
     // ***** ADMIN PAGE POPUPS ***** //
-    const POPUPS = [
+    public const POPUPS = [
         '
             <!-- ADD NEW USER POPUP -->
             <div class="popup-add popup-show popup-user hide-element" data-popup-index="1">

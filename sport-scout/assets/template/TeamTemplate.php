@@ -5,7 +5,7 @@ require_once 'assets/data/TeamData.php';
 
 class TeamTemplate
 {
-    private static function is_data_available($data)
+    private static function isDataAvailable($data)
     {
         $empty_counter = 0;
         foreach ($data as $array) {
@@ -23,7 +23,7 @@ class TeamTemplate
         ];
     }
 
-    static function generate_popups($team_data)
+    public static function generatePopups($team_data)
     {
         $return = '';
 
@@ -55,19 +55,19 @@ class TeamTemplate
         return $return;
     }
 
-    static function generate_players_data($data, $role_id, $league_name)
+    public static function generatePlayersData($data, $role_id, $league_name)
     {
         [
             'is_empty' => $is_empty,
             'css_rule' => $rule_flex_center
-        ] = self::is_data_available($data);
+        ] = self::isDataAvailable($data);
 
         $scroll_container = "
             <div class='div-scroll-container players-scroll {$rule_flex_center}'>
         ";
 
         if ($is_empty) {
-            $scroll_container .= ReusableTemplate::generate_none_available_div('player', 'team');;
+            $scroll_container .= ReusableTemplate::generateNoneAvailableDiv('player', 'team');;
         } else {
             foreach ($data as $player) {
                 $player_id = $player['player_id'];
@@ -83,7 +83,7 @@ class TeamTemplate
 
                 $submit_btns = '';
                 if ($role_id !== 5) {
-                    $submit_btns = ReusableTemplate::generate_form_submit_btns('PLAYER');
+                    $submit_btns = ReusableTemplate::generateFormSubmitBtns('PLAYER');
                 }
 
                 // Prevent the fan from changing input data.
@@ -148,7 +148,7 @@ class TeamTemplate
 
         $add_btn = '';
         if ($role_id !== 5) {
-            $add_btn = ReusableTemplate::generate_popup_add_btn(1);
+            $add_btn = ReusableTemplate::generatePopupAddBtn(1);
         }
 
         $scroll_container .= "
@@ -159,19 +159,19 @@ class TeamTemplate
         return $scroll_container;
     }
 
-    static function generate_staff_data($data, $role_id, $league_name)
+    public static function generateStaffData($data, $role_id, $league_name)
     {
         [
             'is_empty' => $is_empty,
             'css_rule' => $rule_flex_center
-        ] = self::is_data_available($data);
+        ] = self::isDataAvailable($data);
 
         $scroll_container = "
             <div class='div-scroll-container staff-scroll {$rule_flex_center}'>
         ";
 
         if ($is_empty) {
-            $scroll_container .= ReusableTemplate::generate_none_available_div('member', 'team');
+            $scroll_container .= ReusableTemplate::generateNoneAvailableDiv('member', 'team');
         } else {
             foreach ($data as $staff) {
                 // Related staff staff.
@@ -191,7 +191,7 @@ class TeamTemplate
 
                 $submit_btns = '';
                 if ($role_id !== 5) {
-                    $submit_btns = ReusableTemplate::generate_form_submit_btns('STAFF');
+                    $submit_btns = ReusableTemplate::generateFormSubmitBtns('STAFF');
                 }
 
                 // Prevent the fan from changing input data.
@@ -249,7 +249,7 @@ class TeamTemplate
 
         $add_btn = '';
         if ($role_id !== 5) {
-            $add_btn = ReusableTemplate::generate_popup_add_btn(2);
+            $add_btn = ReusableTemplate::generatePopupAddBtn(2);
         }
 
         $scroll_container .= "

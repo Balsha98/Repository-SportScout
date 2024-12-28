@@ -2,7 +2,7 @@
 
 class ScheduleData
 {
-    const POPUPS = [
+    public const POPUPS = [
         '
             <!-- NEW GAME POPUP -->
             <div class="popup popup-add hide-element">

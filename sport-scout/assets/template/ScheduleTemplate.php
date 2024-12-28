@@ -7,14 +7,14 @@ class ScheduleTemplate
 {
     private static Database $db;
 
-    public static function set_database($db)
+    public static function setDatabase($db)
     {
         if (!isset(self::$db)) {
             self::$db = $db;
         }
     }
 
-    private static function is_data_available($data)
+    private static function isDataAvailable($data)
     {
         $empty_counter = 0;
         foreach ($data as $array) {
@@ -32,7 +32,7 @@ class ScheduleTemplate
         ];
     }
 
-    public static function generate_popups($team_id)
+    public static function generatePopups($team_id)
     {
         $return = '';
         $team_data = self::$db->get_team_data_by_team_id('*', $team_id);
@@ -56,13 +56,13 @@ class ScheduleTemplate
         return $return;
     }
 
-    public static function generate_team_data($data, $role_id)
+    public static function generateTeamData($data, $role_id)
     {
         $return = '';
-        ['is_empty' => $is_empty] = self::is_data_available($data);
+        ['is_empty' => $is_empty] = self::isDataAvailable($data);
 
         if ($is_empty) {
-            return ReusableTemplate::generate_none_available_div('team', 'list');
+            return ReusableTemplate::generateNoneAvailableDiv('team', 'list');
         } else {
             foreach ($data as $team) {
                 $team_id = $team['team_id'];
@@ -79,7 +79,7 @@ class ScheduleTemplate
                 // Submit buttons.
                 $submit_btns = '';
                 if ($role_id !== 5) {
-                    $submit_btns = ReusableTemplate::generate_form_submit_btns('TEAM');
+                    $submit_btns = ReusableTemplate::generateFormSubmitBtns('TEAM');
                 }
 
                 // Prevent the fan from changing input data.
@@ -147,24 +147,24 @@ class ScheduleTemplate
         }
     }
 
-    public static function generate_game($data, $role_id)
+    public static function generateGame($data, $role_id)
     {
         [
             'is_empty' => $is_empty,
             'css_rule' => $rule_flex_center
-        ] = self::is_data_available($data);
+        ] = self::isDataAvailable($data);
 
         $scroll_container = "
             <div class='div-scroll-container grid-2-columns {$rule_flex_center}'>
         ";
 
         if ($is_empty) {
-            $scroll_container .= ReusableTemplate::generate_none_available_div('game', 'schedule');
+            $scroll_container .= ReusableTemplate::generateNoneAvailableDiv('game', 'schedule');
         } else {
             $total_inner_arrays = 0;
             $empty_inner_counter = 0;
             foreach ($data as $array) {
-                ['is_empty' => $is_empty] = self::is_data_available($array);
+                ['is_empty' => $is_empty] = self::isDataAvailable($array);
 
                 if ($is_empty) {
                     $empty_inner_counter++;
@@ -206,7 +206,7 @@ class ScheduleTemplate
                         // Button edit.
                         $edit_btn = '';
                         if ($role_id !== 5) {
-                            $edit_btn = ReusableTemplate::generate_popup_edit_btn();
+                            $edit_btn = ReusableTemplate::generatePopupEditBtn();
                         }
 
                         $scroll_container .= "
@@ -248,14 +248,14 @@ class ScheduleTemplate
             }
 
             if ($total_inner_arrays === $empty_inner_counter) {
-                $scroll_container = ReusableTemplate::generate_none_available_div('game', 'schedule');
+                $scroll_container = ReusableTemplate::generateNoneAvailableDiv('game', 'schedule');
             }
         }
 
         // Button add.
         $add_btn = '';
         if ($role_id <= 2) {
-            $add_btn = ReusableTemplate::generate_popup_add_btn();
+            $add_btn = ReusableTemplate::generatePopupAddBtn();
         }
 
         $scroll_container .= "
@@ -267,4 +267,4 @@ class ScheduleTemplate
     }
 }
 
-ScheduleTemplate::set_database($db);
+ScheduleTemplate::setDatabase($db);

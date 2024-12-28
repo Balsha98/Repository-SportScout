@@ -5,7 +5,7 @@ require_once 'assets/data/AdminData.php';
 
 class AdminTemplate
 {
-    private static function is_data_available($data)
+    private static function isDataAvailable($data)
     {
         $empty_counter = 0;
         foreach ($data as $array) {
@@ -23,24 +23,24 @@ class AdminTemplate
         ];
     }
 
-    static function generate_popups($role_id)
+    static function generatePopups($role_id)
     {
-        $return = '';
-
-        $needed_index = self::get_array_index_by_role_id($role_id);
+        $needed_index = self::getArrayIndexByRoleId($role_id);
         $related_popups = array_slice(AdminData::POPUPS, $needed_index);
 
-        foreach ($related_popups as $popup)
+        $return = '';
+        foreach ($related_popups as $popup) {
             $return .= sprintf($popup);
+        }
 
         return $return;
     }
 
-    static function generate_links($role_id)
+    static function generateLinks($role_id)
     {
         $return = '';
 
-        $needed_index = self::get_array_index_by_role_id($role_id);
+        $needed_index = self::getArrayIndexByRoleId($role_id);
         $sidebar_links = array_slice(AdminData::SIDEBAR_LINKS, $needed_index);
 
         foreach ($sidebar_links as $array)
@@ -64,7 +64,7 @@ class AdminTemplate
      * @param mixed $role-id - user's role id.
      * @return mixed the right array index.
      */
-    static function get_array_index_by_role_id($role_id)
+    static function getArrayIndexByRoleId($role_id)
     {
         $needed_index = 0;
         switch ($role_id) {
@@ -82,12 +82,12 @@ class AdminTemplate
         return $needed_index;
     }
 
-    static function generate_users_data_container($data)
+    static function generateUsersDataContainer($data)
     {
         [
             'is_empty' => $is_empty,
             'css_rule' => $rule_flex_center
-        ] = self::is_data_available($data);
+        ] = self::isDataAvailable($data);
 
         $data_container = "
             <div class='div-data-container hide-element' data-container-index='1'>
@@ -101,7 +101,7 @@ class AdminTemplate
         ";
 
         if ($is_empty) {
-            $data_container .= ReusableTemplate::generate_none_available_div('user', 'list');
+            $data_container .= ReusableTemplate::generateNoneAvailableDiv('user', 'list');
         } else {
             foreach ($data as $user) {
                 $user_id = $user['user_id'];
@@ -120,7 +120,7 @@ class AdminTemplate
                     $options .= "<option value='{$value}' {$selected}>{$key}</option>";
                 }
 
-                $submit_btns = ReusableTemplate::generate_form_submit_btns('USER');
+                $submit_btns = ReusableTemplate::generateFormSubmitBtns('USER');
 
                 $data_container .= "
                     <div class='div-row-container user-row-container-{$user_id}' data-row-id='{$user_id}'>
@@ -180,7 +180,7 @@ class AdminTemplate
             }
         }
 
-        $add_btn = ReusableTemplate::generate_popup_add_btn(1);
+        $add_btn = ReusableTemplate::generatePopupAddBtn(1);
 
         $data_container .= "
                 </div>
@@ -191,12 +191,12 @@ class AdminTemplate
         return $data_container;
     }
 
-    static function generate_sports_data_container($data)
+    static function generateSportsDataContainer($data)
     {
         [
             'is_empty' => $is_empty,
             'css_rule' => $rule_flex_center
-        ] = self::is_data_available($data);
+        ] = self::isDataAvailable($data);
 
         $data_container = "
             <div class='div-data-container hide-element' data-container-index='2'>
@@ -209,13 +209,13 @@ class AdminTemplate
         ";
 
         if ($is_empty) {
-            $data_container .= ReusableTemplate::generate_none_available_div('sport', 'list');
+            $data_container .= ReusableTemplate::generateNoneAvailableDiv('sport', 'list');
         } else {
             foreach ($data as $sport) {
                 $sport_id = $sport['sport_id'];
                 $sport_name = $sport['sport_name'];
 
-                $submit_btns = ReusableTemplate::generate_form_submit_btns('SPORT');
+                $submit_btns = ReusableTemplate::generateFormSubmitBtns('SPORT');
 
                 $data_container .= "
                     <div class='div-row-container sport-row-container-{$sport_id}' data-row-id='{$sport_id}'>
@@ -250,7 +250,7 @@ class AdminTemplate
             }
         }
 
-        $add_btn = ReusableTemplate::generate_popup_add_btn(2);
+        $add_btn = ReusableTemplate::generatePopupAddBtn(2);
 
         $data_container .= "
                 </div>
@@ -261,12 +261,12 @@ class AdminTemplate
         return $data_container;
     }
 
-    static function generate_leagues_data_container($data, $role_id)
+    static function generateLeaguesDataContainer($data, $role_id)
     {
         [
             'is_empty' => $is_empty,
             'css_rule' => $rule_flex_center
-        ] = self::is_data_available($data);
+        ] = self::isDataAvailable($data);
 
         $data_container = "
             <div class='div-data-container hide-element' data-container-index='3'>
@@ -279,7 +279,7 @@ class AdminTemplate
         ";
 
         if ($is_empty) {
-            $data_container .= ReusableTemplate::generate_none_available_div('league', 'list');;
+            $data_container .= ReusableTemplate::generateNoneAvailableDiv('league', 'list');;
         } else {
             foreach ($data as $league) {
                 $league_id = $league['league_id'];
@@ -287,7 +287,7 @@ class AdminTemplate
                 $sport_id = $league['sport_id'];
                 $sport_name = $league['sport_name'];
 
-                $submit_btns = ReusableTemplate::generate_form_submit_btns('LEAGUE');
+                $submit_btns = ReusableTemplate::generateFormSubmitBtns('LEAGUE');
 
                 $data_container .= "
                     <div class='div-row-container league-row-container-{$league_id}' data-row-id='{$league_id}'>
@@ -329,7 +329,7 @@ class AdminTemplate
 
         $add_btn = '';
         if ($role_id <= 1) {
-            $add_btn = ReusableTemplate::generate_popup_add_btn(3);
+            $add_btn = ReusableTemplate::generatePopupAddBtn(3);
         }
 
         $data_container .= "
@@ -341,12 +341,12 @@ class AdminTemplate
         return $data_container;
     }
 
-    static function generate_seasons_data_container($data, $role_id)
+    static function generateSeasonsDataContainer($data, $role_id)
     {
         [
             'is_empty' => $is_empty,
             'css_rule' => $rule_flex_center
-        ] = self::is_data_available($data);
+        ] = self::isDataAvailable($data);
 
         $data_container = "
             <div class='div-data-container hide-element' data-container-index='4'>
@@ -360,7 +360,7 @@ class AdminTemplate
         ";
 
         if ($is_empty) {
-            $data_container .= ReusableTemplate::generate_none_available_div('season', 'list');;
+            $data_container .= ReusableTemplate::generateNoneAvailableDiv('season', 'list');;
         } else {
             foreach ($data as $season) {
                 $season_id = $season['season_id'];
@@ -371,7 +371,7 @@ class AdminTemplate
                 $league_id = $season['league_id'];
                 $league_name = $season['league_name'];
 
-                $submit_btns = ReusableTemplate::generate_form_submit_btns('SEASON');
+                $submit_btns = ReusableTemplate::generateFormSubmitBtns('SEASON');
 
                 $data_container .= "
                     <div class='div-row-container season-row-container-{$season_id}' data-row-id='{$season_id}'>
@@ -430,7 +430,7 @@ class AdminTemplate
 
         $add_btn = '';
         if ($role_id <= 2) {
-            $add_btn = ReusableTemplate::generate_popup_add_btn(4);
+            $add_btn = ReusableTemplate::generatePopupAddBtn(4);
         }
 
         $data_container .= "
@@ -442,12 +442,12 @@ class AdminTemplate
         return $data_container;
     }
 
-    static function generate_teams_data_container($data, $role_id)
+    static function generateTeamsDataContainer($data, $role_id)
     {
         [
             'is_empty' => $is_empty,
             'css_rule' => $rule_flex_center
-        ] = self::is_data_available($data);
+        ] = self::isDataAvailable($data);
 
         $data_container = "
             <div class='div-data-container hide-element' data-container-index='5'>
@@ -462,7 +462,7 @@ class AdminTemplate
         ";
 
         if ($is_empty) {
-            $data_container .= ReusableTemplate::generate_none_available_div('team', 'list');;
+            $data_container .= ReusableTemplate::generateNoneAvailableDiv('team', 'list');;
         } else {
             foreach ($data as $team) {
                 $team_id = $team['team_id'];
@@ -479,7 +479,7 @@ class AdminTemplate
 
                 $submit_btns = '';
                 if ($role_id <= 2) {
-                    $submit_btns = ReusableTemplate::generate_form_submit_btns('TEAM');
+                    $submit_btns = ReusableTemplate::generateFormSubmitBtns('TEAM');
                 }
 
                 // Prevent the coaches from changing input data.
@@ -564,7 +564,7 @@ class AdminTemplate
 
         $add_btn = '';
         if ($role_id <= 2) {
-            $add_btn = ReusableTemplate::generate_popup_add_btn(5);
+            $add_btn = ReusableTemplate::generatePopupAddBtn(5);
         }
 
         $data_container .= "
@@ -576,12 +576,12 @@ class AdminTemplate
         return $data_container;
     }
 
-    static function generate_positions_data_container($data, $role_id)
+    static function generatePositionsDataContainer($data, $role_id)
     {
         [
             'is_empty' => $is_empty,
             'css_rule' => $rule_flex_center
-        ] = self::is_data_available($data);
+        ] = self::isDataAvailable($data);
 
         $data_container = "
             <div class='div-data-container hide-element' data-container-index='6'>
@@ -594,7 +594,7 @@ class AdminTemplate
         ";
 
         if ($is_empty) {
-            $data_container .= ReusableTemplate::generate_none_available_div('position', 'list');;
+            $data_container .= ReusableTemplate::generateNoneAvailableDiv('position', 'list');;
         } else {
             foreach ($data as $position) {
                 $position_id = $position['position_id'];
@@ -604,7 +604,7 @@ class AdminTemplate
 
                 $submit_btns = '';
                 if ($role_id <= 2) {
-                    $submit_btns = ReusableTemplate::generate_form_submit_btns('POSITION');
+                    $submit_btns = ReusableTemplate::generateFormSubmitBtns('POSITION');
                 }
 
                 // Prevent the coaches from changing input data.
@@ -651,7 +651,7 @@ class AdminTemplate
 
         $add_btn = '';
         if ($role_id < 5) {
-            $add_btn = ReusableTemplate::generate_popup_add_btn(6);
+            $add_btn = ReusableTemplate::generatePopupAddBtn(6);
         }
 
         $data_container .= "

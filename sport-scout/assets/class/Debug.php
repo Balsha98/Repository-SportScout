@@ -2,7 +2,7 @@
 
 class Debug
 {
-    static function print_array($array)
+    public static function printArray($array)
     {
         echo '<pre>';
         print_r($array);
@@ -10,7 +10,7 @@ class Debug
         exit();
     }
 
-    static function print($data)
+    public static function print($data)
     {
         echo $data;
         exit();
