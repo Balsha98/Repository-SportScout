@@ -78,8 +78,8 @@ class ReusableTemplate
     {
         return "
             <div class='grid-btn-container'>
-                <button class='btn btn-hollow btn-delete' type='submit' data-method='POST' data-clicked='DELETE_{$target}'>Delete</button>
-                <button class='btn btn-full btn-update' type='submit' data-method='POST' data-clicked='UPDATE_{$target}'>Update</button>
+                <button class='btn btn-hollow btn-delete' type='submit' data-method='DELETE' data-clicked='DELETE_{$target}'>Delete</button>
+                <button class='btn btn-full btn-update' type='submit' data-method='PUT' data-clicked='UPDATE_{$target}'>Update</button>
             </div>
         ";
     }

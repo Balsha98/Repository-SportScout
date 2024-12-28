@@ -16,89 +16,92 @@ class ScheduleTemplate
 
     private static function isDataAvailable($data)
     {
-        $empty_counter = 0;
+        $emptyCounter = 0;
         foreach ($data as $array) {
             if (count($array) === 0) {
-                $empty_counter++;
+                $emptyCounter++;
             }
         }
 
-        $is_empty = count($data) === $empty_counter;
-        $rule_flex_center = $is_empty ? 'flex-center' : '';
+        $isEmpty = count($data) === $emptyCounter;
+        $ruleFlexCenter = $isEmpty ? 'flex-center' : '';
 
         return [
-            'is_empty' => $is_empty,
-            'css_rule' => $rule_flex_center
+            'is_empty' => $isEmpty,
+            'css_rule' => $ruleFlexCenter
         ];
     }
 
-    public static function generatePopups($team_id)
+    public static function generatePopups($teamID)
     {
+        $teamData = self::$db->get_team_data_by_team_id('*', $teamID);
+
+        $sportName = $teamData[0]['sport_name'];
+        $sportID = $teamData[0]['sport_id'];
+        $leagueName = $teamData[0]['league_name'];
+        $leagueID = $teamData[0]['league_id'];
+
         $return = '';
-        $team_data = self::$db->get_team_data_by_team_id('*', $team_id);
-
-        $sport_name = $team_data[0]['sport_name'];
-        $sport_id = $team_data[0]['sport_id'];
-        $league_name = $team_data[0]['league_name'];
-        $league_id = $team_data[0]['league_id'];
-
         foreach (ScheduleData::POPUPS as $popup) {
             $return .= sprintf(
                 $popup,
-                $team_id,
-                $sport_id,
-                $league_id,
-                $sport_name,
-                $league_name
+                $teamID,
+                $sportID,
+                $leagueID,
+                $sportName,
+                $leagueName
             );
         }
 
         return $return;
     }
 
-    public static function generateTeamData($data, $role_id)
+    public static function generateTeamData($data, $roleID)
     {
         $return = '';
-        ['is_empty' => $is_empty] = self::isDataAvailable($data);
+        ['is_empty' => $isEmpty] = self::isDataAvailable($data);
 
-        if ($is_empty) {
+        if ($isEmpty) {
             return ReusableTemplate::generateNoneAvailableDiv('team', 'list');
         } else {
             foreach ($data as $team) {
-                $team_id = $team['team_id'];
-                $team_name = $team['team_name'];
-                $home_color = $team['home_color'];
-                $away_color = $team['away_color'];
-                $sport_name = $team['sport_name'];
-                $sport_id = $team['sport_id'];
-                $league_name = $team['league_name'];
-                $league_id = $team['league_id'];
-                $season_year = $team['season_year'];
-                $season_id = $team['season_id'];
+                $teamID = $team['team_id'];
+                $teamName = $team['team_name'];
+                $homeColor = $team['home_color'];
+                $awayColor = $team['away_color'];
+                $sportName = $team['sport_name'];
+                $sportID = $team['sport_id'];
+                $leagueName = $team['league_name'];
+                $leagueID = $team['league_id'];
+                $seasonYear = $team['season_year'];
+                $seasonID = $team['season_id'];
 
                 // Submit buttons.
-                $submit_btns = '';
-                if ($role_id !== 5) {
-                    $submit_btns = ReusableTemplate::generateFormSubmitBtns('TEAM');
+                $submitBtns = '';
+                if ($roleID !== 5) {
+                    $submitBtns = ReusableTemplate::generateFormSubmitBtns('TEAM');
                 }
 
                 // Prevent the fan from changing input data.
-                $required_container = $role_id < 5 ? 'required-container' : '';
-                $required = $role_id < 5 ? 'required' : 'readonly';
+                $requiredContainer = $roleID < 5 ? 'required-container' : '';
+                $required = $roleID < 5 ? 'required' : 'readonly';
 
                 $return .= "
-                    <form class='form form-team-data' action='../process/process-schedule.php'>
-                        <input type='hidden' name='sport_id' value='{$sport_id}'>
-                        <input type='hidden' name='league_id' value='{$league_id}'>
-                        <input type='hidden' name='season_id' value='{$season_id}'>
+                    <form 
+                        class='form form-team-data' 
+                        action='" . SERVER . "/api/schedule.php'
+                    >
+                        <input type='hidden' name='sport_id' value='{$sportID}'>
+                        <input type='hidden' name='league_id' value='{$leagueID}'>
+                        <input type='hidden' name='season_id' value='{$seasonID}'>
                         <div class='div-multi-input-containers custom-2-column-grid'>
-                            <div class='div-input-container {$required_container}'>
+                            <div class='div-input-container {$requiredContainer}'>
                                 <label for='team_name'>Team Name:</label>
-                                <input id='team_name' type='text' name='team_name' value='{$team_name}' data-prev-team-name='{$team_name}' {$required}>
+                                <input id='team_name' type='text' name='team_name' value='{$teamName}' data-prev-team-name='{$teamName}' {$required}>
                             </div>
                             <div class='div-input-container'>
                                 <label for='team_id'>Team ID:</label>
-                                <input id='team_id' type='number' name='team_id' value='{$team_id}' readonly>
+                                <input id='team_id' type='number' name='team_id' value='{$teamID}' readonly>
                             </div>
                         </div>
                         <div class='div-logo-colors-container grid-2-columns'>
@@ -108,17 +111,17 @@ class ScheduleTemplate
                             <div class='div-colors-container'>
                                 <ul class='team-colors-list'>
                                     <li class='team-color-list-item'>
-                                        <div class='team-color' data-colors='{$home_color}'>&nbsp;</div>
-                                        <div class='div-input-container {$required_container}'>
+                                        <div class='team-color' data-colors='{$homeColor}'>&nbsp;</div>
+                                        <div class='div-input-container {$requiredContainer}'>
                                             <label for='home_color'>Home:</label>
-                                            <input id='home_color' type='text' name='home_color' value='{$home_color}' {$required}>
+                                            <input id='home_color' type='text' name='home_color' value='{$homeColor}' {$required}>
                                         </div>
                                     </li>
                                     <li class='team-color-list-item'>
-                                        <div class='team-color' data-colors='{$away_color}'>&nbsp;</div>
-                                        <div class='div-input-container {$required_container}'>
+                                        <div class='team-color' data-colors='{$awayColor}'>&nbsp;</div>
+                                        <div class='div-input-container {$requiredContainer}'>
                                             <label for='away_color'>Away:</label>
-                                            <input id='away_color' type='text' name='away_color' value='{$away_color}' {$required}>
+                                            <input id='away_color' type='text' name='away_color' value='{$awayColor}' {$required}>
                                         </div>
                                     </li>
                                 </ul>
@@ -127,18 +130,18 @@ class ScheduleTemplate
                         <div class='div-multi-input-containers grid-3-columns'>
                             <div class='div-input-container'>
                                 <label for='team_sport_name'>Sport:</label>
-                                <input id='team_sport_name' type='text' name='sport_name' value='{$sport_name}' readonly>
+                                <input id='team_sport_name' type='text' name='sport_name' value='{$sportName}' readonly>
                             </div>
                             <div class='div-input-container'>
                                 <label for='team_league_name'>League:</label>
-                                <input id='team_league_name' type='text' name='league_name' value='{$league_name}' readonly>
+                                <input id='team_league_name' type='text' name='league_name' value='{$leagueName}' readonly>
                             </div>
                             <div class='div-input-container'>
                                 <label for='team_season_year'>Season:</label>
-                                <input id='team_season_year' type='text' name='season_year' value='{$season_year}' readonly>
+                                <input id='team_season_year' type='text' name='season_year' value='{$seasonYear}' readonly>
                             </div>
                         </div>
-                        {$submit_btns}
+                        {$submitBtns}
                     </form>
                 ";
             }
@@ -147,45 +150,45 @@ class ScheduleTemplate
         }
     }
 
-    public static function generateGame($data, $role_id)
+    public static function generateGame($data, $roleID)
     {
         [
-            'is_empty' => $is_empty,
-            'css_rule' => $rule_flex_center
+            'is_empty' => $isEmpty,
+            'css_rule' => $ruleFlexCenter
         ] = self::isDataAvailable($data);
 
-        $scroll_container = "
-            <div class='div-scroll-container grid-2-columns {$rule_flex_center}'>
+        $scrollContainer = "
+            <div class='div-scroll-container grid-2-columns {$ruleFlexCenter}'>
         ";
 
-        if ($is_empty) {
-            $scroll_container .= ReusableTemplate::generateNoneAvailableDiv('game', 'schedule');
+        if ($isEmpty) {
+            $scrollContainer .= ReusableTemplate::generateNoneAvailableDiv('game', 'schedule');
         } else {
-            $total_inner_arrays = 0;
-            $empty_inner_counter = 0;
+            $totalInnerArrays = 0;
+            $emptyInnerCounter = 0;
             foreach ($data as $array) {
-                ['is_empty' => $is_empty] = self::isDataAvailable($array);
+                ['is_empty' => $isEmpty] = self::isDataAvailable($array);
 
-                if ($is_empty) {
-                    $empty_inner_counter++;
+                if ($isEmpty) {
+                    $emptyInnerCounter++;
                 } else {
-                    foreach ($array as $inner_array) {
-                        $schedule_id = $inner_array['schedule_id'];
-                        $season_id = $inner_array['season_id'];
+                    foreach ($array as $innerArray) {
+                        $scheduleID = $innerArray['schedule_id'];
+                        $seasonID = $innerArray['season_id'];
 
                         // Temp team values.
-                        $home_score = $inner_array['home_score'];
-                        $home_team_id = $inner_array['home_team_id'];
-                        $away_score = $inner_array['away_score'];
-                        $away_team_id = $inner_array['away_team_id'];
-                        $date = $inner_array['scheduled'];
+                        $homeScore = $innerArray['home_score'];
+                        $homeTeamID = $innerArray['home_team_id'];
+                        $awayScore = $innerArray['away_score'];
+                        $awayTeamID = $innerArray['away_team_id'];
+                        $date = $innerArray['scheduled'];
 
                         // Get home and away team names.
-                        $home_team = self::$db->get_team_data_by_team_id('team_name', $home_team_id)[0]['team_name'];
-                        $away_team = self::$db->get_team_data_by_team_id('team_name', $away_team_id)[0]['team_name'];
+                        [['team_name' => $homeTeamName]] = self::$db->get_team_data_by_team_id('team_name', $homeTeamID);
+                        [['team_name' => $awayTeamName]] = self::$db->get_team_data_by_team_id('team_name', $awayTeamID);
 
                         // Get appropriate visuals.
-                        $status = $inner_array['status'];
+                        $status = $innerArray['status'];
                         switch ($status) {
                             case 1:
                                 $css = 'canceled';
@@ -200,70 +203,76 @@ class ScheduleTemplate
                                 $icon = 'checkmark';
                         }
 
-                        // Dataset.
-                        $dataset = "{$home_team_id}|{$home_score}|{$away_team_id}|{$away_score}|{$season_id}|{$status}|{$date}";
-
                         // Button edit.
-                        $edit_btn = '';
-                        if ($role_id !== 5) {
-                            $edit_btn = ReusableTemplate::generatePopupEditBtn();
+                        $editBtn = '';
+                        if ($roleID !== 5) {
+                            $editBtn = ReusableTemplate::generatePopupEditBtn();
                         }
 
-                        $scroll_container .= "
-                            <div class='div-schedule-game game-{$schedule_id}' data-schedule-id='{$schedule_id}' data-editable-data='{$dataset}'>
-                                {$edit_btn}
+                        $scrollContainer .= "
+                            <div class='div-schedule-game game-{$scheduleID}' data-schedule-id='{$scheduleID}'>
+                                {$editBtn}
                                 <div class='div-scoreboard-container'>
                                     <div class='div-grid-score-container'>
-                                        <p class='home-score'>{$home_score}</p>
+                                        <p class='home-score'>{$homeScore}</p>
                                         <p>:</p>
-                                        <p class='away-score'>{$away_score}</p>
+                                        <p class='away-score'>{$awayScore}</p>
                                     </div>
                                     <div class='div-grid-score-container'>
                                         <div class='div-team-name-container'>
-                                            <p class='home-team'>{$home_team}</p>
+                                            <p class='home-team'>{$homeTeamName}</p>
                                             <span>Home</span>
                                         </div>
                                         <p>&nbsp;</p>
                                         <div class='div-team-name-container'>
-                                            <p class='away-team'>{$away_team}</p>
+                                            <p class='away-team'>{$awayTeamName}</p>
                                             <span>Away</span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class='div-date-completion-container'>
                                     <div class='div-input-container'>
-                                        <label for='scheduled_{$schedule_id}'>Game Date:</label>
-                                        <input id='scheduled_{$schedule_id}' type='date' name='scheduled' value='{$date}' readonly>
+                                        <label for='scheduled_{$scheduleID}'>Game Date:</label>
+                                        <input id='scheduled_{$scheduleID}' type='date' name='scheduled' value='{$date}' readonly>
                                     </div>
                                     <div class='div-completion-status {$css}' data-completion-index='{$status}'>
                                         <ion-icon class='status-icon' name='{$icon}-outline'></ion-icon>
                                     </div>
+                                </div>
+                                <div class='div-hidden-inputs-container'>
+                                    <input id='home_team_id_{$scheduleID}' type='hidden' name='home_team_id' value='{$homeTeamID}'>
+                                    <input id='home_score_{$scheduleID}' type='hidden' name='home_score' value='{$homeScore}'>
+                                    <input id='away_team_id_{$scheduleID}' type='hidden' name='away_team_id' value='{$awayTeamID}'>
+                                    <input id='away_score_{$scheduleID}' type='hidden' name='away_score' value='{$awayScore}'>
+                                    <input id='season_id_{$scheduleID}' type='hidden' name='season_id' value='{$seasonID}'>
+                                    <input id='status_{$scheduleID}' type='hidden' name='status' value='{$status}'>
+                                    <input id='date_{$scheduleID}' type='hidden' name='date' value='{$date}'>
                                 </div>
                             </div>
                         ";
                     }
                 }
 
-                $total_inner_arrays++;
+                $totalInnerArrays++;
             }
 
-            if ($total_inner_arrays === $empty_inner_counter) {
-                $scroll_container = ReusableTemplate::generateNoneAvailableDiv('game', 'schedule');
+            if ($totalInnerArrays === $emptyInnerCounter) {
+                $scrollContainer = ReusableTemplate::generateNoneAvailableDiv('game', 'schedule');
             }
         }
 
         // Button add.
-        $add_btn = '';
-        if ($role_id <= 2) {
-            $add_btn = ReusableTemplate::generatePopupAddBtn();
+        $addBtn = '';
+        if ($roleID <= 2) {
+            $addBtn = ReusableTemplate::generatePopupAddBtn();
         }
 
-        $scroll_container .= "
-            {$add_btn}
+        $scrollContainer .= "
+            {$addBtn}
             </div>
         ";
 
-        return $scroll_container;
+        return $scrollContainer;
     }
 }
 

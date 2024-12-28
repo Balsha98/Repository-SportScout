@@ -37,23 +37,23 @@ class GeneralTemplate
         ';
     }
 
-    public static function generatePageHeader($page, $role_id)
+    public static function generatePageHeader($page, $roleID)
     {
-        $list_items = '';
+        $listItems = '';
         $active = self::isPageActive($page);
-        $header_links = GeneralData::NAV_LINKS;
+        $headerLinks = GeneralData::NAV_LINKS;
 
-        if ($role_id === 5) {
-            array_pop($header_links);
+        if ($roleID === 5) {
+            array_pop($headerLinks);
         }
 
-        foreach ($header_links as $index => $link) {
-            $page_name = ucfirst($link);
+        foreach ($headerLinks as $index => $link) {
+            $pageName = ucfirst($link);
             $icon = self::getLinkIcon($link);
 
-            $list_items .= "
+            $listItems .= "
                 <li class='top-navbar-list-item {$active[$index]}'>
-                    <p class='page-icon-text'>{$page_name}</p>
+                    <p class='page-icon-text'>{$pageName}</p>
                     <a href='/{$link}'>
                         <ion-icon class='top-navbar-icon' name='{$icon}-outline'></ion-icon>
                     </a>
@@ -73,7 +73,7 @@ class GeneralTemplate
                     </div>
                     <nav class='top-navbar'>
                         <ul class='top-navbar-list'>
-                            {$list_items}
+                            {$listItems}
                             <li class='top-navbar-list-item'>
                                 <p class='page-icon-text'>Log Out</p>
                                 <a href='/logout'>
@@ -87,35 +87,35 @@ class GeneralTemplate
         ";
     }
 
-    private static function isPageActive($curr_page)
+    private static function isPageActive($currPage)
     {
         foreach (GeneralData::NAV_LINKS as $page) {
-            $result[] = $page === $curr_page ? 'active-page' : '';
+            $result[] = $page === $currPage ? 'active-page' : '';
         }
 
         return $result;
     }
 
-    public static function generateDashboardLinks($role_id)
+    public static function generateDashboardLinks($roleID)
     {
-        $dashboard_links = GeneralData::NAV_LINKS;
-        array_shift($dashboard_links);  // Remove dashboard.
+        $dashboardLinks = GeneralData::NAV_LINKS;
+        array_shift($dashboardLinks);  // Remove dashboard.
 
         // Remove admin.
-        if ($role_id === 5) {
-            array_pop($dashboard_links);
+        if ($roleID === 5) {
+            array_pop($dashboardLinks);
         }
 
         $return = '';
-        foreach ($dashboard_links as $link) {
-            $page_name = ucfirst($link);
+        foreach ($dashboardLinks as $link) {
+            $pageName = ucfirst($link);
             $icon = self::getLinkIcon($link);
 
             $return .= "
                 <li class='pages-list-item'>
                     <div class='div-pages-list-link'>
                         <ion-icon class='pages-icon' name='{$icon}-outline'></ion-icon>
-                        <a class='page-link' href='/{$link}'>{$page_name}</a>
+                        <a class='page-link' href='/{$link}'>{$pageName}</a>
                     </div>
                     <ion-icon class='caret-right-icon' name='caret-forward-outline'></ion-icon>
                 </li>

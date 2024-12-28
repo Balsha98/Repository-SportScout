@@ -7,43 +7,43 @@ class AdminTemplate
 {
     private static function isDataAvailable($data)
     {
-        $empty_counter = 0;
+        $emptyCounter = 0;
         foreach ($data as $array) {
             if (count($array) === 0) {
-                $empty_counter++;
+                $emptyCounter++;
             }
         }
 
-        $is_empty = (bool) (count($data) === $empty_counter);
-        $rule_flex_center = $is_empty ? 'flex-center' : '';
+        $isEmpty = (bool) (count($data) === $emptyCounter);
+        $ruleFlexCenter = $isEmpty ? 'flex-center' : '';
 
         return [
-            'is_empty' => $is_empty,
-            'css_rule' => $rule_flex_center
+            'is_empty' => $isEmpty,
+            'css_rule' => $ruleFlexCenter
         ];
     }
 
-    static function generatePopups($role_id)
+    public static function generatePopups($roleID)
     {
-        $needed_index = self::getArrayIndexByRoleId($role_id);
-        $related_popups = array_slice(AdminData::POPUPS, $needed_index);
+        $neededIndex = self::getArrayIndexByRoleId($roleID);
+        $relatedPopups = array_slice(AdminData::POPUPS, $neededIndex);
 
         $return = '';
-        foreach ($related_popups as $popup) {
+        foreach ($relatedPopups as $popup) {
             $return .= sprintf($popup);
         }
 
         return $return;
     }
 
-    static function generateLinks($role_id)
+    public static function generateLinks($roleID)
     {
         $return = '';
 
-        $needed_index = self::getArrayIndexByRoleId($role_id);
-        $sidebar_links = array_slice(AdminData::SIDEBAR_LINKS, $needed_index);
+        $neededIndex = self::getArrayIndexByRoleId($roleID);
+        $sidebarLinks = array_slice(AdminData::SIDEBAR_LINKS, $neededIndex);
 
-        foreach ($sidebar_links as $array)
+        foreach ($sidebarLinks as $array)
             $return .= "
                 <li class='sidebar-nav-list-item'>
                     <button class='btn btn-full btn-sidebar' data-container-index='{$array['container']}'>
@@ -64,32 +64,32 @@ class AdminTemplate
      * @param mixed $role-id - user's role id.
      * @return mixed the right array index.
      */
-    static function getArrayIndexByRoleId($role_id)
+    public static function getArrayIndexByRoleId($roleID)
     {
-        $needed_index = 0;
-        switch ($role_id) {
+        $neededIndex = 0;
+        switch ($roleID) {
             case 2:
-                $needed_index = $role_id;
+                $neededIndex = $roleID;
                 break;
             case 3:
             case 4:
-                $needed_index = 4;
+                $neededIndex = 4;
                 break;
             default:
-                $needed_index = 0;
+                $neededIndex = 0;
         }
 
-        return $needed_index;
+        return $neededIndex;
     }
 
-    static function generateUsersDataContainer($data)
+    public static function generateUsersDataContainer($data)
     {
         [
-            'is_empty' => $is_empty,
-            'css_rule' => $rule_flex_center
+            'is_empty' => $isEmpty,
+            'css_rule' => $ruleFlexCenter
         ] = self::isDataAvailable($data);
 
-        $data_container = "
+        $dataContainer = "
             <div class='div-data-container hide-element' data-container-index='1'>
                 <header class='data-container-header grid-4-columns'>
                     <p>ID</p>
@@ -97,59 +97,62 @@ class AdminTemplate
                     <p>Role</p>
                     <p>Details</p>
                 </header>
-                <div class='div-scroll-container users-scroll {$rule_flex_center}'>
+                <div class='div-scroll-container users-scroll {$ruleFlexCenter}'>
         ";
 
-        if ($is_empty) {
-            $data_container .= ReusableTemplate::generateNoneAvailableDiv('user', 'list');
+        if ($isEmpty) {
+            $dataContainer .= ReusableTemplate::generateNoneAvailableDiv('user', 'list');
         } else {
             foreach ($data as $user) {
-                $user_id = $user['user_id'];
+                $userID = $user['user_id'];
                 $username = $user['username'];
-                $role_id = $user['role_id'];
-                $role_name = $user['role_name'];
-                $role_option = "{$role_id}|{$role_name}";
-                $league_id = $user['league_id'];
-                $league_name = $user['league_name'];
-                $team_id = $user['team_id'];
-                $team_name = $user['team_name'];
+                $roleID = $user['role_id'];
+                $roleName = $user['role_name'];
+                $roleOption = "{$roleID}|{$roleName}";
+                $leagueID = $user['league_id'];
+                $leagueName = $user['league_name'];
+                $teamID = $user['team_id'];
+                $teamName = $user['team_name'];
 
                 $options = '';
                 foreach (AdminData::USER_SELECT_OPTIONS as $key => $value) {
-                    $selected = $role_option === $value ? 'selected' : '';
+                    $selected = $roleOption === $value ? 'selected' : '';
                     $options .= "<option value='{$value}' {$selected}>{$key}</option>";
                 }
 
-                $submit_btns = ReusableTemplate::generateFormSubmitBtns('USER');
+                $submitBtns = ReusableTemplate::generateFormSubmitBtns('USER');
 
-                $data_container .= "
-                    <div class='div-row-container user-row-container-{$user_id}' data-row-id='{$user_id}'>
+                $dataContainer .= "
+                    <div class='div-row-container user-row-container-{$userID}' data-row-id='{$userID}'>
                         <ul class='row-header-list grid-4-columns'>
                             <li class='row-header-list-item'>
-                                <p>{$user_id}</p>
+                                <p>{$userID}</p>
                             </li>
                             <li class='row-header-list-item'>
                                 <p class='username'>{$username}</p>
                             </li>
                             <li class='row-header-list-item'>
-                                <p class='role-name' data-old-role-id='{$role_id}'>{$role_name}</p>
+                                <p class='role-name' data-old-role-id='{$roleID}'>{$roleName}</p>
                             </li>
                             <li class='row-header-list-item'>
                                 <p>
-                                    <ion-icon class='open-icon icon-{$user_id}' name='chevron-down-outline'></ion-icon>
+                                    <ion-icon class='open-icon icon-{$userID}' name='chevron-down-outline'></ion-icon>
                                 </p>
                             </li>
                         </ul>
-                        <form class='form form-info form-{$user_id} hide-element' action='../process/process-admin.php'>
-                            <input type='hidden' name='user_id' value='{$user_id}'>
+                        <form 
+                            class='form form-info form-{$userID} hide-element' 
+                            action='" . SERVER . "/api/admin.php'
+                        >
+                            <input type='hidden' name='user_id' value='{$userID}'>
                             <div class='div-multi-input-containers grid-2-columns'>
                                 <div class='div-input-container required-container'>
-                                    <label for='username_{$user_id}'>Username:</label>
-                                    <input id='username_{$user_id}' type='text' name='username' value='{$username}' autocomplete='off' required>
+                                    <label for='username_{$userID}'>Username:</label>
+                                    <input id='username_{$userID}' type='text' name='username' value='{$username}' autocomplete='off' required>
                                 </div>
                                 <div class='div-input-container required-container'>
-                                    <label for='user_role_name_{$user_id}'>Role Type:</label>
-                                    <select id='user_role_name_{$user_id}' name='role_name' autocomplete='off' required>
+                                    <label for='user_role_name_{$userID}'>Role Type:</label>
+                                    <select id='user_role_name_{$userID}' name='role_name' autocomplete='off' required>
                                         <option value=''>Select Role</option>
                                         {$options}
                                     </select>
@@ -157,198 +160,204 @@ class AdminTemplate
                             </div>
                             <div class='div-multi-input-containers grid-4-columns'>
                                 <div class='div-input-container'>
-                                    <label for='user_league_name_{$user_id}'>League:</label>
-                                    <input id='user_league_name_{$user_id}' type='text' name='league_name' value='{$league_name}' autocomplete='off' readonly>
+                                    <label for='user_league_name_{$userID}'>League:</label>
+                                    <input id='user_league_name_{$userID}' type='text' name='league_name' value='{$leagueName}' autocomplete='off' readonly>
                                 </div>
                                 <div class='div-input-container required-container'>
-                                    <label for='user_league_id_{$user_id}'>League ID:</label>
-                                    <input id='user_league_id_{$user_id}' type='number' name='league_id' value='{$league_id}' min='0' autocomplete='off' required>
+                                    <label for='user_league_id_{$userID}'>League ID:</label>
+                                    <input id='user_league_id_{$userID}' type='number' name='league_id' value='{$leagueID}' min='0' autocomplete='off' required>
                                 </div>
                                 <div class='div-input-container'>
-                                    <label for='user_team_name_{$user_id}'>Team:</label>
-                                    <input id='user_team_name_{$user_id}' type='text' name='team_name' value='{$team_name}' autocomplete='off' readonly>
+                                    <label for='user_team_name_{$userID}'>Team:</label>
+                                    <input id='user_team_name_{$userID}' type='text' name='team_name' value='{$teamName}' autocomplete='off' readonly>
                                 </div>
                                 <div class='div-input-container required-container'>
-                                    <label for='user_team_id_{$user_id}'>Team ID:</label>
-                                    <input id='user_team_id_{$user_id}' type='number' name='team_id' value='{$team_id}' min='0' autocomplete='off' required>
+                                    <label for='user_team_id_{$userID}'>Team ID:</label>
+                                    <input id='user_team_id_{$userID}' type='number' name='team_id' value='{$teamID}' min='0' autocomplete='off' required>
                                 </div>
                             </div>
-                            {$submit_btns}
+                            {$submitBtns}
                         </form>
                     </div>
                 ";
             }
         }
 
-        $add_btn = ReusableTemplate::generatePopupAddBtn(1);
+        $addBtn = ReusableTemplate::generatePopupAddBtn(1);
 
-        $data_container .= "
+        $dataContainer .= "
                 </div>
-                {$add_btn}
+                {$addBtn}
             </div>
         ";
 
-        return $data_container;
+        return $dataContainer;
     }
 
-    static function generateSportsDataContainer($data)
+    public static function generateSportsDataContainer($data)
     {
         [
-            'is_empty' => $is_empty,
-            'css_rule' => $rule_flex_center
+            'is_empty' => $isEmpty,
+            'css_rule' => $ruleFlexCenter
         ] = self::isDataAvailable($data);
 
-        $data_container = "
+        $dataContainer = "
             <div class='div-data-container hide-element' data-container-index='2'>
                 <header class='data-container-header grid-3-columns'>
                     <p>ID</p>
                     <p>Sport</p>
                     <p>Details</p>
                 </header>
-                <div class='div-scroll-container sports-scroll {$rule_flex_center}'>
+                <div class='div-scroll-container sports-scroll {$ruleFlexCenter}'>
         ";
 
-        if ($is_empty) {
-            $data_container .= ReusableTemplate::generateNoneAvailableDiv('sport', 'list');
+        if ($isEmpty) {
+            $dataContainer .= ReusableTemplate::generateNoneAvailableDiv('sport', 'list');
         } else {
             foreach ($data as $sport) {
-                $sport_id = $sport['sport_id'];
-                $sport_name = $sport['sport_name'];
+                $sportID = $sport['sport_id'];
+                $sportName = $sport['sport_name'];
 
-                $submit_btns = ReusableTemplate::generateFormSubmitBtns('SPORT');
+                $submitBtns = ReusableTemplate::generateFormSubmitBtns('SPORT');
 
-                $data_container .= "
-                    <div class='div-row-container sport-row-container-{$sport_id}' data-row-id='{$sport_id}'>
+                $dataContainer .= "
+                    <div class='div-row-container sport-row-container-{$sportID}' data-row-id='{$sportID}'>
                         <ul class='row-header-list grid-3-columns'>
                             <li class='row-header-list-item'>
-                                <p>{$sport_id}</p>
+                                <p>{$sportID}</p>
                             </li>
                             <li class='row-header-list-item'>
-                                <p class='sport-name'>{$sport_name}</p>
+                                <p class='sport-name'>{$sportName}</p>
                             </li>
                             <li class='row-header-list-item'>
                                 <p>
-                                    <ion-icon class='open-icon icon-{$sport_id}' name='chevron-down-outline'></ion-icon>
+                                    <ion-icon class='open-icon icon-{$sportID}' name='chevron-down-outline'></ion-icon>
                                 </p>
                             </li>
                         </ul>
-                        <form class='form form-info form-{$sport_id} hide-element' action='../process/process-admin.php'>
+                        <form 
+                            class='form form-info form-{$sportID} hide-element' 
+                            action='" . SERVER . "/api/admin.php'
+                        >
                             <div class='div-multi-input-containers custom-2-column-grid'>
                                 <div class='div-input-container required-container'>
-                                    <label for='sport_name_{$sport_id}'>Sport Name:</label>
-                                    <input id='sport_name_{$sport_id}' type='text' name='sport_name' value='{$sport_name}' autocomplete='off' required>
+                                    <label for='sport_name_{$sportID}'>Sport Name:</label>
+                                    <input id='sport_name_{$sportID}' type='text' name='sport_name' value='{$sportName}' autocomplete='off' required>
                                 </div>
                                 <div class='div-input-container'>
-                                    <label for='sport_id_{$sport_id}'>Sport ID:</label>
-                                    <input id='sport_id_{$sport_id}' type='text' name='sport_id' value='{$sport_id}' readonly>
+                                    <label for='sport_id_{$sportID}'>Sport ID:</label>
+                                    <input id='sport_id_{$sportID}' type='text' name='sport_id' value='{$sportID}' readonly>
                                 </div>
                             </div>
-                            {$submit_btns}
+                            {$submitBtns}
                         </form>
                     </div>
                 ";
             }
         }
 
-        $add_btn = ReusableTemplate::generatePopupAddBtn(2);
+        $addBtn = ReusableTemplate::generatePopupAddBtn(2);
 
-        $data_container .= "
+        $dataContainer .= "
                 </div>
-                {$add_btn}
+                {$addBtn}
             </div>
         ";
 
-        return $data_container;
+        return $dataContainer;
     }
 
-    static function generateLeaguesDataContainer($data, $role_id)
+    public static function generateLeaguesDataContainer($data, $roleID)
     {
         [
-            'is_empty' => $is_empty,
-            'css_rule' => $rule_flex_center
+            'is_empty' => $isEmpty,
+            'css_rule' => $ruleFlexCenter
         ] = self::isDataAvailable($data);
 
-        $data_container = "
+        $dataContainer = "
             <div class='div-data-container hide-element' data-container-index='3'>
                 <header class='data-container-header grid-3-columns'>
                     <p>ID</p>
                     <p>League</p>
                     <p>Details</p>
                 </header>
-                <div class='div-scroll-container leagues-scroll {$rule_flex_center}'>
+                <div class='div-scroll-container leagues-scroll {$ruleFlexCenter}'>
         ";
 
-        if ($is_empty) {
-            $data_container .= ReusableTemplate::generateNoneAvailableDiv('league', 'list');;
+        if ($isEmpty) {
+            $dataContainer .= ReusableTemplate::generateNoneAvailableDiv('league', 'list');;
         } else {
             foreach ($data as $league) {
-                $league_id = $league['league_id'];
-                $league_name = $league['league_name'];
-                $sport_id = $league['sport_id'];
-                $sport_name = $league['sport_name'];
+                $leagueID = $league['league_id'];
+                $leagueName = $league['league_name'];
+                $sportID = $league['sport_id'];
+                $sportName = $league['sport_name'];
 
-                $submit_btns = ReusableTemplate::generateFormSubmitBtns('LEAGUE');
+                $submitBtns = ReusableTemplate::generateFormSubmitBtns('LEAGUE');
 
-                $data_container .= "
-                    <div class='div-row-container league-row-container-{$league_id}' data-row-id='{$league_id}'>
+                $dataContainer .= "
+                    <div class='div-row-container league-row-container-{$leagueID}' data-row-id='{$leagueID}'>
                         <ul class='row-header-list grid-3-columns'>
                             <li class='row-header-list-item'>
-                                <p>{$league_id}</p>
+                                <p>{$leagueID}</p>
                             </li>
                             <li class='row-header-list-item'>
-                                <p class='league-name'>{$league_name}</p>
+                                <p class='league-name'>{$leagueName}</p>
                             </li>
                             <li class='row-header-list-item'>
                                 <p>
-                                    <ion-icon class='open-icon icon-{$league_id}' name='chevron-down-outline'></ion-icon>
+                                    <ion-icon class='open-icon icon-{$leagueID}' name='chevron-down-outline'></ion-icon>
                                 </p>
                             </li>
                         </ul>
-                        <form class='form form-info form-{$league_id} hide-element' action='../process/process-admin.php'>
-                            <input type='hidden' name='league_id' value='{$league_id}'>
+                        <form 
+                            class='form form-info form-{$leagueID} hide-element' 
+                            action='" . SERVER . "/api/admin.php'
+                        >
+                            <input type='hidden' name='league_id' value='{$leagueID}'>
                             <div class='div-multi-input-containers grid-3-columns'>
                                 <div class='div-input-container required-container'>
-                                    <label for='league_name_{$league_id}'>League Name:</label>
-                                    <input id='league_name_{$league_id}' type='text' name='league_name' value='{$league_name}' autocomplete='off' required>
+                                    <label for='league_name_{$leagueID}'>League Name:</label>
+                                    <input id='league_name_{$leagueID}' type='text' name='league_name' value='{$leagueName}' autocomplete='off' required>
                                 </div>
                                 <div class='div-input-container'>
-                                    <label for='league_sport_name_{$league_id}'>Sport:</label>
-                                    <input id='league_sport_name_{$league_id}' type='text' name='sport_name' value='{$sport_name}' autocomplete='off' readonly>
+                                    <label for='league_sport_name_{$leagueID}'>Sport:</label>
+                                    <input id='league_sport_name_{$leagueID}' type='text' name='sport_name' value='{$sportName}' autocomplete='off' readonly>
                                 </div>
                                 <div class='div-input-container required-container'>
-                                    <label for='league_sport_id_{$league_id}'>Sport ID:</label>
-                                    <input id='league_sport_id_{$league_id}' type='number' name='sport_id' value='{$sport_id}' min='1' autocomplete='off' required>
+                                    <label for='league_sport_id_{$leagueID}'>Sport ID:</label>
+                                    <input id='league_sport_id_{$leagueID}' type='number' name='sport_id' value='{$sportID}' min='1' autocomplete='off' required>
                                 </div>
                             </div>
-                            {$submit_btns}
+                            {$submitBtns}
                         </form>
                     </div>
                 ";
             }
         }
 
-        $add_btn = '';
-        if ($role_id <= 1) {
-            $add_btn = ReusableTemplate::generatePopupAddBtn(3);
+        $addBtn = '';
+        if ($roleID <= 1) {
+            $addBtn = ReusableTemplate::generatePopupAddBtn(3);
         }
 
-        $data_container .= "
+        $dataContainer .= "
                 </div>
-                {$add_btn}
+                {$addBtn}
             </div>
         ";
 
-        return $data_container;
+        return $dataContainer;
     }
 
-    static function generateSeasonsDataContainer($data, $role_id)
+    public static function generateSeasonsDataContainer($data, $roleID)
     {
         [
-            'is_empty' => $is_empty,
-            'css_rule' => $rule_flex_center
+            'is_empty' => $isEmpty,
+            'css_rule' => $ruleFlexCenter
         ] = self::isDataAvailable($data);
 
-        $data_container = "
+        $dataContainer = "
             <div class='div-data-container hide-element' data-container-index='4'>
                 <header class='data-container-header grid-4-columns'>
                     <p>ID</p>
@@ -356,100 +365,103 @@ class AdminTemplate
                     <p>Description</p>
                     <p>Details</p>
                 </header>
-                <div class='div-scroll-container seasons-scroll {$rule_flex_center}'>
+                <div class='div-scroll-container seasons-scroll {$ruleFlexCenter}'>
         ";
 
-        if ($is_empty) {
-            $data_container .= ReusableTemplate::generateNoneAvailableDiv('season', 'list');;
+        if ($isEmpty) {
+            $dataContainer .= ReusableTemplate::generateNoneAvailableDiv('season', 'list');;
         } else {
             foreach ($data as $season) {
-                $season_id = $season['season_id'];
-                $season_year = $season['season_year'];
-                $season_desc = $season['season_desc'];
-                $sport_id = $season['sport_id'];
-                $sport_name = $season['sport_name'];
-                $league_id = $season['league_id'];
-                $league_name = $season['league_name'];
+                $seasonID = $season['season_id'];
+                $seasonYear = $season['season_year'];
+                $seasonDesc = $season['season_desc'];
+                $sportID = $season['sport_id'];
+                $sportName = $season['sport_name'];
+                $leagueID = $season['league_id'];
+                $leagueName = $season['league_name'];
 
-                $submit_btns = ReusableTemplate::generateFormSubmitBtns('SEASON');
+                $submitBtns = ReusableTemplate::generateFormSubmitBtns('SEASON');
 
-                $data_container .= "
-                    <div class='div-row-container season-row-container-{$season_id}' data-row-id='{$season_id}'>
+                $dataContainer .= "
+                    <div class='div-row-container season-row-container-{$seasonID}' data-row-id='{$seasonID}'>
                         <ul class='row-header-list grid-4-columns'>
                             <li class='row-header-list-item'>
-                                <p>{$season_id}</p>
+                                <p>{$seasonID}</p>
                             </li>
                             <li class='row-header-list-item'>
-                                <p class='season-year'>{$season_year}</p>
+                                <p class='season-year'>{$seasonYear}</p>
                             </li>
                             <li class='row-header-list-item'>
-                                <p class='season-desc'>{$season_desc}</p>
+                                <p class='season-desc'>{$seasonDesc}</p>
                             </li>
                             <li class='row-header-list-item'>
                                 <p>
-                                    <ion-icon class='open-icon icon-{$season_id}' name='chevron-down-outline'></ion-icon>
+                                    <ion-icon class='open-icon icon-{$seasonID}' name='chevron-down-outline'></ion-icon>
                                 </p>
                             </li>
                         </ul>
-                        <form class='form form-info form-{$season_id} hide-element' action='../process/process-admin.php'>
-                            <input type='hidden' name='season_id' value='{$season_id}'>
+                        <form 
+                            class='form form-info form-{$seasonID} hide-element' 
+                            action='" . SERVER . "/api/admin.php'
+                        >
+                            <input type='hidden' name='season_id' value='{$seasonID}'>
                             <div class='div-multi-input-containers grid-2-columns'>
                                 <div class='div-input-container required-container'>
-                                    <label for='season_year_{$season_id}'>Season Year:</label>
-                                    <input id='season_year_{$season_id}' type='text' name='season_year' value='{$season_year}' autocomplete='off' required>
+                                    <label for='season_year_{$seasonID}'>Season Year:</label>
+                                    <input id='season_year_{$seasonID}' type='text' name='season_year' value='{$seasonYear}' autocomplete='off' required>
                                 </div>
                                 <div class='div-input-container required-container'>
-                                    <label for='season_desc_{$season_id}'>Season Description:</label>
-                                    <input id='season_desc_{$season_id}' type='text' name='season_desc' value='{$season_desc}' autocomplete='off' required>
+                                    <label for='season_desc_{$seasonID}'>Season Description:</label>
+                                    <input id='season_desc_{$seasonID}' type='text' name='season_desc' value='{$seasonDesc}' autocomplete='off' required>
                                 </div>
                             </div>
                             <div class='div-multi-input-containers grid-4-columns'>
                                 <div class='div-input-container'>
-                                    <label for='season_sport_name_{$season_id}'>Sport:</label>
-                                    <input id='season_sport_name_{$season_id}' type='text' name='sport_name' value='{$sport_name}' readonly>
+                                    <label for='season_sport_name_{$seasonID}'>Sport:</label>
+                                    <input id='season_sport_name_{$seasonID}' type='text' name='sport_name' value='{$sportName}' readonly>
                                 </div>
                                 <div class='div-input-container required-container'>
-                                    <label for='season_sport_id_{$season_id}'>Sport ID:</label>
-                                    <input id='season_sport_id_{$season_id}' type='number' name='sport_id' value='{$sport_id}' min='1' required>
+                                    <label for='season_sport_id_{$seasonID}'>Sport ID:</label>
+                                    <input id='season_sport_id_{$seasonID}' type='number' name='sport_id' value='{$sportID}' min='1' required>
                                 </div>
                                 <div class='div-input-container'>
-                                    <label for='season_league_name_{$season_id}'>League:</label>
-                                    <input id='season_league_name_{$season_id}' type='text' name='league_name' value='{$league_name}' autocomplete='off' readonly>
+                                    <label for='season_league_name_{$seasonID}'>League:</label>
+                                    <input id='season_league_name_{$seasonID}' type='text' name='league_name' value='{$leagueName}' autocomplete='off' readonly>
                                 </div>
                                 <div class='div-input-container required-container'>
-                                    <label for='season_league_id_{$season_id}'>League ID:</label>
-                                    <input id='season_league_id_{$season_id}' type='number' name='league_id' value='{$league_id}' min='1' autocomplete='off' required>
+                                    <label for='season_league_id_{$seasonID}'>League ID:</label>
+                                    <input id='season_league_id_{$seasonID}' type='number' name='league_id' value='{$leagueID}' min='1' autocomplete='off' required>
                                 </div>
                             </div>
-                            {$submit_btns}
+                            {$submitBtns}
                         </form>
                     </div>
                 ";
             }
         }
 
-        $add_btn = '';
-        if ($role_id <= 2) {
-            $add_btn = ReusableTemplate::generatePopupAddBtn(4);
+        $addBtn = '';
+        if ($roleID <= 2) {
+            $addBtn = ReusableTemplate::generatePopupAddBtn(4);
         }
 
-        $data_container .= "
+        $dataContainer .= "
                 </div>
-                {$add_btn}
+                {$addBtn}
             </div>
         ";
 
-        return $data_container;
+        return $dataContainer;
     }
 
-    static function generateTeamsDataContainer($data, $role_id)
+    public static function generateTeamsDataContainer($data, $roleID)
     {
         [
-            'is_empty' => $is_empty,
-            'css_rule' => $rule_flex_center
+            'is_empty' => $isEmpty,
+            'css_rule' => $ruleFlexCenter
         ] = self::isDataAvailable($data);
 
-        $data_container = "
+        $dataContainer = "
             <div class='div-data-container hide-element' data-container-index='5'>
                 <header class='data-container-header grid-5-columns'>
                     <p>ID</p>
@@ -458,102 +470,105 @@ class AdminTemplate
                     <p>Season</p>
                     <p>Details</p>
                 </header>
-                <div class='div-scroll-container teams-scroll {$rule_flex_center}'>
+                <div class='div-scroll-container teams-scroll {$ruleFlexCenter}'>
         ";
 
-        if ($is_empty) {
-            $data_container .= ReusableTemplate::generateNoneAvailableDiv('team', 'list');;
+        if ($isEmpty) {
+            $dataContainer .= ReusableTemplate::generateNoneAvailableDiv('team', 'list');;
         } else {
             foreach ($data as $team) {
-                $team_id = $team['team_id'];
-                $team_name = $team['team_name'];
-                $sport_id = $team['sport_id'];
-                $sport_name = $team['sport_name'];
-                $league_id = $team['league_id'];
-                $league_name = $team['league_name'];
-                $season_id = $team['season_id'];
-                $season_year = $team['season_year'];
-                $max_players = $team['max_players'];
-                $home_color = $team['home_color'];
-                $away_color = $team['away_color'];
+                $teamID = $team['team_id'];
+                $teamName = $team['team_name'];
+                $sportID = $team['sport_id'];
+                $sportName = $team['sport_name'];
+                $leagueID = $team['league_id'];
+                $leagueName = $team['league_name'];
+                $seasonID = $team['season_id'];
+                $seasonYear = $team['season_year'];
+                $maxPlayers = $team['max_players'];
+                $homeColor = $team['home_color'];
+                $awayColor = $team['away_color'];
 
-                $submit_btns = '';
-                if ($role_id <= 2) {
-                    $submit_btns = ReusableTemplate::generateFormSubmitBtns('TEAM');
+                $submitBtns = '';
+                if ($roleID <= 2) {
+                    $submitBtns = ReusableTemplate::generateFormSubmitBtns('TEAM');
                 }
 
                 // Prevent the coaches from changing input data.
-                $span_across = $role_id <= 2 ? 'grid-2-columns' : 'span-across-all';
-                $required_container = $role_id <= 2 ? 'required-container' : '';
-                $required = $role_id <= 2 ? 'required' : 'readonly';
+                $spanAcross = $roleID <= 2 ? 'grid-2-columns' : 'span-across-all';
+                $requiredContainer = $roleID <= 2 ? 'required-container' : '';
+                $required = $roleID <= 2 ? 'required' : 'readonly';
 
-                $data_container .= "
-                    <div class='div-row-container team-row-container-{$team_id}' data-row-id='{$team_id}'>
+                $dataContainer .= "
+                    <div class='div-row-container team-row-container-{$teamID}' data-row-id='{$teamID}'>
                         <ul class='row-header-list grid-5-columns'>
                             <li class='row-header-list-item'>
-                                <p>{$team_id}</p>
+                                <p>{$teamID}</p>
                             </li>
                             <li class='row-header-list-item'>
-                                <p class='team-name'>{$team_name}</p>
+                                <p class='team-name'>{$teamName}</p>
                             </li>
                             <li class='row-header-list-item'>
-                                <p class='league-name'>{$league_name}</p>
+                                <p class='league-name'>{$leagueName}</p>
                             </li>
                             <li class='row-header-list-item'>
-                                <p class='season-year'>{$season_year}</p>
+                                <p class='season-year'>{$seasonYear}</p>
                             </li>
                             <li class='row-header-list-item'>
                                 <p>
-                                    <ion-icon class='open-icon icon-{$team_id}' name='chevron-down-outline'></ion-icon>
+                                    <ion-icon class='open-icon icon-{$teamID}' name='chevron-down-outline'></ion-icon>
                                 </p>
                             </li>
                         </ul>
-                        <form class='form form-info form-{$team_id} hide-element' action='../process/process-admin.php'>
-                            <input type='hidden' name='team_id' value='{$team_id}'>
-                            <input type='hidden' name='sport_id' value='{$sport_id}'>
+                        <form 
+                            class='form form-info form-{$teamID} hide-element' 
+                            action='" . SERVER . "/api/admin.php'
+                        >
+                            <input type='hidden' name='team_id' value='{$teamID}'>
+                            <input type='hidden' name='sport_id' value='{$sportID}'>
                             <div class='div-multi-input-containers custom-2-column-grid'>
-                                <div class='div-input-container {$required_container}'>
-                                    <label for='team_name_{$team_id}'>Team Name:</label>
-                                    <input id='team_name_{$team_id}' type='text' name='team_name' value='{$team_name}' autocomplete='off' {$required}>
+                                <div class='div-input-container {$requiredContainer}'>
+                                    <label for='team_name_{$teamID}'>Team Name:</label>
+                                    <input id='team_name_{$teamID}' type='text' name='team_name' value='{$teamName}' autocomplete='off' {$required}>
                                 </div>
                                 <div class='div-input-container'>
-                                    <label for='team_id_{$team_id}'>Team ID:</label>
-                                    <input id='team_id_{$team_id}' type='number' name='team_id' value='{$team_id}' readonly>
+                                    <label for='team_id_{$teamID}'>Team ID:</label>
+                                    <input id='team_id_{$teamID}' type='number' name='team_id' value='{$teamID}' readonly>
                                 </div>
                             </div>
                             <div class='div-multi-input-containers grid-4-columns'>
                                 <div class='div-input-container'>
-                                    <label for='team_sport_name_{$team_id}'>Sport:</label>
-                                    <input id='team_sport_name_{$team_id}' type='text' name='sport_name' value='{$sport_name}' readonly>
+                                    <label for='team_sport_name_{$teamID}'>Sport:</label>
+                                    <input id='team_sport_name_{$teamID}' type='text' name='sport_name' value='{$sportName}' readonly>
                                 </div>
-                                <div class='div-input-container {$required_container}'>
-                                    <label for='team_league_id_{$team_id}'>League ID:</label>
-                                    <input id='team_league_id_{$team_id}' type='number' name='league_id' min='1' value='{$league_id}' autocomplete='off' {$required}>
+                                <div class='div-input-container {$requiredContainer}'>
+                                    <label for='team_league_id_{$teamID}'>League ID:</label>
+                                    <input id='team_league_id_{$teamID}' type='number' name='league_id' min='1' value='{$leagueID}' autocomplete='off' {$required}>
                                 </div>
-                                <div class='div-input-container {$required_container}'>
-                                    <label for='team_season_id_{$team_id}'>Season ID:</label>
-                                    <input id='team_season_id_{$team_id}' type='number' name='season_id' min='1' value='{$season_id}' autocomplete='off' {$required}>
+                                <div class='div-input-container {$requiredContainer}'>
+                                    <label for='team_season_id_{$teamID}'>Season ID:</label>
+                                    <input id='team_season_id_{$teamID}' type='number' name='season_id' min='1' value='{$seasonID}' autocomplete='off' {$required}>
                                 </div>
-                                <div class='div-input-container {$required_container}'>
-                                    <label for='team_max_players_{$team_id}'>Max Players:</label>
-                                    <input id='team_max_players_{$team_id}' type='number' name='team_max_players' min='1' max='{$max_players}' value='{$max_players}' autocomplete='off' {$required}>
+                                <div class='div-input-container {$requiredContainer}'>
+                                    <label for='team_max_players_{$teamID}'>Max Players:</label>
+                                    <input id='team_max_players_{$teamID}' type='number' name='team_max_players' min='1' max='{$maxPlayers}' value='{$maxPlayers}' autocomplete='off' {$required}>
                                 </div>
                             </div>
                             <div class='div-multi-input-containers grid-2-columns'>
-                                <div class='div-input-container {$required_container}'>
-                                    <label for='team_home_color_{$team_id}'>Home Colors:</label>
-                                    <input id='team_home_color_{$team_id}' type='text' name='team_home_color' value='{$home_color}' autocomplete='off' {$required}>
+                                <div class='div-input-container {$requiredContainer}'>
+                                    <label for='team_home_color_{$teamID}'>Home Colors:</label>
+                                    <input id='team_home_color_{$teamID}' type='text' name='team_home_color' value='{$homeColor}' autocomplete='off' {$required}>
                                 </div>
-                                <div class='div-input-container {$required_container}'>
-                                    <label for='team_away_color_{$team_id}'>Away Colors:</label>
-                                    <input id='team_away_color_{$team_id}' type='text' name='team_away_color' value='{$away_color}' autocomplete='off' {$required}>
+                                <div class='div-input-container {$requiredContainer}'>
+                                    <label for='team_away_color_{$teamID}'>Away Colors:</label>
+                                    <input id='team_away_color_{$teamID}' type='text' name='team_away_color' value='{$awayColor}' autocomplete='off' {$required}>
                                 </div>
                             </div>
-                            <div class='div-multi-input-containers {$span_across}'>
-                                {$submit_btns}
+                            <div class='div-multi-input-containers {$spanAcross}'>
+                                {$submitBtns}
                                 <div class='grid-btn-container'>
-                                    <a class='btn btn-full btn-view' href='/team/{$team_id}'>View Team</a>
-                                    <a class='btn btn-full btn-view' href='/schedule/{$team_id}'>View Schedule</a>
+                                    <a class='btn btn-full btn-view' href='/team/{$teamID}'>View Team</a>
+                                    <a class='btn btn-full btn-view' href='/schedule/{$teamID}'>View Schedule</a>
                                 </div>
                             </div>
                         </form>
@@ -562,104 +577,107 @@ class AdminTemplate
             }
         }
 
-        $add_btn = '';
-        if ($role_id <= 2) {
-            $add_btn = ReusableTemplate::generatePopupAddBtn(5);
+        $addBtn = '';
+        if ($roleID <= 2) {
+            $addBtn = ReusableTemplate::generatePopupAddBtn(5);
         }
 
-        $data_container .= "
+        $dataContainer .= "
                 </div>
-                {$add_btn}
+                {$addBtn}
             </div>
         ";
 
-        return $data_container;
+        return $dataContainer;
     }
 
-    static function generatePositionsDataContainer($data, $role_id)
+    public static function generatePositionsDataContainer($data, $roleID)
     {
         [
-            'is_empty' => $is_empty,
-            'css_rule' => $rule_flex_center
+            'is_empty' => $isEmpty,
+            'css_rule' => $ruleFlexCenter
         ] = self::isDataAvailable($data);
 
-        $data_container = "
+        $dataContainer = "
             <div class='div-data-container hide-element' data-container-index='6'>
                 <header class='data-container-header grid-3-columns'>
                     <p>ID</p>
                     <p>Name</p>
                     <p>Details</p>
                 </header>
-                <div class='div-scroll-container positions-scroll {$rule_flex_center}'>
+                <div class='div-scroll-container positions-scroll {$ruleFlexCenter}'>
         ";
 
-        if ($is_empty) {
-            $data_container .= ReusableTemplate::generateNoneAvailableDiv('position', 'list');;
+        if ($isEmpty) {
+            $dataContainer .= ReusableTemplate::generateNoneAvailableDiv('position', 'list');;
         } else {
             foreach ($data as $position) {
-                $position_id = $position['position_id'];
-                $position_name = $position['position_name'];
-                $sport_id = $position['sport_id'];
-                $sport_name = $position['sport_name'];
+                $positionID = $position['position_id'];
+                $positionName = $position['position_name'];
+                $sportID = $position['sport_id'];
+                $sportName = $position['sport_name'];
 
-                $submit_btns = '';
-                if ($role_id <= 2) {
-                    $submit_btns = ReusableTemplate::generateFormSubmitBtns('POSITION');
+                $submitBtns = '';
+                if ($roleID <= 2) {
+                    $submitBtns = ReusableTemplate::generateFormSubmitBtns('POSITION');
                 }
 
                 // Prevent the coaches from changing input data.
-                $required_container = $role_id <= 2 ? 'required-container' : '';
-                $required = $role_id <= 2 ? 'required' : 'readonly';
+                $requiredContainer = $roleID <= 2 ? 'required-container' : '';
+                $required = $roleID <= 2 ? 'required' : 'readonly';
 
-                $data_container .= "
-                    <div class='div-row-container position-row-container-{$position_id}' data-row-id='{$position_id}'>
+                $dataContainer .= "
+                    <div class='div-row-container position-row-container-{$positionID}' data-row-id='{$positionID}'>
                         <ul class='row-header-list grid-3-columns'>
                             <li class='row-header-list-item'>
-                                <p>{$position_id}</p>
+                                <p>{$positionID}</p>
                             </li>
                             <li class='row-header-list-item'>
-                                <p class='position-name'>{$position_name}</p>
+                                <p class='position-name'>{$positionName}</p>
                             </li>
                             <li class='row-header-list-item'>
                                 <p>
-                                    <ion-icon class='open-icon icon-{$position_id}' name='chevron-down-outline'></ion-icon>
+                                    <ion-icon class='open-icon icon-{$positionID}' name='chevron-down-outline'></ion-icon>
                                 </p>
                             </li>
                         </ul>
-                        <form class='form form-info form-{$position_id} hide-element' action='../process/process-admin.php'>
-                            <input type='hidden' name='position_id' value='{$position_id}'>
+                        <form 
+                            class='form form-info form-{$positionID} hide-element' 
+                            action='" . SERVER . "/api/admin.php'
+                        >
+                            <input type='hidden' name='position_id' value='{$positionID}'>
                             <div class='div-multi-input-containers grid-3-columns'>
-                                <div class='div-input-container {$required_container}'>
-                                    <label for='position_name_{$position_id}'>Team Name:</label>
-                                    <input id='position_name_{$position_id}' type='text' name='position_name' value='{$position_name}' autocomplete='off' {$required}>
+                                <div class='div-input-container {$requiredContainer}'>
+                                    <label for='position_name_{$positionID}'>Team Name:</label>
+                                    <input id='position_name_{$positionID}' type='text' name='position_name' value='{$positionName}' autocomplete='off' {$required}>
                                 </div>
                                 <div class='div-input-container'>
-                                    <label for='position_sport_name_{$position_id}'>Sport:</label>
-                                    <input id='position_sport_name_{$position_id}' type='text' name='sport_name' value='{$sport_name}' readonly>
+                                    <label for='position_sport_name_{$positionID}'>Sport:</label>
+                                    <input id='position_sport_name_{$positionID}' type='text' name='sport_name' value='{$sportName}' readonly>
                                 </div>
-                                <div class='div-input-container {$required_container}'>
-                                    <label for='position_sport_id_{$position_id}'>Sport ID:</label>
-                                    <input id='position_sport_id_{$position_id}' type='number' name='sport_id' value='{$sport_id}' min='1' {$required}>
+                                <div class='div-input-container {$requiredContainer}'>
+                                    <label for='position_sport_id_{$positionID}'>Sport ID:</label>
+                                    <input id='position_sport_id_{$positionID}' type='number' name='sport_id' value='{$sportID}' min='1' {$required}>
                                 </div>
                             </div>
-                            {$submit_btns}
+                            {$submitBtns}
                         </form>
                     </div>
                 ";
             }
         }
 
-        $add_btn = '';
-        if ($role_id < 5) {
-            $add_btn = ReusableTemplate::generatePopupAddBtn(6);
+        $addBtn = '';
+        if ($roleID < 5) {
+            $addBtn = ReusableTemplate::generatePopupAddBtn(6);
         }
 
-        $data_container .= "
+        $dataContainer .= "
                 </div>
-                {$add_btn}
+                {$addBtn}
             </div>
         ";
 
-        return $data_container;
+        return $dataContainer;
     }
 }
