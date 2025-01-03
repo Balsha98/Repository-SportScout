@@ -22,7 +22,7 @@ class TeamData
                     <h2>Add New Player?</h2>
                     <p>Fill in the following <span>fields</span> appropriately.</p>
                 </header>
-                <form class="form form-add" action="../process/process-team.php">
+                <form class="form form-add" action="api/team.php">
                     <input type="hidden" name="team_id" value="%s">
                     <input type="hidden" name="sport_id" value="%s">
                     <input type="hidden" name="league_name" value="%s">
@@ -74,7 +74,7 @@ class TeamData
                     <h2>Add New Staff?</h2>
                     <p>Fill in the following <span>fields</span> appropriately.</p>
                 </header>
-                <form class="form form-add" action="../process/process-team.php">
+                <form class="form form-add" action="api/team.php">
                     <input type="hidden" name="team_id" value="%s">
                     <input type="hidden" name="league_id" value="%s">
                     <div class="div-multi-input-containers grid-2-columns">

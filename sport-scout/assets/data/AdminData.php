@@ -58,7 +58,7 @@ class AdminData
                     <h2>Add New User?</h2>
                     <p>Fill in the following <span>form</span> appropriately.</p>
                 </header>
-                <form class="form form-add" action="../process/process-admin.php">
+                <form class="form form-add" action="api/admin.php">
                     <div class="div-multi-input-containers grid-2-columns">
                         <div class="div-input-container required-container">
                             <label for="new_username">Username:</label>
@@ -114,7 +114,7 @@ class AdminData
                     <h2>Add New Sport?</h2>
                     <p>Fill in the following <span>fields</span> appropriately.</p>
                 </header>
-                <form class="form form-add" action="../process/process-admin.php">
+                <form class="form form-add" action="api/admin.php">
                     <div class="div-input-container required-container">
                         <label for="new_sport_name">Sport Name:</label>
                         <input id="new_sport_name" type="text" name="new_sport_name" autocomplete="off" required>
@@ -141,7 +141,7 @@ class AdminData
                     <h2>Add New League?</h2>
                     <p>Fill in the following <span>fields</span> appropriately.</p>
                 </header>
-                <form class="form form-add" action="../process/process-admin.php">
+                <form class="form form-add" action="api/admin.php">
                     <div class="div-multi-input-containers custom-2-column-grid">
                         <div class="div-input-container required-container">
                             <label for="new_league_name">League Name:</label>
@@ -174,7 +174,7 @@ class AdminData
                     <h2>Add New Season?</h2>
                     <p>Fill in the following <span>fields</span> appropriately.</p>
                 </header>
-                <form class="form form-add" action="../process/process-admin.php">
+                <form class="form form-add" action="api/admin.php">
                     <div class="div-multi-input-containers grid-2-columns">
                         <div class="div-input-container required-container">
                             <label for="new_season_year">Season Year:</label>
@@ -217,7 +217,7 @@ class AdminData
                     <h2>Add New Team?</h2>
                     <p>Fill in the following <span>fields</span> appropriately.</p>
                 </header>
-                <form class="form form-add" action="../process/process-admin.php">
+                <form class="form form-add" action="api/admin.php">
                     <div class="div-multi-input-containers">
                         <div class="div-input-container required-container">
                             <label for="new_team_name">Team Name:</label>
@@ -274,7 +274,7 @@ class AdminData
                     <h2>Add New Position?</h2>
                     <p>Fill in the following <span>fields</span> appropriately.</p>
                 </header>
-                <form class="form form-add" action="../process/process-admin.php">
+                <form class="form form-add" action="api/admin.php">
                     <div class="div-multi-input-containers custom-2-column-grid">
                         <div class="div-input-container required-container">
                             <label for="new_position_name">Position Name:</label>

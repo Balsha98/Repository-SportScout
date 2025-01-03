@@ -13,7 +13,7 @@ class ScheduleData
                     <h2>Add New Game?</h2>
                     <p>Fill in the following <span>fields</span> appropriately.</p>
                 </header>
-                <form class="form form-add" action="../process/process-schedule.php">
+                <form class="form form-add" action="api/schedule.php">
                     <input type="hidden" name="team_id" value="%s">
                     <input type="hidden" name="sport_id" value="%s">
                     <input type="hidden" name="league_id" value="%s">
@@ -84,7 +84,7 @@ class ScheduleData
                     <h2>Edit Current Game?</h2>
                     <p>Fill in the following <span>fields</span> appropriately.</p>
                 </header>
-                <form class="form form-edit" action="../process/process-schedule.php">
+                <form class="form form-edit" action="api/schedule.php">
                     <input type="hidden" name="team_id" value="%s">
                     <input id="schedule_id" type="hidden" name="schedule_id">
                     <div class="div-multi-input-containers grid-4-columns">
