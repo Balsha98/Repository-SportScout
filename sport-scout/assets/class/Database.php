@@ -189,18 +189,6 @@ class Database
         return null;
     }
 
-    public function getLastSportId()
-    {
-        $query = 'SELECT MAX(sport_id) AS sport_id FROM sports;';
-        $result = $this->db->prepare($query);
-
-        if ($result->execute()) {
-            return $result->fetch(PDO::FETCH_ASSOC);
-        }
-
-        return null;
-    }
-
     public function insertNewSport($data)
     {
         $query = 'INSERT INTO sports (sport_name) VALUES (:sport_name);';
@@ -283,18 +271,6 @@ class Database
         return null;
     }
 
-    public function getLastLeagueId()
-    {
-        $query = 'SELECT MAX(league_id) AS league_id FROM leagues;';
-        $result = $this->db->prepare($query);
-
-        if ($result->execute()) {
-            return $result->fetch(PDO::FETCH_ASSOC);
-        }
-
-        return null;
-    }
-
     public function insertNewLeague($data)
     {
         $query = '
@@ -369,18 +345,6 @@ class Database
         return null;
     }
 
-    public function getLastSeasonId()
-    {
-        $query = 'SELECT MAX(season_id) AS season_id FROM seasons;';
-        $result = $this->db->prepare($query);
-
-        if ($result->execute()) {
-            return $result->fetch(PDO::FETCH_ASSOC);
-        }
-
-        return null;
-    }
-
     public function insertNewSeason($data)
     {
         $query = '
@@ -441,18 +405,6 @@ class Database
 
         if ($result->execute()) {
             return $result->fetchAll(PDO::FETCH_ASSOC);
-        }
-
-        return null;
-    }
-
-    public function getLastTeamId()
-    {
-        $query = 'SELECT MAX(team_id) AS team_id FROM teams;';
-        $result = $this->db->prepare($query);
-
-        if ($result->execute()) {
-            return $result->fetch(PDO::FETCH_ASSOC);
         }
 
         return null;
@@ -591,18 +543,6 @@ class Database
         return null;
     }
 
-    public function getLastPlayerId()
-    {
-        $query = 'SELECT MAX(player_id) AS player_id FROM players;';
-        $result = $this->db->prepare($query);
-
-        if ($result->execute()) {
-            return $result->fetch(PDO::FETCH_ASSOC);
-        }
-
-        return null;
-    }
-
     public function insertNewPlayer($data)
     {
         $query = '
@@ -690,18 +630,6 @@ class Database
         return null;
     }
 
-    public function getLastPositionId()
-    {
-        $query = 'SELECT MAX(position_id) AS position_id FROM positions;';
-        $result = $this->db->prepare($query);
-
-        if ($result->execute()) {
-            return $result->fetch(PDO::FETCH_ASSOC);
-        }
-
-        return null;
-    }
-
     public function insertNewPosition($data)
     {
         $query = '
@@ -782,18 +710,6 @@ class Database
     }
 
     // ***** SCHEDULE RELATED METHODS ***** //
-
-    public function getLastScheduledGameId()
-    {
-        $query = 'SELECT MAX(schedule_id) AS schedule_id FROM schedule;';
-        $result = $this->db->prepare($query);
-
-        if ($result->execute()) {
-            return $result->fetch(PDO::FETCH_ASSOC);
-        }
-
-        return null;
-    }
 
     public function getScheduleByTeamId($id)
     {
