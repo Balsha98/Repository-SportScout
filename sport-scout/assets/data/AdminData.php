@@ -58,21 +58,21 @@ class AdminData
                     <h2>Add New User?</h2>
                     <p>Fill in the following <span>form</span> appropriately.</p>
                 </header>
-                <form class="form form-add" action="api/admin.php">
+                <form class="form form-add" action="api/admin.php" method="POST">
                     <div class="div-multi-input-containers grid-2-columns">
                         <div class="div-input-container required-container">
                             <label for="new_username">Username:</label>
-                            <input id="new_username" type="text" name="new_username" autocomplete="off" required>
+                            <input id="new_username" type="text" name="username" autocomplete="off" required>
                         </div>
                         <div class="div-input-container required-container">
                             <label for="new_password">Password:</label>
-                            <input id="new_password" type="password" name="new_password" autocomplete="off" required>
+                            <input id="new_password" type="password" name="password" autocomplete="off" required>
                         </div>
                     </div>
                     <div class="div-multi-input-containers grid-2-columns">
                         <div class="div-input-container required-container">
                             <label for="new_role_name">Type of Role:</label>
-                            <select id="new_role_name" name="new_role_name" autocomplete="off" required>
+                            <select id="new_role_name" name="role_name" autocomplete="off" required>
                                 <option value="">Select Role</option>
                                 <option value="1|Administrator">Administrator</option>
                                 <option value="2|League Manager">League Manager</option>
@@ -83,12 +83,12 @@ class AdminData
                         </div>
                         <div class="div-multi-input-containers grid-2-columns">
                             <div class="div-input-container required-container">
-                                <label for="league_id">League ID:</label>
-                                <input id="league_id" type="number" name="league_id" min="0" value="0" autocomplete="off" required>
+                                <label for="new_user_league_id">League ID:</label>
+                                <input id="new_user_league_id" type="number" name="league_id" min="0" value="0" autocomplete="off" required>
                             </div>
                             <div class="div-input-container required-container">
-                                <label for="team_id">Team ID:</label>
-                                <input id="team_id" type="number" name="team_id" min="0" value="0" autocomplete="off" required>
+                                <label for="new_user_team_id">Team ID:</label>
+                                <input id="new_user_team_id" type="number" name="team_id" min="0" value="0" autocomplete="off" required>
                             </div>
                         </div>
                     </div>
@@ -97,7 +97,7 @@ class AdminData
                             <ion-icon class="arrow-icon" name="arrow-back-outline"></ion-icon>
                             <span>Cancel</span>
                         </button>
-                        <button class="btn btn-full btn-add-new" type="submit" data-method="POST" data-clicked="ADD_USER">
+                        <button class="btn btn-full btn-add-new" type="submit" data-item-type="user">
                             <span>Add</span>
                         </button>
                     </div>
@@ -114,17 +114,17 @@ class AdminData
                     <h2>Add New Sport?</h2>
                     <p>Fill in the following <span>fields</span> appropriately.</p>
                 </header>
-                <form class="form form-add" action="api/admin.php">
+                <form class="form form-add" action="api/admin.php" method="POST">
                     <div class="div-input-container required-container">
                         <label for="new_sport_name">Sport Name:</label>
-                        <input id="new_sport_name" type="text" name="new_sport_name" autocomplete="off" required>
+                        <input id="new_sport_name" type="text" name="sport_name" autocomplete="off" required>
                     </div>
                     <div class="div-btn-container grid-btn-container">
                         <button class="btn btn-hollow btn-cancel" type="button">
                             <ion-icon class="arrow-icon" name="arrow-back-outline"></ion-icon>
                             <span>Cancel</span>
                         </button>
-                        <button class="btn btn-full btn-add-new" type="submit" data-method="POST" data-clicked="ADD_SPORT">
+                        <button class="btn btn-full btn-add-new" type="submit" data-item-type="sport">
                             <span>Add</span>
                         </button>
                     </div>
@@ -141,15 +141,15 @@ class AdminData
                     <h2>Add New League?</h2>
                     <p>Fill in the following <span>fields</span> appropriately.</p>
                 </header>
-                <form class="form form-add" action="api/admin.php">
+                <form class="form form-add" action="api/admin.php" method="POST">
                     <div class="div-multi-input-containers custom-2-column-grid">
                         <div class="div-input-container required-container">
                             <label for="new_league_name">League Name:</label>
-                            <input id="new_league_name" type="text" name="new_league_name" autocomplete="off" required>
+                            <input id="new_league_name" type="text" name="league_name" autocomplete="off" required>
                         </div>
                         <div class="div-input-container required-container">
-                            <label for="league_sport_id">Sport ID:</label>
-                            <input id="league_sport_id" type="number" name="sport_id" min="1" autocomplete="off" required>
+                            <label for="new_league_sport_id">Sport ID:</label>
+                            <input id="new_league_sport_id" type="number" name="sport_id" min="1" autocomplete="off" required>
                         </div>
                     </div>
                     <div class="div-btn-container grid-btn-container">
@@ -157,7 +157,7 @@ class AdminData
                             <ion-icon class="arrow-icon" name="arrow-back-outline"></ion-icon>
                             <span>Cancel</span>
                         </button>
-                        <button class="btn btn-full btn-add-new" type="submit" data-method="POST" data-clicked="ADD_LEAGUE">
+                        <button class="btn btn-full btn-add-new" type="submit" data-item-type="league">
                             <span>Add</span>
                         </button>
                     </div>
@@ -174,11 +174,11 @@ class AdminData
                     <h2>Add New Season?</h2>
                     <p>Fill in the following <span>fields</span> appropriately.</p>
                 </header>
-                <form class="form form-add" action="api/admin.php">
+                <form class="form form-add" action="api/admin.php" method="POST">
                     <div class="div-multi-input-containers grid-2-columns">
                         <div class="div-input-container required-container">
                             <label for="new_season_year">Season Year:</label>
-                            <input id="new_season_year" type="text" name="new_season_year" placeholder="YYYY/YY" autocomplete="off" required>
+                            <input id="new_season_year" type="text" name="season_year" placeholder="YYYY/YY" autocomplete="off" required>
                         </div>
                         <div class="div-multi-input-containers grid-2-columns">
                             <div class="div-input-container required-container">
@@ -193,14 +193,14 @@ class AdminData
                     </div>
                     <div class="div-input-container required-container">
                         <label for="new_season_desc">Season Description:</label>
-                        <input id="new_season_desc" type="text" name="new_season_desc" autocomplete="off" required>
+                        <input id="new_season_desc" type="text" name="season_desc" autocomplete="off" required>
                     </div>
                     <div class="div-btn-container grid-btn-container">
                         <button class="btn btn-hollow btn-cancel" type="button">
                             <ion-icon class="arrow-icon" name="arrow-back-outline"></ion-icon>
                             <span>Cancel</span>
                         </button>
-                        <button class="btn btn-full btn-add-new" type="submit" data-method="POST" data-clicked="ADD_SEASON">
+                        <button class="btn btn-full btn-add-new" type="submit" data-item-type="season">
                             <span>Add</span>
                         </button>
                     </div>
@@ -217,39 +217,39 @@ class AdminData
                     <h2>Add New Team?</h2>
                     <p>Fill in the following <span>fields</span> appropriately.</p>
                 </header>
-                <form class="form form-add" action="api/admin.php">
+                <form class="form form-add" action="api/admin.php" method="POST">
                     <div class="div-multi-input-containers">
                         <div class="div-input-container required-container">
                             <label for="new_team_name">Team Name:</label>
-                            <input id="new_team_name" type="text" name="new_team_name" autocomplete="off" required>
+                            <input id="new_team_name" type="text" name="team_name" autocomplete="off" required>
                         </div>
                     </div>
                     <div class="div-multi-input-containers grid-4-columns">
                         <div class="div-input-container required-container">
-                            <label for="team_sport_id">Sport ID:</label>
-                            <input id="team_sport_id" type="number" name="sport_id" min="1" autocomplete="off" required>
+                            <label for="new_team_sport_id">Sport ID:</label>
+                            <input id="new_team_sport_id" type="number" name="sport_id" min="1" autocomplete="off" required>
                         </div>
                         <div class="div-input-container required-container">
-                            <label for="team_league_id">League ID:</label>
-                            <input id="team_league_id" type="number" name="league_id" min="1" autocomplete="off" required>
+                            <label for="new_team_league_id">League ID:</label>
+                            <input id="new_team_league_id" type="number" name="league_id" min="1" autocomplete="off" required>
                         </div>
                         <div class="div-input-container required-container">
-                            <label for="team_season_id">Season ID:</label>
-                            <input id="team_season_id" type="number" name="season_id" min="1" autocomplete="off" required>
+                            <label for="new_team_season_id">Season ID:</label>
+                            <input id="new_team_season_id" type="number" name="season_id" min="1" autocomplete="off" required>
                         </div>
                         <div class="div-input-container required-container">
                             <label for="new_team_max_players">Max Players:</label>
-                            <input id="new_team_max_players" type="number" name="new_team_max_players" min="1" autocomplete="off" required>
+                            <input id="new_team_max_players" type="number" name="team_max_players" min="1" autocomplete="off" required>
                         </div>
                     </div>
                     <div class="div-multi-input-containers grid-2-columns">
                         <div class="div-input-container required-container">
                             <label for="new_team_home_color">Home Colors:</label>
-                            <input id="new_team_home_color" type="text" name="new_team_home_color" placeholder="Color/Color" autocomplete="off" required>
+                            <input id="new_team_home_color" type="text" name="team_home_color" placeholder="Color/Color" autocomplete="off" required>
                         </div>
                         <div class="div-input-container required-container">
                             <label for="new_team_away_color">Away Colors:</label>
-                            <input id="new_team_away_color" type="text" name="new_team_away_color" placeholder="Color/Color" autocomplete="off" required>
+                            <input id="new_team_away_color" type="text" name="team_away_color" placeholder="Color/Color" autocomplete="off" required>
                         </div>
                     </div>
                     <div class="div-btn-container grid-btn-container">
@@ -257,7 +257,7 @@ class AdminData
                             <ion-icon class="arrow-icon" name="arrow-back-outline"></ion-icon>
                             <span>Cancel</span>
                         </button>
-                        <button class="btn btn-full btn-add-new" type="submit" data-method="POST" data-clicked="ADD_TEAM">
+                        <button class="btn btn-full btn-add-new" type="submit" data-item-type="team">
                             <span>Add</span>
                         </button>
                     </div>
@@ -274,11 +274,11 @@ class AdminData
                     <h2>Add New Position?</h2>
                     <p>Fill in the following <span>fields</span> appropriately.</p>
                 </header>
-                <form class="form form-add" action="api/admin.php">
+                <form class="form form-add" action="api/admin.php" method="POST">
                     <div class="div-multi-input-containers custom-2-column-grid">
                         <div class="div-input-container required-container">
                             <label for="new_position_name">Position Name:</label>
-                            <input id="new_position_name" type="text" name="new_position_name" autocomplete="off" required>
+                            <input id="new_position_name" type="text" name="position_name" autocomplete="off" required>
                         </div>
                         <div class="div-input-container required-container">
                             <label for="new_position_sport_id">Sport ID:</label>
@@ -290,7 +290,7 @@ class AdminData
                             <ion-icon class="arrow-icon" name="arrow-back-outline"></ion-icon>
                             <span>Cancel</span>
                         </button>
-                        <button class="btn btn-full btn-add-new" type="submit" data-method="POST" data-clicked="ADD_POSITION">
+                        <button class="btn btn-full btn-add-new" type="submit" data-item-type="position">
                             <span>Add</span>
                         </button>
                     </div>

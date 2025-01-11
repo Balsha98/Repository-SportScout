@@ -74,12 +74,12 @@ class ReusableTemplate
      * Display buttons for submitting the form.
      * @return string the form submission buttons.
      */
-    public static function generateFormSubmitBtns($target)
+    public static function generateFormSubmitBtns($itemType)
     {
         return "
             <div class='grid-btn-container'>
-                <button class='btn btn-hollow btn-delete' type='submit' data-method='DELETE' data-clicked='DELETE_{$target}'>Delete</button>
-                <button class='btn btn-full btn-update' type='submit' data-method='PUT' data-clicked='UPDATE_{$target}'>Update</button>
+                <button class='btn btn-hollow btn-delete' type='submit' data-method='DELETE' data-item-type='{$itemType}'>Delete</button>
+                <button class='btn btn-full btn-update' type='submit' data-method='PUT' data-item-type='{$itemType}'>Update</button>
             </div>
         ";
     }

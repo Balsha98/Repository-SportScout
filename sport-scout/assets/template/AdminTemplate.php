@@ -120,7 +120,7 @@ class AdminTemplate
                     $options .= "<option value='{$value}' {$selected}>{$key}</option>";
                 }
 
-                $submitBtns = ReusableTemplate::generateFormSubmitBtns('USER');
+                $submitBtns = ReusableTemplate::generateFormSubmitBtns('user');
 
                 $dataContainer .= "
                     <div class='div-row-container user-row-container-{$userID}' data-row-id='{$userID}'>

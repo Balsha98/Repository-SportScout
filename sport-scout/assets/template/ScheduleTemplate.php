@@ -34,7 +34,7 @@ class ScheduleTemplate
 
     public static function generatePopups($teamID)
     {
-        $teamData = self::$db->get_team_data_by_team_id('*', $teamID);
+        $teamData = self::$db->getTeamDataByTeamId('*', $teamID);
 
         [['sport_name' => $sportName]] = $teamData;
         [['sport_id' => $sportID]] = $teamData;
@@ -184,8 +184,8 @@ class ScheduleTemplate
                         $date = $innerArray['scheduled'];
 
                         // Get home and away team names.
-                        [['team_name' => $homeTeamName]] = self::$db->get_team_data_by_team_id('team_name', $homeTeamID);
-                        [['team_name' => $awayTeamName]] = self::$db->get_team_data_by_team_id('team_name', $awayTeamID);
+                        [['team_name' => $homeTeamName]] = self::$db->getTeamDataByTeamId('team_name', $homeTeamID);
+                        [['team_name' => $awayTeamName]] = self::$db->getTeamDataByTeamId('team_name', $awayTeamID);
 
                         // Get appropriate visuals.
                         $status = $innerArray['status'];

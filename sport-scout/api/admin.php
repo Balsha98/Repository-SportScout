@@ -1,33 +1,40 @@
 <?php declare(strict_types=1);
 
-require_once '../class/Database.php';
-require_once '../class/Sanitize.php';
-require_once '../class/Helper.php';
+require_once '../assets/class/Encoder.php';
+require_once '../assets/class/Database.php';
+require_once '../assets/class/Sanitize.php';
+require_once '../assets/class/Helper.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $clicked = $_POST['clicked'];
-    $message = 'success';
-    $data = [];
+$request = $_SERVER['REQUEST_METHOD'];
+$input = Encoder::fromJSON(file_get_contents('php://input'));
+$itemType = $input['item_type'];
+if (array_key_exists('item_id', $input)) {
+    $itemID = $input['item_id'];
+}
 
-    // ADD USERS, SPORTS, LEAGUES, SEASONS, TEAMS
-    if ($clicked === 'ADD_USER') {
+$status = 'success';
+$return = [];
+
+// Create new items.
+if ($request === 'POST') {
+    if ($itemType === 'ADD_USER') {
         $last_user_id = $db->get_last_user_id()['user_id'];
 
         $username = Sanitize::stripString($_POST['new_username']);
-        Sanitize::fullStringSearch($message, $username, 25);
+        Sanitize::fullStringSearch($status, $username, 25);
 
         $password = Sanitize::stripString($_POST['new_password']);
         if ($password === '') {
-            $message = 'fail';
+            $status = 'fail';
         } else if (!Sanitize::isShorter($password, 64)) {
-            $message = 'fail';
+            $status = 'fail';
             $password = '';
         }
 
         $role_id = '';
         $role_name = '';
         Helper::setRoleIdAndName(
-            $message,
+            $status,
             $role_id,
             $role_name,
             'new_role_name'
@@ -39,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $team_name = '';
         Helper::setLeagueAndTeamNames(
             $db,
-            $message,
+            $status,
             $league_id,
             $league_name,
             $team_id,
@@ -48,8 +55,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'team_id'
         );
 
-        $data = [
-            'message' => $message,
+        $return = [
+            'status' => $status,
             'last_user_id' => $last_user_id,
             'new_username' => $username,
             'new_password' => $password,
@@ -61,65 +68,65 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'team_name' => $team_name
         ];
 
-        if ($message === 'success') {
+        if ($status === 'success') {
             $db->alter_auto_increment('users', $last_user_id);
-            $db->insert_new_user($data);
+            $db->insert_new_user($return);
         }
-    } else if ($clicked === 'ADD_SPORT') {
+    } else if ($itemType === 'ADD_SPORT') {
         $last_sport_id = (int) $db->get_last_sport_id()['sport_id'];
 
         $sport_name = Sanitize::stripString($_POST['new_sport_name']);
-        Sanitize::fullStringSearch($message, $sport_name, 50);
+        Sanitize::fullStringSearch($status, $sport_name, 50);
 
-        $data = [
-            'message' => $message,
+        $return = [
+            'status' => $status,
             'last_sport_id' => $last_sport_id,
             'new_sport_name' => $sport_name
         ];
 
-        if ($message === 'success') {
+        if ($status === 'success') {
             $db->alter_auto_increment('sports', $last_sport_id);
-            $db->insert_new_sport($data);
+            $db->insert_new_sport($return);
         }
-    } else if ($clicked === 'ADD_LEAGUE') {
+    } else if ($itemType === 'ADD_LEAGUE') {
         $last_league_id = $db->get_last_league_id()['league_id'];
 
         $league_name = Sanitize::stripString($_POST['new_league_name']);
-        Sanitize::fullStringSearch($message, $league_name, 50);
+        Sanitize::fullStringSearch($status, $league_name, 50);
 
         $sport_id = '';
         $sport_name = '';
         Helper::setSportName(
             $db,
-            $message,
+            $status,
             $sport_id,
             $sport_name,
             'sport_id'
         );
 
-        $data = [
-            'message' => $message,
+        $return = [
+            'status' => $status,
             'last_league_id' => $last_league_id,
             'new_league_name' => $league_name,
             'league_sport_id' => $sport_id,
             'league_sport_name' => $sport_name
         ];
 
-        if ($message === 'success') {
+        if ($status === 'success') {
             $db->alter_auto_increment('leagues', $last_league_id);
-            $db->insert_new_league($data);
+            $db->insert_new_league($return);
         }
-    } else if ($clicked === 'ADD_SEASON') {
+    } else if ($itemType === 'ADD_SEASON') {
         $last_season_id = $db->get_last_season_id()['season_id'];
 
         $season_year = $_POST['new_season_year'];
         if ($season_year === '') {
-            $message = 'fail';
+            $status = 'fail';
         } else if (!Sanitize::isExactly($season_year, 7)) {
-            $message = 'fail';
+            $status = 'fail';
             $season_year = '';
         } else if (!Sanitize::isYearFormatted($season_year)) {
-            $message = 'fail';
+            $status = 'fail';
             $season_year = '';
         }
 
@@ -127,7 +134,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $sport_id = '';
         Helper::setSportName(
             $db,
-            $message,
+            $status,
             $sport_id,
             $sport_name,
             'sport_id'
@@ -137,7 +144,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $league_id = '';
         Helper::setLeagueName(
             $db,
-            $message,
+            $status,
             $sport_id,
             $league_id,
             $league_name,
@@ -146,14 +153,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $season_desc = Sanitize::stripString($_POST['new_season_desc']);
         if ($season_desc === '') {
-            $message = 'fail';
+            $status = 'fail';
         } else if (!Sanitize::isShorter($season_desc, 50)) {
-            $message = 'fail';
+            $status = 'fail';
             $season_desc = '';
         }
 
-        $data = [
-            'message' => $message,
+        $return = [
+            'status' => $status,
             'last_season_id' => $last_season_id,
             'new_season_year' => $season_year,
             'new_season_sport_id' => $sport_id,
@@ -163,21 +170,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'new_season_desc' => $season_desc,
         ];
 
-        if ($message === 'success') {
+        if ($status === 'success') {
             $db->alter_auto_increment('seasons', $last_season_id);
-            $db->insert_new_season($data);
+            $db->insert_new_season($return);
         }
-    } else if ($clicked === 'ADD_TEAM') {
+    } else if ($itemType === 'ADD_TEAM') {
         $last_team_id = $db->get_last_team_id()['team_id'];
 
         $team_name = Sanitize::stripString($_POST['new_team_name']);
-        Sanitize::fullStringSearch($message, $team_name, 50);
+        Sanitize::fullStringSearch($status, $team_name, 50);
 
         $sport_id = '';
         $sport_name = '';
         Helper::setSportName(
             $db,
-            $message,
+            $status,
             $sport_id,
             $sport_name,
             'sport_id'
@@ -187,7 +194,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $league_name = '';
         Helper::setLeagueName(
             $db,
-            $message,
+            $status,
             $sport_id,
             $league_id,
             $league_name,
@@ -198,7 +205,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $season_year = '';
         Helper::setSeasonYear(
             $db,
-            $message,
+            $status,
             $league_id,
             $season_id,
             $season_year,
@@ -207,20 +214,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $max_players = (int) $_POST['new_team_max_players'];
         if ($max_players === '') {
-            $message = 'fail';
+            $status = 'fail';
         } else if ($max_players <= 0) {
-            $message = 'fail';
+            $status = 'fail';
             $max_players = '';
         }
 
         $home_color = Sanitize::stripString($_POST['new_team_home_color']);
-        Sanitize::fullColorSearch($message, $home_color, 25);
+        Sanitize::fullColorSearch($status, $home_color, 25);
 
         $away_color = Sanitize::stripString($_POST['new_team_away_color']);
-        Sanitize::fullColorSearch($message, $away_color, 25);
+        Sanitize::fullColorSearch($status, $away_color, 25);
 
-        $data = [
-            'message' => $message,
+        $return = [
+            'status' => $status,
             'last_team_id' => $last_team_id,
             'new_team_name' => $team_name,
             'team_sport_id' => $sport_id,
@@ -234,51 +241,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'new_team_away_color' => $away_color
         ];
 
-        if ($message === 'success') {
+        if ($status === 'success') {
             $db->alter_auto_increment('teams', $last_team_id);
-            $db->insert_new_team($data);
+            $db->insert_new_team($return);
         }
-    } else if ($clicked === 'ADD_POSITION') {
+    } else if ($itemType === 'ADD_POSITION') {
         $last_position_id = (int) $db->get_last_position_id()['position_id'];
 
         $position_name = Sanitize::stripString($_POST['new_position_name']);
-        Sanitize::fullStringSearch($message, $position_name, 50);
+        Sanitize::fullStringSearch($status, $position_name, 50);
 
         $sport_id = '';
         $sport_name = '';
         Helper::setSportName(
             $db,
-            $message,
+            $status,
             $sport_id,
             $sport_name,
             'sport_id'
         );
 
-        $data = [
-            'message' => $message,
+        $return = [
+            'status' => $status,
             'last_position_id' => $last_position_id,
             'new_position_name' => $position_name,
             'new_position_sport_id' => $sport_id,
             'new_position_sport_name' => $sport_name
         ];
 
-        if ($message === 'success') {
+        if ($status === 'success') {
             $db->alter_auto_increment('positions', $last_position_id);
-            $db->insert_new_position($data);
+            $db->insert_new_position($return);
         }
     }
 
-    // UPDATE USERS, SPORTS, LEAGUES, SEASONS, TEAMS
-    if ($clicked === 'UPDATE_USER') {
+    echo Encoder::toJSON($return);
+} else if ($request === 'PUT') {  // Update existing items.
+    if ($itemType === 'UPDATE_USER') {
         $user_id = (int) $_POST['user_id'];
 
         $username = Sanitize::stripString($_POST['username']);
-        Sanitize::fullStringSearch($message, $username, 25);
+        Sanitize::fullStringSearch($status, $username, 25);
 
         $role_id = '';
         $role_name = '';
         Helper::setRoleIdAndName(
-            $message,
+            $status,
             $role_id,
             $role_name,
             'role_name'
@@ -290,7 +298,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $team_name = '';
         Helper::setLeagueAndTeamNames(
             $db,
-            $message,
+            $status,
             $league_id,
             $league_name,
             $team_id,
@@ -299,8 +307,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'team_id'
         );
 
-        $data = [
-            'message' => $message,
+        $return = [
+            'status' => $status,
             'user_id' => $user_id,
             "username_{$user_id}" => $username,
             'role_id' => $role_id,
@@ -311,70 +319,70 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             "user_team_name_{$user_id}" => $team_name,
         ];
 
-        if ($message === 'success') {
-            $db->update_admin_user($data);
+        if ($status === 'success') {
+            $db->update_admin_user($return);
         }
-    } else if ($clicked === 'UPDATE_SPORT') {
+    } else if ($itemType === 'UPDATE_SPORT') {
         $sport_id = (int) $_POST['sport_id'];
 
         $sport_name = Sanitize::stripString($_POST['sport_name']);
-        Sanitize::fullStringSearch($message, $sport_name, 50);
+        Sanitize::fullStringSearch($status, $sport_name, 50);
 
-        $data = [
-            'message' => $message,
+        $return = [
+            'status' => $status,
             'sport_id' => $sport_id,
             "sport_name_{$sport_id}" => $sport_name
         ];
 
-        if ($message === 'success') {
-            $db->update_sport($data);
+        if ($status === 'success') {
+            $db->update_sport($return);
         }
-    } else if ($clicked === 'UPDATE_LEAGUE') {
+    } else if ($itemType === 'UPDATE_LEAGUE') {
         $league_id = (int) $_POST['league_id'];
 
         $league_name = Sanitize::stripString($_POST['league_name']);
-        Sanitize::fullStringSearch($message, $league_name, 50);
+        Sanitize::fullStringSearch($status, $league_name, 50);
 
         $sport_id = '';
         $sport_name = '';
         Helper::setSportName(
             $db,
-            $message,
+            $status,
             $sport_id,
             $sport_name,
             'sport_id'
         );
 
-        $data = [
-            'message' => $message,
+        $return = [
+            'status' => $status,
             'league_id' => $league_id,
             "league_name_{$league_id}" => $league_name,
             "league_sport_id_{$league_id}" => $sport_id,
             'sport_name' => $sport_name
         ];
 
-        if ($message === 'success') {
-            $db->update_league($data);
+        if ($status === 'success') {
+            $db->update_league($return);
         }
-    } else if ($clicked === 'UPDATE_SEASON') {
+    } else if ($itemType === 'UPDATE_SEASON') {
         $season_id = (int) $_POST['season_id'];
 
         $season_year = $_POST['season_year'];
         if ($season_year === '') {
-            $message = 'fail';
+            $status = 'fail';
         } else if (!Sanitize::isExactly($season_year, 7)) {
-            $message = 'fail';
+            $status = 'fail';
             $season_year = '';
         } else if (!Sanitize::isYearFormatted($season_year)) {
-            $message = 'fail';
+            $status = 'fail';
             $season_year = '';
         }
 
         $season_desc = Sanitize::stripString($_POST['season_desc']);
         if ($season_desc === '') {
-            $message = 'fail';
+            $status = 'fail';
         } else if (!Sanitize::isShorter($season_desc, 50)) {
-            $message = 'fail';
+            $status = 'fail';
             $season_desc = '';
         }
 
@@ -382,7 +390,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $sport_name = '';
         Helper::setSportName(
             $db,
-            $message,
+            $status,
             $sport_id,
             $sport_name,
             'sport_id'
@@ -392,15 +400,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $league_name = '';
         Helper::setLeagueName(
             $db,
-            $message,
+            $status,
             $sport_id,
             $league_id,
             $league_name,
             'league_id'
         );
 
-        $data = [
-            'message' => $message,
+        $return = [
+            'status' => $status,
             'season_id' => $season_id,
             "season_year_{$season_id}" => $season_year,
             "season_desc_{$season_id}" => $season_desc,
@@ -410,14 +418,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'league_name' => $league_name
         ];
 
-        if ($message === 'success') {
-            $db->update_season($data);
+        if ($status === 'success') {
+            $db->update_season($return);
         }
-    } else if ($clicked === 'UPDATE_TEAM') {
+    } else if ($itemType === 'UPDATE_TEAM') {
         $team_id = (int) $_POST['team_id'];
 
         $team_name = Sanitize::stripString($_POST['team_name']);
-        Sanitize::fullStringSearch($message, $team_name, 50);
+        Sanitize::fullStringSearch($status, $team_name, 50);
 
         // Get sport for validation.
         $sport_id = (int) $_POST['sport_id'];
@@ -426,7 +434,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $league_name = '';
         Helper::setLeagueName(
             $db,
-            $message,
+            $status,
             $sport_id,
             $league_id,
             $league_name,
@@ -437,7 +445,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $season_year = '';
         Helper::setSeasonYear(
             $db,
-            $message,
+            $status,
             $league_id,
             $season_id,
             $season_year,
@@ -446,20 +454,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $max_players = (int) $_POST['team_max_players'];
         if ($max_players === '') {
-            $message = 'fail';
+            $status = 'fail';
         } else if ($max_players <= 0) {
-            $message = '';
+            $status = '';
             $max_players = '';
         }
 
         $home_color = Sanitize::stripString($_POST['team_home_color']);
-        Sanitize::fullColorSearch($message, $home_color, 25);
+        Sanitize::fullColorSearch($status, $home_color, 25);
 
         $away_color = Sanitize::stripString($_POST['team_away_color']);
-        Sanitize::fullColorSearch($message, $away_color, 25);
+        Sanitize::fullColorSearch($status, $away_color, 25);
 
-        $data = [
-            'message' => $message,
+        $return = [
+            'status' => $status,
             'team_id' => $team_id,
             "team_name_{$team_id}" => $team_name,
             "team_league_id_{$team_id}" => $league_id,
@@ -471,52 +479,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             "team_away_color_{$team_id}" => $away_color,
         ];
 
-        if ($message === 'success') {
-            $db->update_team($data);
+        if ($status === 'success') {
+            $db->update_team($return);
         }
-    } else if ($clicked === 'UPDATE_POSITION') {
+    } else if ($itemType === 'UPDATE_POSITION') {
         $position_id = (int) $_POST['position_id'];
 
         $position_name = Sanitize::stripString($_POST['position_name']);
-        Sanitize::fullStringSearch($message, $position_name, 50);
+        Sanitize::fullStringSearch($status, $position_name, 50);
 
         $sport_id = '';
         $sport_name = '';
         Helper::setSportName(
             $db,
-            $message,
+            $status,
             $sport_id,
             $sport_name,
             'sport_id'
         );
 
-        $data = [
-            'message' => $message,
+        $return = [
+            'status' => $status,
             'position_id' => $position_id,
             "position_name_{$position_id}" => $position_name,
             "position_sport_id_{$position_id}" => $sport_id,
             "position_sport_name_{$position_id}" => $sport_name
         ];
 
-        if ($message === 'success') {
-            $db->update_position($data);
+        if ($status === 'success') {
+            $db->update_position($return);
         }
     }
 
-    // DELETE USERS, SPORTS, LEAGUES, SEASONS, TEAMS
-    if ($clicked === 'DELETE_USER') {
-        $db->delete_user_by_id($_POST['user_id']);
-    } else if ($clicked === 'DELETE_SPORT') {
-        $db->delete_sport_by_id($_POST['sport_id']);
-    } else if ($clicked === 'DELETE_LEAGUE') {
-        $db->delete_league_by_id($_POST['league_id']);
-    } else if ($clicked === 'DELETE_SEASON') {
-        $db->delete_season_by_id($_POST['season_id']);
-    } else if ($clicked === 'DELETE_TEAM') {
-        $db->delete_team_by_id($_POST['team_id']);
-    } else if ($clicked === 'DELETE_POSITION') {
-        $db->delete_position_by_id($_POST['position_id']);
-    }
-
-    echo json_encode($data);
+    echo Encoder::toJSON($return);
+} else if ($request === 'DELETE') {  // Delete existing items.
+    $tableName = $itemType !== 'schedule' ? "{$itemType}s" : $itemType;
+    $db->deleteRowById($tableName, $itemType, $itemID);
 }

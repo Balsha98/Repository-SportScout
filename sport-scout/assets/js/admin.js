@@ -21,7 +21,24 @@ const viewBtns = $(".btn-view");
 const updateBtns = $(".btn-update");
 const deleteBtns = $(".btn-delete");
 
-// USER SELECT OPTIONS
+// ***** VARIABLES ***** //
+const newItemInputs = {
+    user: ["new_username", "new_password", "new_role_name", "new_user_league_id", "new_user_team_id"],
+    sport: ["new_sport_name"],
+    league: ["new_league_name", "new_league_sport_id"],
+    season: ["new_season_year", "new_season_sport_id", "new_season_league_id", "new_season_desc"],
+    team: [
+        "new_team_name",
+        "new_team_sport_id",
+        "new_team_league_id",
+        "new_team_season_id",
+        "new_team_max_players",
+        "new_team_home_color",
+        "new_team_away_color",
+    ],
+    position: ["new_position_name", "new_position_sport_id"],
+};
+
 const selectOptions = {
     Administrator: "1|Administrator",
     "League Manager": "2|League Manager",
@@ -100,12 +117,10 @@ const resetInput = function (data) {
     }
 };
 
-const warnInputs = function (data, message) {
+const warnInputs = function (data, status) {
     for (const [key, value] of Object.entries(data)) {
-        if (message === "fail") {
-            if (value === "") {
-                $(`#${key}`)?.closest(".div-input-container").addClass("red-container");
-            }
+        if (status === "fail") {
+            if (value === "") $(`#${key}`)?.closest(".div-input-container").addClass("red-container");
 
             continue;
         }
@@ -133,31 +148,39 @@ const reloadWindow = function (seconds) {
 const ajaxAdd = function (clickEvent) {
     clickEvent.preventDefault();
 
-    const clickedBtn = $(this).data("clicked");
     const relPopup = $(this.closest(".popup-show"));
     const form = $(this.closest(".form"));
+    const url = form.attr("action");
+    const method = form.attr("method");
+    const itemType = $(this).data("item-type");
+
+    const data = {};
+    data["item_type"] = itemType;
+    newItemInputs[itemType].forEach((id) => {
+        data[id] = $(`#${id}`).val();
+    });
 
     $.ajax({
-        url: form.attr("action"),
-        type: $(this).data("method"),
-        data: `${form.serialize()}&clicked=${clickedBtn}`,
+        url: url,
+        type: method,
+        data: JSON.stringify(data),
         success: function (response) {
             console.log(response);
             const data = JSON.parse(response);
-            const message = data["message"];
+            const status = data["status"];
 
-            if (message === "fail") {
-                warnInputs(data, message);
+            if (status === "fail") {
+                warnInputs(data, status);
                 return;
             }
 
             // Back to white.
-            warnInputs(data, message);
+            warnInputs(data, status);
             resetInput(data);
 
             let previousRowID = 0;
 
-            if (clickedBtn === "ADD_USER") {
+            if (itemType === "ADD_USER") {
                 // Checking for items.
                 const noneAvailable = $(".div-none-available-container");
                 if (noneAvailable) {
@@ -176,9 +199,9 @@ const ajaxAdd = function (clickEvent) {
                 const roleID = data["new_role_id"];
                 const roleName = data["new_role_name"];
                 const roleOption = `${roleID}|${roleName}`;
-                const leagueID = data["league_id"];
+                const leagueID = data["new_user_league_id"];
                 const leagueName = data["league_name"];
-                const teamID = data["team_id"];
+                const teamID = data["new_user_team_id"];
                 const teamName = data["team_name"];
 
                 let options = "";
@@ -245,7 +268,7 @@ const ajaxAdd = function (clickEvent) {
                         </form>
                     </div>    
                 `);
-            } else if (clickedBtn === "ADD_SPORT") {
+            } else if (itemType === "ADD_SPORT") {
                 // Checking for items.
                 const noneAvailable = $(".div-none-available-container");
                 if (noneAvailable) {
@@ -295,7 +318,7 @@ const ajaxAdd = function (clickEvent) {
                         </form>
                     </div>
                 `);
-            } else if (clickedBtn === "ADD_LEAGUE") {
+            } else if (itemType === "ADD_LEAGUE") {
                 // Checking for items.
                 const noneAvailable = $(".div-none-available-container");
                 if (noneAvailable) {
@@ -352,7 +375,7 @@ const ajaxAdd = function (clickEvent) {
                         </form>
                     </div>
                 `);
-            } else if (clickedBtn === "ADD_SEASON") {
+            } else if (itemType === "ADD_SEASON") {
                 // Checking for items.
                 const noneAvailable = $(".div-none-available-container");
                 if (noneAvailable) {
@@ -429,7 +452,7 @@ const ajaxAdd = function (clickEvent) {
                         </form>
                     </div>
                 `);
-            } else if (clickedBtn === "ADD_TEAM") {
+            } else if (itemType === "ADD_TEAM") {
                 // Checking for items.
                 const noneAvailable = $(".div-none-available-container");
                 if (noneAvailable) {
@@ -532,7 +555,7 @@ const ajaxAdd = function (clickEvent) {
                 `);
 
                 attachViewBtnEvent($(".btn-view"));
-            } else if (clickedBtn === "ADD_POSITION") {
+            } else if (itemType === "ADD_POSITION") {
                 // Checking for items.
                 const noneAvailable = $(".div-none-available-container");
                 if (noneAvailable) {
@@ -608,7 +631,7 @@ const ajaxAdd = function (clickEvent) {
 const ajaxUpdate = function (clickEvent) {
     clickEvent.preventDefault();
 
-    const clickedBtn = $(this).data("clicked");
+    const itemType = $(this).data("clicked");
     const relContainer = $(this.closest(".div-row-container"));
     const relContainerClass = relContainer.attr("class").split(" ")[1];
     const form = $(this.closest(".form"));
@@ -616,21 +639,21 @@ const ajaxUpdate = function (clickEvent) {
     $.ajax({
         url: form.attr("action"),
         type: $(this).data("method"),
-        data: `${form.serialize()}&clicked=${clickedBtn}`,
+        data: `${form.serialize()}&clicked=${itemType}`,
         success: function (response) {
             console.log(response);
             const data = JSON.parse(response);
-            const message = data["message"];
+            const status = data["status"];
 
-            if (message === "fail") {
-                warnInputs(data, message);
+            if (status === "fail") {
+                warnInputs(data, status);
                 return;
             }
 
             // Back to white.
-            warnInputs(data, message);
+            warnInputs(data, status);
 
-            if (clickedBtn === "UPDATE_USER") {
+            if (itemType === "UPDATE_USER") {
                 const userID = +data["user_id"];
 
                 const username = data[`username_${userID}`];
@@ -660,13 +683,13 @@ const ajaxUpdate = function (clickEvent) {
 
                 const teamName = data[`user_team_name_${userID}`];
                 $(`.${relContainerClass} #user_team_name_${userID}`).val(teamName);
-            } else if (clickedBtn === "UPDATE_SPORT") {
+            } else if (itemType === "UPDATE_SPORT") {
                 const sportID = data["sport_id"];
                 const sportName = data[`sport_name_${sportID}`];
                 $(`.${relContainerClass} .sport-name`).text(sportName);
 
                 reloadWindow(1);
-            } else if (clickedBtn === "UPDATE_LEAGUE") {
+            } else if (itemType === "UPDATE_LEAGUE") {
                 const leagueID = data["league_id"];
 
                 const leagueName = data[`league_name_${leagueID}`];
@@ -676,7 +699,7 @@ const ajaxUpdate = function (clickEvent) {
                 $(`.${relContainerClass} #league_sport_name_${leagueID}`).val(sportName);
 
                 reloadWindow(1);
-            } else if (clickedBtn === "UPDATE_SEASON") {
+            } else if (itemType === "UPDATE_SEASON") {
                 const seasonID = data["season_id"];
 
                 const seasonYear = data[`season_year_${seasonID}`];
@@ -692,7 +715,7 @@ const ajaxUpdate = function (clickEvent) {
                 $(`.${relContainerClass} #season_league_name_${seasonID}`).val(leagueName);
 
                 reloadWindow(1);
-            } else if (clickedBtn === "UPDATE_TEAM") {
+            } else if (itemType === "UPDATE_TEAM") {
                 const teamID = data["team_id"];
 
                 const teamName = data[`team_name_${teamID}`];
@@ -705,7 +728,7 @@ const ajaxUpdate = function (clickEvent) {
                 $(`.${relContainerClass} .season-year`).text(seasonYear);
 
                 reloadWindow(1);
-            } else if (clickedBtn === "UPDATE_POSITION") {
+            } else if (itemType === "UPDATE_POSITION") {
                 const positionID = data["position_id"];
 
                 const positionName = data[`position_name_${positionID}`];
@@ -721,54 +744,49 @@ const ajaxUpdate = function (clickEvent) {
 const ajaxDelete = function (clickEvent) {
     clickEvent.preventDefault();
 
-    const clickedBtn = $(this).data("clicked");
     const relContainer = $(this.closest(".div-row-container"));
+    const rowID = +relContainer.data("row-id");
     const form = $(this.closest(".form"));
+    const url = form.attr("action");
+    const method = $(this).data("method");
+    const itemType = $(this).data("item-type");
+
+    const data = {};
+    data["item_type"] = itemType;
+    data["item_id"] = rowID;
 
     $.ajax({
-        url: form.attr("action"),
-        type: $(this).data("method"),
-        data: `${form.serialize()}&clicked=${clickedBtn}`,
+        url: url,
+        type: method,
+        data: JSON.stringify(data),
         success: function (response) {
             console.log(response);
-            let members = [];
             let scrollContainer;
-            let cookieKey;
-            let message;
+            let members = [];
 
-            if (clickedBtn === "DELETE_USER") {
-                scrollContainer = scrollUsers;
-                cookieKey = "admin_user";
-                message = cookieKey.split("_")[1];
-
-                const delRowID = +relContainer.data("row-id");
-                if (delRowID === +getCookie("user_id")) {
-                    window.open("logout.php", "_self");
+            if (itemType === "user") {
+                if (rowID === +getCookie("user_id")) {
+                    window.open("logout", "_self");
+                    return;
                 }
-            } else if (clickedBtn === "DELETE_SPORT") {
+
+                scrollContainer = scrollUsers;
+            } else if (itemType === "sport") {
                 scrollContainer = scrollSports;
-                cookieKey = "admin_sport";
-            } else if (clickedBtn === "DELETE_LEAGUE") {
+            } else if (itemType === "league") {
                 scrollContainer = scrollLeagues;
-                cookieKey = "admin_league";
-            } else if (clickedBtn === "DELETE_SEASON") {
+            } else if (itemType === "season") {
                 scrollContainer = scrollSeasons;
-                cookieKey = "admin_season";
-            } else if (clickedBtn === "DELETE_TEAM") {
+            } else if (itemType === "team") {
                 scrollContainer = scrollTeams;
-                cookieKey = "admin_player";
-            } else if (clickedBtn === "DELETE_POSITION") {
+            } else if (itemType === "position") {
                 scrollContainer = scrollPositions;
-                cookieKey = "admin_position";
             }
 
-            if (clickedBtn !== "DELETE_USER" && clickedBtn !== "DELETE_POSITION") {
-                reloadWindow(1);
-            }
+            if (itemType !== "user" && itemType !== "position") reloadWindow(1);
 
-            message = cookieKey.split("_")[1];
             members = getDataRowsOnly(scrollContainer);
-            setCookie(`last_${cookieKey}_id`, $(members[members.length - 1]).data("row-id"));
+            setCookie(`last_admin_${itemType}_id`, $(members[members.length - 1]).data("row-id"));
             // setCookie(`last_${cookieKey}_id`, relContainer.data("row-id"));
             // Getting the last deleted row makes no sense... it kind of does.
 
@@ -781,8 +799,8 @@ const ajaxDelete = function (clickEvent) {
                     <div class='div-none-available-container'>
                         <ion-icon class='none-available-icon' name='alert-circle-outline'></ion-icon>
                         <div class='none-available-text'>
-                            <h2>No ${message}s at the moment.</h2>
-                            <p>Start off by adding a <span>new</span> ${message} to the team.</p>
+                            <h2>No ${itemType}s at the moment.</h2>
+                            <p>Start off by adding a <span>new</span> ${itemType} to the team.</p>
                         </div>
                     </div>
                 `);
@@ -822,13 +840,13 @@ sidebarBtns.each((_, btn) => {
     });
 });
 
-// DROPDOWN EVENT
+// Dropdown event.
 attachDropdownEvent(rowDivs);
 
-// AJAX EVENTS
+// Ajax events.
 attachAjaxEvent(addNewBtns, ajaxAdd);
 attachAjaxEvent(updateBtns, ajaxUpdate);
 attachAjaxEvent(deleteBtns, ajaxDelete);
 
-// SETTING TEAM COOKIE
+// Set team cookie event.
 attachViewBtnEvent(viewBtns);
