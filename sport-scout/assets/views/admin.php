@@ -19,7 +19,7 @@ if (isset($_COOKIE['new_role_id'])) {
 
 // User data.
 $username = Session::getSessionVar('username');
-$userData = $db->get_current_user_data($username);
+$userData = $db->getCurrentUserData($username);
 $roleID = (int) Session::getSessionVar('role_id');
 $roleName = $userData['role_name'];
 $leagueID = (int) $userData['league_id'];
@@ -76,48 +76,48 @@ echo Template::generatePageHead($pageData);
 
                     switch ($roleID) {
                         case 1:
-                            $allUsers = $db->get_all_users();
+                            $allUsers = $db->getAllUsers();
                             echo Template::generateAdminUsersDataContainer($allUsers);
 
-                            $allSports = $db->get_all_sports();
+                            $allSports = $db->getAllSports();
                             echo Template::generateAdminSportsDataContainer($allSports);
 
-                            $allLeagues = $db->get_all_leagues();
+                            $allLeagues = $db->getAllLeagues();
                             echo Template::generateAdminLeaguesDataContainer($allLeagues, $roleID);
 
-                            $allSeasons = $db->get_all_seasons();
+                            $allSeasons = $db->getAllSeasons();
                             echo Template::generateAdminSeasonsDataContainer($allSeasons, $roleID);
 
-                            $allTeams = $db->get_all_teams();
+                            $allTeams = $db->getAllTeams();
                             echo Template::generateAdminTeamsDataContainer($allTeams, $roleID);
 
-                            $allPositions = $db->get_all_positions();
+                            $allPositions = $db->getAllPositions();
                             echo Template::generateAdminPositionsDataContainer($allPositions, $roleID);
                             break;
                         case 2:
-                            $leaguesData = $db->get_league_data_by_league_id($leagueID);
+                            $leaguesData = $db->getLeagueDataByLeagueId($leagueID);
                             echo Template::generateAdminLeaguesDataContainer($leaguesData, $roleID);
 
-                            $seasonsData = $db->get_seasons_by_league_id($leagueID);
+                            $seasonsData = $db->getSeasonsByLeagueId($leagueID);
                             echo Template::generateAdminSeasonsDataContainer($seasonsData, $roleID);
 
-                            $teamsData = $db->get_teams_by_league_id($leagueID);
+                            $teamsData = $db->getTeamsByLeagueId($leagueID);
                             echo Template::generateAdminTeamsDataContainer($teamsData, $roleID);
 
                             if (count($leaguesData) > 0) {
                                 ['sport_id' => $sportID] = $leaguesData;
-                                $positionsData = $db->get_positions_by_sport_id($sportID);
+                                $positionsData = $db->getPositionsBySportId($sportID);
                                 echo Template::generateAdminPositionsDataContainer($positionsData, $roleID);
                             }
                             break;
                         case 3:
                         case 4:
-                            $team_data = $db->get_team_data_by_team_id('*', $teamID);
+                            $team_data = $db->getTeamDataByTeamId('*', $teamID);
                             echo Template::generateAdminTeamsDataContainer($team_data, $roleID);
 
                             if (count($team_data) > 0) {
                                 ['sport_id' => $sportID] = $team_data;
-                                $positionsData = $db->get_positions_by_sport_id($sportID);
+                                $positionsData = $db->getPositionsBySportId($sportID);
                                 echo Template::generateAdminPositionsDataContainer($positionsData, $roleID);
                             }
                     }

@@ -13,7 +13,7 @@ if (isset($_COOKIE['new_username'])) {
 
 // User data.
 $username = Session::getSessionVar('username');
-$userData = $db->get_current_user_data($username);
+$userData = $db->getCurrentUserData($username);
 $roleID = (int) $userData['role_id'];
 Session::setSessionVar('role_id', $roleID);
 Cookie::setCookie('role_id', $roleID);

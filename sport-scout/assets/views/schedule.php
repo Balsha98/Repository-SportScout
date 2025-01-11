@@ -13,7 +13,7 @@ if (isset($_COOKIE['new_username'])) {
 
 // User data.
 $username = Session::getSessionVar('username');
-$userData = $db->get_current_user_data($username);
+$userData = $db->getCurrentUserData($username);
 $roleID = (int) Session::getSessionVar('role_id');
 
 // Making sure a team exists,
@@ -31,7 +31,7 @@ if ($roleID < 3) {
 }
 
 if ($teamID !== 0) {
-    $teamData = $db->get_team_data_by_team_id('team_name', $teamID);
+    $teamData = $db->getTeamDataByTeamId('team_name', $teamID);
 
     // In case the team was deleted.
     if (count($teamData) > 0) {
@@ -73,7 +73,7 @@ echo Template::generatePageHeader($pageData['active'], $roleID);
                 if ($teamID === 0)
                     echo Template::generateNoneSelectedDiv($noneSelected);
                 else {
-                    $teamData = $db->get_team_data_by_team_id('*', $teamID);
+                    $teamData = $db->getTeamDataByTeamId('*', $teamID);
                     echo Template::generateScheduleTeamData($teamData, $roleID);
                 }
                 ?>
@@ -87,7 +87,7 @@ echo Template::generatePageHeader($pageData['active'], $roleID);
                 if ($teamID === 0)
                     echo Template::generateNoneSelectedDiv($noneSelected);
                 else {
-                    $schedule_data = $db->get_schedule_by_team_id($teamID);
+                    $schedule_data = $db->getScheduleByTeamId($teamID);
                     echo Template::generateScheduleGame($schedule_data, $roleID);
                 }
                 ?>

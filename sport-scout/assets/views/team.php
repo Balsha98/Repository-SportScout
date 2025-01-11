@@ -13,7 +13,7 @@ if (isset($_COOKIE['new_username'])) {
 
 // User data.
 $username = Session::getSessionVar('username');
-$userData = $db->get_current_user_data($username);
+$userData = $db->getCurrentUserData($username);
 $roleID = (int) Session::getSessionVar('role_id');
 
 // Making sure a team exists,
@@ -32,7 +32,7 @@ if ($roleID < 3) {
 
 $leagueName = '';
 if ($teamID !== 0) {
-    $teamData = $db->get_team_data_by_team_id('*', $teamID);
+    $teamData = $db->getTeamDataByTeamId('*', $teamID);
 
     // In case the team was deleted.
     if (count($teamData) > 0) {
@@ -82,7 +82,7 @@ echo Template::generatePageHeader($pageData['active'], $roleID);
                 if ($teamID === 0)
                     echo Template::generateNoneSelectedDiv($noneSelected);
                 else {
-                    $players = $db->get_players_by_team_id($teamID);
+                    $players = $db->getPlayersByTeamId($teamID);
                     echo Template::generateTeamPlayersData($players, $roleID, $leagueName);
                 }
                 ?>
@@ -97,7 +97,7 @@ echo Template::generatePageHeader($pageData['active'], $roleID);
                 if ($teamID === 0)
                     echo Template::generateNoneSelectedDiv($noneSelected);
                 else {
-                    $staff = $db->get_staff_by_team_id($teamID);
+                    $staff = $db->getStaffByTeamId($teamID);
                     echo Template::generateTeamStaffData($staff, $roleID, $leagueName);
                 }
                 ?>
