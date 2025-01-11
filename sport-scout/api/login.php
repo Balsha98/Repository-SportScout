@@ -12,11 +12,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = ['status' => 'fail'];
 
     // Verify user credentials.
-    if ($db->verify_user($username, $password)) {
+    if ($db->verifyUser($username, $password)) {
         Session::setSessionVar('login', true);
         Session::setSessionVar('username', $username);
-
-        $userID = $db->get_current_user_data($username)['user_id'];
+        ['user_id' => $userID] = $db->getCurrentUserData($username);
 
         $data = [
             'status' => 'success',
