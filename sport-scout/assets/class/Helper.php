@@ -2,9 +2,9 @@
 
 class Helper
 {
-    public static function setRoleIdAndName(&$status, &$role_id, &$role_name, $key)
+    public static function setRoleIdAndName($input, &$status, &$role_id, &$role_name, $key)
     {
-        $role = explode('|', $_POST[$key]);
+        $role = explode('|', $input[$key]);
 
         if (count($role) < 2) {
             $status = 'fail';
@@ -14,9 +14,9 @@ class Helper
         }
     }
 
-    public static function setSportName($db, &$status, &$sport_id, &$sport_name, $key)
+    public static function setSportName($db, $input, &$status, &$sport_id, &$sport_name, $key)
     {
-        $sport_id = (int) $_POST[$key];
+        $sport_id = (int) $input[$key];
         if ($sport_id === '') {
             $status = 'fail';
         } else if ($sport_id <= 0) {
@@ -42,9 +42,9 @@ class Helper
         }
     }
 
-    public static function setLeagueAndTeamNames($db, &$status, &$league_id, &$league_name, &$team_id, &$team_name, $key1, $key2)
+    public static function setLeagueAndTeamNames($db, $input, &$status, &$league_id, &$league_name, &$team_id, &$team_name, $key1, $key2)
     {
-        $league_id = (int) $_POST[$key1];
+        $league_id = (int) $input[$key1];
         if ($league_id === '') {
             $status = 'fail';
         } else if ($league_id === 0) {
@@ -70,7 +70,7 @@ class Helper
             $league_id = '';
         }
 
-        $team_id = (int) $_POST[$key2];
+        $team_id = (int) $input[$key2];
         if ($team_id === '') {
             $status = 'fail';
         } else if ($league_id === 0 && $team_id === 0) {
@@ -99,9 +99,9 @@ class Helper
         }
     }
 
-    public static function setLeagueName($db, &$status, &$sport_id, &$league_id, &$league_name, $key)
+    public static function setLeagueName($db, $input, &$status, &$sport_id, &$league_id, &$league_name, $key)
     {
-        $league_id = (int) $_POST[$key];
+        $league_id = (int) $input[$key];
         if ($league_id === '') {
             $status = 'fail';
         } else if ($league_id <= 0) {
@@ -127,9 +127,9 @@ class Helper
         }
     }
 
-    public static function setTeamName($db, &$status, &$team_id, &$team_name, $key)
+    public static function setTeamName($db, $input, &$status, &$team_id, &$team_name, $key)
     {
-        $team_id = (int) $_POST[$key];
+        $team_id = (int) $input[$key];
         if ($team_id === '') {
             $status = 'fail';
         } else if ($team_id <= 0) {
@@ -165,9 +165,9 @@ class Helper
         }
     }
 
-    public static function setSeasonYear($db, &$status, &$league_id, &$season_id, &$season_year, $key)
+    public static function setSeasonYear($db, $input, &$status, &$league_id, &$season_id, &$season_year, $key)
     {
-        $season_id = (int) $_POST[$key];
+        $season_id = (int) $input[$key];
         if ($season_id === '') {
             $status = 'fail';
         } else if ($season_id <= 0) {
@@ -193,9 +193,9 @@ class Helper
         }
     }
 
-    public static function setPositionName($db, &$status, &$sport_id, &$position_id, &$position_name, $key)
+    public static function setPositionName($db, $input, &$status, &$sport_id, &$position_id, &$position_name, $key)
     {
-        $position_id = (int) $_POST[$key];
+        $position_id = (int) $input[$key];
         if ($position_id === '') {
             $status = 'fail';
         } else if ($position_id <= 0) {

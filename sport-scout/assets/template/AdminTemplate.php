@@ -144,7 +144,7 @@ class AdminTemplate
                             class='form form-info form-{$userID} hide-element' 
                             action='" . SERVER . "/api/admin.php'
                         >
-                            <input type='hidden' name='user_id' value='{$userID}'>
+                            <input id='user_id_{$userID}' type='hidden' name='user_id' value='{$userID}'>
                             <div class='div-multi-input-containers grid-2-columns'>
                                 <div class='div-input-container required-container'>
                                     <label for='username_{$userID}'>Username:</label>
@@ -218,7 +218,7 @@ class AdminTemplate
                 $sportID = $sport['sport_id'];
                 $sportName = $sport['sport_name'];
 
-                $submitBtns = ReusableTemplate::generateFormSubmitBtns('SPORT');
+                $submitBtns = ReusableTemplate::generateFormSubmitBtns('sport');
 
                 $dataContainer .= "
                     <div class='div-row-container sport-row-container-{$sportID}' data-row-id='{$sportID}'>
@@ -293,7 +293,7 @@ class AdminTemplate
                 $sportID = $league['sport_id'];
                 $sportName = $league['sport_name'];
 
-                $submitBtns = ReusableTemplate::generateFormSubmitBtns('LEAGUE');
+                $submitBtns = ReusableTemplate::generateFormSubmitBtns('league');
 
                 $dataContainer .= "
                     <div class='div-row-container league-row-container-{$leagueID}' data-row-id='{$leagueID}'>
@@ -314,7 +314,7 @@ class AdminTemplate
                             class='form form-info form-{$leagueID} hide-element' 
                             action='" . SERVER . "/api/admin.php'
                         >
-                            <input type='hidden' name='league_id' value='{$leagueID}'>
+                            <input id='league_id_{$leagueID}' type='hidden' name='league_id' value='{$leagueID}'>
                             <div class='div-multi-input-containers grid-3-columns'>
                                 <div class='div-input-container required-container'>
                                     <label for='league_name_{$leagueID}'>League Name:</label>
@@ -380,7 +380,7 @@ class AdminTemplate
                 $leagueID = $season['league_id'];
                 $leagueName = $season['league_name'];
 
-                $submitBtns = ReusableTemplate::generateFormSubmitBtns('SEASON');
+                $submitBtns = ReusableTemplate::generateFormSubmitBtns('season');
 
                 $dataContainer .= "
                     <div class='div-row-container season-row-container-{$seasonID}' data-row-id='{$seasonID}'>
@@ -404,7 +404,7 @@ class AdminTemplate
                             class='form form-info form-{$seasonID} hide-element' 
                             action='" . SERVER . "/api/admin.php'
                         >
-                            <input type='hidden' name='season_id' value='{$seasonID}'>
+                            <input id='season_id_{$seasonID}' type='hidden' name='season_id' value='{$seasonID}'>
                             <div class='div-multi-input-containers grid-2-columns'>
                                 <div class='div-input-container required-container'>
                                     <label for='season_year_{$seasonID}'>Season Year:</label>
@@ -491,7 +491,7 @@ class AdminTemplate
 
                 $submitBtns = '';
                 if ($roleID <= 2) {
-                    $submitBtns = ReusableTemplate::generateFormSubmitBtns('TEAM');
+                    $submitBtns = ReusableTemplate::generateFormSubmitBtns('team');
                 }
 
                 // Prevent the coaches from changing input data.
@@ -524,8 +524,7 @@ class AdminTemplate
                             class='form form-info form-{$teamID} hide-element' 
                             action='" . SERVER . "/api/admin.php'
                         >
-                            <input type='hidden' name='team_id' value='{$teamID}'>
-                            <input type='hidden' name='sport_id' value='{$sportID}'>
+                            <input id='team_sport_id_{$teamID}' type='hidden' name='sport_id' value='{$sportID}'>
                             <div class='div-multi-input-containers custom-2-column-grid'>
                                 <div class='div-input-container {$requiredContainer}'>
                                     <label for='team_name_{$teamID}'>Team Name:</label>
@@ -619,7 +618,7 @@ class AdminTemplate
 
                 $submitBtns = '';
                 if ($roleID <= 2) {
-                    $submitBtns = ReusableTemplate::generateFormSubmitBtns('POSITION');
+                    $submitBtns = ReusableTemplate::generateFormSubmitBtns('position');
                 }
 
                 // Prevent the coaches from changing input data.
@@ -645,7 +644,7 @@ class AdminTemplate
                             class='form form-info form-{$positionID} hide-element' 
                             action='" . SERVER . "/api/admin.php'
                         >
-                            <input type='hidden' name='position_id' value='{$positionID}'>
+                            <input id='position_id_{$positionID}' type='hidden' name='position_id' value='{$positionID}'>
                             <div class='div-multi-input-containers grid-3-columns'>
                                 <div class='div-input-container {$requiredContainer}'>
                                     <label for='position_name_{$positionID}'>Team Name:</label>

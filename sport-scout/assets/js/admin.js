@@ -39,6 +39,41 @@ const newItemInputs = {
     position: ["new_position_name", "new_position_sport_id"],
 };
 
+const existingItemInputs = {
+    user: [
+        "user_id",
+        "username",
+        "user_role_name",
+        "user_league_name",
+        "user_league_id",
+        "user_team_name",
+        "user_team_id",
+    ],
+    sport: ["sport_name", "sport_id"],
+    league: ["league_id", "league_name", "league_sport_name", "league_sport_id"],
+    season: [
+        "season_id",
+        "season_year",
+        "season_desc",
+        "season_sport_name",
+        "season_sport_id",
+        "season_league_name",
+        "season_league_id",
+    ],
+    team: [
+        "team_sport_id",
+        "team_name",
+        "team_id",
+        "team_sport_name",
+        "team_league_id",
+        "team_season_id",
+        "team_max_players",
+        "team_home_color",
+        "team_away_color",
+    ],
+    position: ["position_id", "position_name", "position_sport_name", "position_sport_id"],
+};
+
 const selectOptions = {
     Administrator: "1|Administrator",
     "League Manager": "2|League Manager",
@@ -631,20 +666,31 @@ const ajaxAdd = function (clickEvent) {
 const ajaxUpdate = function (clickEvent) {
     clickEvent.preventDefault();
 
-    const itemType = $(this).data("clicked");
     const relContainer = $(this.closest(".div-row-container"));
     const relContainerClass = relContainer.attr("class").split(" ")[1];
+    const rowID = +relContainer.data("row-id");
     const form = $(this.closest(".form"));
+    const url = form.attr("action");
+    const method = $(this).data("method");
+    const itemType = $(this).data("item-type");
+
+    const data = {};
+    data["item_type"] = itemType;
+    data["item_id"] = rowID;
+    existingItemInputs[itemType].forEach((id) => {
+        data[`${id}_${rowID}`] = $(`#${id}_${rowID}`).val();
+    });
 
     $.ajax({
-        url: form.attr("action"),
-        type: $(this).data("method"),
-        data: `${form.serialize()}&clicked=${itemType}`,
+        url: url,
+        type: method,
+        data: JSON.stringify(data),
         success: function (response) {
             console.log(response);
             const data = JSON.parse(response);
             const status = data["status"];
 
+            // Guard clause.
             if (status === "fail") {
                 warnInputs(data, status);
                 return;
@@ -653,13 +699,10 @@ const ajaxUpdate = function (clickEvent) {
             // Back to white.
             warnInputs(data, status);
 
-            if (itemType === "UPDATE_USER") {
-                const userID = +data["user_id"];
-
-                const username = data[`username_${userID}`];
+            if (itemType === "user") {
+                const username = data[`username`];
                 $(`.${relContainerClass} .username`).text(username);
-
-                if (userID === +getCookie("user_id")) {
+                if (rowID === +getCookie("user_id")) {
                     setCookie("new_username", username);
                     $(".span-username").text(username);
                 }
@@ -675,67 +718,34 @@ const ajaxUpdate = function (clickEvent) {
                     }
                 }
 
-                const newRoleName = data[`user_role_name_${userID}`];
-                $(`.${relContainerClass} .role-name`).text(newRoleName);
-
-                const leagueName = data[`user_league_name_${userID}`];
-                $(`.${relContainerClass} #user_league_name_${userID}`).val(leagueName);
-
-                const teamName = data[`user_team_name_${userID}`];
-                $(`.${relContainerClass} #user_team_name_${userID}`).val(teamName);
-            } else if (itemType === "UPDATE_SPORT") {
-                const sportID = data["sport_id"];
-                const sportName = data[`sport_name_${sportID}`];
-                $(`.${relContainerClass} .sport-name`).text(sportName);
+                $(`.${relContainerClass} .role-name`).text(data[`user_role_name`]);
+                $(`#user_league_name_${rowID}`).val(data[`user_league_name`]);
+                $(`#user_team_name_${rowID}`).val(data[`user_team_name`]);
+            } else if (itemType === "sport") {
+                $(`.${relContainerClass} .sport-name`).text(data[`sport_name`]);
 
                 reloadWindow(1);
-            } else if (itemType === "UPDATE_LEAGUE") {
-                const leagueID = data["league_id"];
-
-                const leagueName = data[`league_name_${leagueID}`];
-                $(`.${relContainerClass} .league-name`).text(leagueName);
-
-                const sportName = data[`league_sport_name_${leagueID}`];
-                $(`.${relContainerClass} #league_sport_name_${leagueID}`).val(sportName);
+            } else if (itemType === "league") {
+                $(`.${relContainerClass} .league-name`).text(data[`league_name`]);
+                $(`#league_sport_name_${rowID}`).val(data[`league_sport_name`]);
 
                 reloadWindow(1);
-            } else if (itemType === "UPDATE_SEASON") {
-                const seasonID = data["season_id"];
-
-                const seasonYear = data[`season_year_${seasonID}`];
-                $(`.${relContainerClass} .season-year`).text(seasonYear);
-
-                const seasonDesc = data[`season_desc_${seasonID}`];
-                $(`.${relContainerClass} .season-desc`).text(seasonDesc);
-
-                const sportName = data[`sport_name`];
-                $(`.${relContainerClass} #season_sport_name_${seasonID}`).val(sportName);
-
-                const leagueName = data[`league_name`];
-                $(`.${relContainerClass} #season_league_name_${seasonID}`).val(leagueName);
+            } else if (itemType === "season") {
+                $(`.${relContainerClass} .season-year`).text(data[`season_year`]);
+                $(`.${relContainerClass} .season-desc`).text(data[`season_desc`]);
+                $(`#season_sport_name_${rowID}`).val(data[`season_sport_name`]);
+                $(`#season_league_name_${rowID}`).val(data[`season_league_name`]);
 
                 reloadWindow(1);
-            } else if (itemType === "UPDATE_TEAM") {
-                const teamID = data["team_id"];
-
-                const teamName = data[`team_name_${teamID}`];
-                $(`.${relContainerClass} .team-name`).text(teamName);
-
-                const leagueName = data[`team_league_name_${teamID}`];
-                $(`.${relContainerClass} .league-name`).text(leagueName);
-
-                const seasonYear = data[`team_season_year_${teamID}`];
-                $(`.${relContainerClass} .season-year`).text(seasonYear);
+            } else if (itemType === "team") {
+                $(`.${relContainerClass} .team-name`).text(data[`team_name`]);
+                $(`.${relContainerClass} .league-name`).text(data[`team_league_name`]);
+                $(`.${relContainerClass} .season-year`).text(data[`team_season_year`]);
 
                 reloadWindow(1);
-            } else if (itemType === "UPDATE_POSITION") {
-                const positionID = data["position_id"];
-
-                const positionName = data[`position_name_${positionID}`];
-                $(`.${relContainerClass} .position-name`).text(positionName);
-
-                const sportName = data[`position_sport_name_${positionID}`];
-                $(`.${relContainerClass} #position_sport_name_${positionID}`).val(sportName);
+            } else if (itemType === "position") {
+                $(`.${relContainerClass} .position-name`).text(data[`position_name`]);
+                $(`#position_sport_name_${rowID}`).val(data[`position_sport_name`]);
             }
         },
     });

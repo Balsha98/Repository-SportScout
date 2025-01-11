@@ -8,10 +8,6 @@ require_once '../assets/class/Helper.php';
 $request = $_SERVER['REQUEST_METHOD'];
 $input = Encoder::fromJSON(file_get_contents('php://input'));
 $itemType = $input['item_type'];
-if (array_key_exists('item_id', $input)) {
-    $itemID = $input['item_id'];
-}
-
 $status = 'success';
 $return = [];
 
@@ -35,6 +31,7 @@ if ($request === 'POST') {
         $roleID = '';
         $roleName = '';
         Helper::setRoleIdAndName(
+            $input,
             $status,
             $roleID,
             $roleName,
@@ -47,6 +44,7 @@ if ($request === 'POST') {
         $teamName = '';
         Helper::setLeagueAndTeamNames(
             $db,
+            $input,
             $status,
             $leagueID,
             $leagueName,
@@ -57,8 +55,8 @@ if ($request === 'POST') {
         );
 
         $return = [
-            'last_user_id' => $lastRowID,
             'status' => $status,
+            'last_user_id' => $lastRowID,
             'new_username' => $username,
             'new_password' => $password,
             'new_role_id' => $roleID,
@@ -95,6 +93,7 @@ if ($request === 'POST') {
         $sportName = '';
         Helper::setSportName(
             $db,
+            $input,
             $status,
             $sportID,
             $sportName,
@@ -129,6 +128,7 @@ if ($request === 'POST') {
         $sportID = '';
         Helper::setSportName(
             $db,
+            $input,
             $status,
             $sportID,
             $sportName,
@@ -139,6 +139,7 @@ if ($request === 'POST') {
         $leagueID = '';
         Helper::setLeagueName(
             $db,
+            $input,
             $status,
             $sportID,
             $leagueID,
@@ -177,6 +178,7 @@ if ($request === 'POST') {
         $sportName = '';
         Helper::setSportName(
             $db,
+            $input,
             $status,
             $sportID,
             $sportName,
@@ -187,6 +189,7 @@ if ($request === 'POST') {
         $leagueName = '';
         Helper::setLeagueName(
             $db,
+            $input,
             $status,
             $sportID,
             $leagueID,
@@ -198,6 +201,7 @@ if ($request === 'POST') {
         $seasonYear = '';
         Helper::setSeasonYear(
             $db,
+            $input,
             $status,
             $leagueID,
             $seasonID,
@@ -246,6 +250,7 @@ if ($request === 'POST') {
         $sportName = '';
         Helper::setSportName(
             $db,
+            $input,
             $status,
             $sportID,
             $sportName,
@@ -268,19 +273,20 @@ if ($request === 'POST') {
 
     echo Encoder::toJSON($return);
 } else if ($request === 'PUT') {  // Update existing items.
-    if ($itemType === 'user') {
-        $userID = (int) $input['user_id'];
+    $itemID = (int) $input['item_id'];
 
-        $username = Sanitize::stripString($input['username']);
+    if ($itemType === 'user') {
+        $username = Sanitize::stripString($input["username_{$itemID}"]);
         Sanitize::fullStringSearch($status, $username, 25);
 
         $roleID = '';
         $roleName = '';
         Helper::setRoleIdAndName(
+            $input,
             $status,
             $roleID,
             $roleName,
-            'role_name'
+            "user_role_name_{$itemID}"
         );
 
         $leagueID = '';
@@ -289,75 +295,71 @@ if ($request === 'POST') {
         $teamName = '';
         Helper::setLeagueAndTeamNames(
             $db,
+            $input,
             $status,
             $leagueID,
             $leagueName,
             $teamID,
             $teamName,
-            'league_id',
-            'team_id'
+            "user_league_id_{$itemID}",
+            "user_team_id_{$itemID}"
         );
 
         $return = [
             'status' => $status,
-            'user_id' => $userID,
-            "username_{$userID}" => $username,
+            'user_id' => $itemID,
+            'username' => $username,
             'role_id' => $roleID,
-            "user_role_name_{$userID}" => $roleName,
-            "user_league_id_{$userID}" => $leagueID,
-            "user_league_name_{$userID}" => $leagueName,
-            "user_team_id_{$userID}" => $teamID,
-            "user_team_name_{$userID}" => $teamName,
+            'user_role_name' => $roleName,
+            'user_league_id' => $leagueID,
+            'user_league_name' => $leagueName,
+            'user_team_id' => $teamID,
+            'user_team_name' => $teamName,
         ];
 
         if ($status === 'success') {
             $db->updateAdminUser($return);
         }
-    } else if ($itemType === 'UPDATE_SPORT') {
-        $sportID = (int) $input['sport_id'];
-
-        $sportName = Sanitize::stripString($input['sport_name']);
+    } else if ($itemType === 'sport') {
+        $sportName = Sanitize::stripString($input["sport_name_{$itemID}"]);
         Sanitize::fullStringSearch($status, $sportName, 50);
 
         $return = [
             'status' => $status,
-            'sport_id' => $sportID,
-            "sport_name_{$sportID}" => $sportName
+            'sport_id' => $itemID,
+            'sport_name' => $sportName
         ];
 
         if ($status === 'success') {
             $db->updateSport($return);
         }
-    } else if ($itemType === 'UPDATE_LEAGUE') {
-        $leagueID = (int) $input['league_id'];
-
-        $leagueName = Sanitize::stripString($input['league_name']);
+    } else if ($itemType === 'league') {
+        $leagueName = Sanitize::stripString($input["league_name_{$itemID}"]);
         Sanitize::fullStringSearch($status, $leagueName, 50);
 
         $sportID = '';
         $sportName = '';
         Helper::setSportName(
             $db,
+            $input,
             $status,
             $sportID,
             $sportName,
-            'sport_id'
+            "league_sport_id_{$itemID}"
         );
 
         $return = [
             'status' => $status,
-            'league_id' => $leagueID,
-            "league_name_{$leagueID}" => $leagueName,
-            "league_sport_id_{$leagueID}" => $sportID,
-            'sport_name' => $sportName
+            'league_id' => $itemID,
+            'league_name' => $leagueName,
+            'league_sport_id' => $sportID,
+            'league_sport_name' => $sportName
         ];
 
         if ($status === 'success') {
             $db->updateLeague($return);
         }
-    } else if ($itemType === 'UPDATE_SEASON') {
-        $seasonID = (int) $input['season_id'];
-
+    } else if ($itemType === 'season') {
         $seasonYear = $input['season_year'];
         if ($seasonYear === '') {
             $status = 'fail';
@@ -369,7 +371,7 @@ if ($request === 'POST') {
             $seasonYear = '';
         }
 
-        $seasonDesc = Sanitize::stripString($input['season_desc']);
+        $seasonDesc = Sanitize::stripString($input["season_desc_{$itemID}"]);
         if ($seasonDesc === '') {
             $status = 'fail';
         } else if (!Sanitize::isShorter($seasonDesc, 50)) {
@@ -381,69 +383,71 @@ if ($request === 'POST') {
         $sportName = '';
         Helper::setSportName(
             $db,
+            $input,
             $status,
             $sportID,
             $sportName,
-            'sport_id'
+            "season_sport_id_{$itemID}"
         );
 
         $leagueID = '';
         $leagueName = '';
         Helper::setLeagueName(
             $db,
+            $input,
             $status,
             $sportID,
             $leagueID,
             $leagueName,
-            'league_id'
+            "season_league_id_{$itemID}"
         );
 
         $return = [
             'status' => $status,
-            'season_id' => $seasonID,
-            "season_year_{$seasonID}" => $seasonYear,
-            "season_desc_{$seasonID}" => $seasonDesc,
-            "season_sport_id_{$seasonID}" => $sportID,
-            'sport_name' => $sportName,
-            "season_league_id_{$seasonID}" => $leagueID,
-            'league_name' => $leagueName
+            'season_id' => $itemID,
+            'season_year' => $seasonYear,
+            'season_desc' => $seasonDesc,
+            'season_sport_id' => $sportID,
+            'season_sport_name' => $sportName,
+            'season_league_id' => $leagueID,
+            'season_league_name' => $leagueName
         ];
 
         if ($status === 'success') {
             $db->updateSeason($return);
         }
-    } else if ($itemType === 'UPDATE_TEAM') {
-        $teamID = (int) $input['team_id'];
-
-        $teamName = Sanitize::stripString($input['team_name']);
+    } else if ($itemType === 'team') {
+        $teamName = Sanitize::stripString($input["team_name_{$itemID}"]);
         Sanitize::fullStringSearch($status, $teamName, 50);
 
         // Get sport for validation.
-        $sportID = (int) $input['sport_id'];
+        $sportID = (int) $input["team_sport_id_{$itemID}"];
 
         $leagueID = '';
         $leagueName = '';
         Helper::setLeagueName(
             $db,
+            $input,
             $status,
             $sportID,
             $leagueID,
             $leagueName,
-            'league_id'
+            "team_league_id_{$itemID}"
         );
 
         $seasonID = '';
         $seasonYear = '';
         Helper::setSeasonYear(
             $db,
+            $input,
             $status,
             $leagueID,
             $seasonID,
             $seasonYear,
-            'season_id'
+            "team_season_id_{$itemID}"
         );
 
-        $maxPlayers = (int) $input['team_max_players'];
+        $maxPlayers = (int) $input["team_max_players_{$itemID}"];
         if ($maxPlayers === '') {
             $status = 'fail';
         } else if ($maxPlayers <= 0) {
@@ -451,50 +455,49 @@ if ($request === 'POST') {
             $maxPlayers = '';
         }
 
-        $homeColor = Sanitize::stripString($input['team_home_color']);
+        $homeColor = Sanitize::stripString($input["team_home_color_{$itemID}"]);
         Sanitize::fullColorSearch($status, $homeColor, 25);
 
-        $awayColor = Sanitize::stripString($input['team_away_color']);
+        $awayColor = Sanitize::stripString($input["team_away_color_{$itemID}"]);
         Sanitize::fullColorSearch($status, $awayColor, 25);
 
         $return = [
             'status' => $status,
-            'team_id' => $teamID,
-            "team_name_{$teamID}" => $teamName,
-            "team_league_id_{$teamID}" => $leagueID,
-            "team_league_name_{$teamID}" => $leagueName,
-            "team_season_id_{$teamID}" => $seasonID,
-            "team_season_year_{$teamID}" => $seasonYear,
-            "team_max_players_{$teamID}" => $maxPlayers,
-            "team_home_color_{$teamID}" => $homeColor,
-            "team_away_color_{$teamID}" => $awayColor,
+            'team_id' => $itemID,
+            'team_name' => $teamName,
+            'team_league_id' => $leagueID,
+            'team_league_name' => $leagueName,
+            'team_season_id' => $seasonID,
+            'team_season_year' => $seasonYear,
+            'team_max_players' => $maxPlayers,
+            'team_home_color' => $homeColor,
+            'team_away_color' => $awayColor,
         ];
 
         if ($status === 'success') {
             $db->updateTeam($return);
         }
-    } else if ($itemType === 'UPDATE_POSITION') {
-        $position_id = (int) $input['position_id'];
-
-        $positionName = Sanitize::stripString($input['position_name']);
+    } else if ($itemType === 'position') {
+        $positionName = Sanitize::stripString($input["position_name_{$itemID}"]);
         Sanitize::fullStringSearch($status, $positionName, 50);
 
         $sportID = '';
         $sportName = '';
         Helper::setSportName(
             $db,
+            $input,
             $status,
             $sportID,
             $sportName,
-            'sport_id'
+            "position_sport_id_{$itemID}"
         );
 
         $return = [
             'status' => $status,
             'position_id' => $position_id,
-            "position_name_{$position_id}" => $positionName,
-            "position_sport_id_{$position_id}" => $sportID,
-            "position_sport_name_{$position_id}" => $sportName
+            'position_name' => $positionName,
+            'position_sport_id' => $sportID,
+            'position_sport_name' => $sportName
         ];
 
         if ($status === 'success') {
