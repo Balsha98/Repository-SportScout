@@ -274,7 +274,7 @@ class Database
 
         $result = $this->db->prepare($query);
         $result->bindParam(':league_name', $data['new_league_name'], PDO::PARAM_STR);
-        $result->bindParam(':sport_id', $data['league_sport_id'], PDO::PARAM_INT);
+        $result->bindParam(':sport_id', $data['new_league_sport_id'], PDO::PARAM_INT);
         $result->execute();
     }
 

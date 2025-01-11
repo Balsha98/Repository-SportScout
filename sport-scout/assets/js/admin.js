@@ -215,7 +215,7 @@ const ajaxAdd = function (clickEvent) {
 
             let previousRowID = 0;
 
-            if (itemType === "ADD_USER") {
+            if (itemType === "user") {
                 // Checking for items.
                 const noneAvailable = $(".div-none-available-container");
                 if (noneAvailable) {
@@ -263,8 +263,8 @@ const ajaxAdd = function (clickEvent) {
                                 </p>
                             </li>
                         </ul>
-                        <form class='form form-info form-${previousRowID} hide-element' action='../process/process-admin.php'>
-                            <input type='hidden' name='user_id' value='${previousRowID}'>
+                        <form class='form form-info form-${previousRowID} hide-element' action='/api/admin.php'>
+                            <input id='user_id_${previousRowID}' type='hidden' name='user_id' value='${previousRowID}'>
                             <div class='div-multi-input-containers grid-2-columns'>
                                 <div class='div-input-container required-container'>
                                     <label for='username_${previousRowID}'>Username:</label>
@@ -297,13 +297,13 @@ const ajaxAdd = function (clickEvent) {
                                 </div>
                             </div>
                             <div class='grid-btn-container'>
-                                <button class='btn btn-hollow btn-delete' type='submit' data-method='POST' data-clicked='DELETE_USER'>Delete</button>
-                                <button class='btn btn-full btn-update' type='submit' data-method='POST' data-clicked='UPDATE_USER'>Update</button>
+                                <button class='btn btn-hollow btn-delete' type='submit' data-method='DELETE' data-item-type='user'>Delete</button>
+                                <button class='btn btn-full btn-update' type='submit' data-method='PUT' data-item-type='user'>Update</button>
                             </div>
                         </form>
                     </div>    
                 `);
-            } else if (itemType === "ADD_SPORT") {
+            } else if (itemType === "sport") {
                 // Checking for items.
                 const noneAvailable = $(".div-none-available-container");
                 if (noneAvailable) {
@@ -335,7 +335,7 @@ const ajaxAdd = function (clickEvent) {
                                 </p>
                             </li>
                         </ul>
-                        <form class='form form-info form-${previousRowID} hide-element' action='../process/process-admin.php'>
+                        <form class='form form-info form-${previousRowID} hide-element' action='/api/admin.php'>
                             <div class='div-multi-input-containers custom-2-column-grid'>
                                 <div class='div-input-container required-container'>
                                     <label for='sport_name_${previousRowID}'>Sport Name:</label>
@@ -347,13 +347,13 @@ const ajaxAdd = function (clickEvent) {
                                 </div>
                             </div>
                             <div class='grid-btn-container'>
-                                <button class='btn btn-hollow btn-delete' type='submit' data-method='POST' data-clicked='DELETE_SPORT'>Delete</button>
-                                <button class='btn btn-full btn-update' type='submit' data-method='POST' data-clicked='UPDATE_SPORT'>Update</button>
+                                <button class='btn btn-hollow btn-delete' type='submit' data-method='DELETE' data-item-type='sport'>Delete</button>
+                                <button class='btn btn-full btn-update' type='submit' data-method='PUT' data-item-type='sport'>Update</button>
                             </div>
                         </form>
                     </div>
                 `);
-            } else if (itemType === "ADD_LEAGUE") {
+            } else if (itemType === "league") {
                 // Checking for items.
                 const noneAvailable = $(".div-none-available-container");
                 if (noneAvailable) {
@@ -369,8 +369,8 @@ const ajaxAdd = function (clickEvent) {
                 }
 
                 const leagueName = data["new_league_name"];
+                const sportID = data["new_league_sport_id"];
                 const sportName = data["league_sport_name"];
-                const sportID = data["league_sport_id"];
 
                 scrollLeagues.append(`
                     <div class='div-row-container league-row-container-${++previousRowID}' data-row-id='${previousRowID}'>
@@ -387,8 +387,8 @@ const ajaxAdd = function (clickEvent) {
                                 </p>
                             </li>
                         </ul>
-                        <form class='form form-info form-${previousRowID} hide-element' action='../process/process-admin.php'>
-                            <input type='hidden' name='league_id' value='${previousRowID}'>
+                        <form class='form form-info form-${previousRowID} hide-element' action='/api/admin.php'>
+                            <input id='league_id_${previousRowID}' type='hidden' name='league_id' value='${previousRowID}'>
                             <div class='div-multi-input-containers grid-3-columns'>
                                 <div class='div-input-container required-container'>
                                     <label for='league_name_${previousRowID}'>League Name:</label>
@@ -404,13 +404,13 @@ const ajaxAdd = function (clickEvent) {
                                 </div>
                             </div>
                             <div class='grid-btn-container'>
-                                <button class='btn btn-hollow btn-delete' type='submit' data-method='POST' data-clicked='DELETE_LEAGUE'>Delete</button>
-                                <button class='btn btn-full btn-update' type='submit' data-method='POST' data-clicked='UPDATE_LEAGUE'>Update</button>
+                                <button class='btn btn-hollow btn-delete' type='submit' data-method='DELETE' data-item-type='league'>Delete</button>
+                                <button class='btn btn-full btn-update' type='submit' data-method='PUT' data-item-type='league'>Update</button>
                             </div>
                         </form>
                     </div>
                 `);
-            } else if (itemType === "ADD_SEASON") {
+            } else if (itemType === "season") {
                 // Checking for items.
                 const noneAvailable = $(".div-none-available-container");
                 if (noneAvailable) {
@@ -450,8 +450,8 @@ const ajaxAdd = function (clickEvent) {
                                 </p>
                             </li>
                         </ul>
-                        <form class='form form-info form-${previousRowID} hide-element' action='../process/process-admin.php'>
-                            <input type='hidden' name='season_id' value='${previousRowID}'>
+                        <form class='form form-info form-${previousRowID} hide-element' action='/api/admin.php'>
+                            <input id='season_id_${previousRowID}' type='hidden' name='season_id' value='${previousRowID}'>
                             <div class='div-multi-input-containers grid-2-columns'>
                                 <div class='div-input-container required-container'>
                                     <label for='season_year_${previousRowID}'>Season Year:</label>
@@ -481,13 +481,13 @@ const ajaxAdd = function (clickEvent) {
                                 </div>
                             </div>
                             <div class='grid-btn-container'>
-                                <button class='btn btn-hollow btn-delete' type='submit' data-method='POST' data-clicked='DELETE_SEASON'>Delete</button>
-                                <button class='btn btn-full btn-update' type='submit' data-method='POST' data-clicked='UPDATE_SEASON'>Update</button>
+                                <button class='btn btn-hollow btn-delete' type='submit' data-method='DELETE' data-item-type='season'>Delete</button>
+                                <button class='btn btn-full btn-update' type='submit' data-method='PUT' data-item-type='season'>Update</button>
                             </div>
                         </form>
                     </div>
                 `);
-            } else if (itemType === "ADD_TEAM") {
+            } else if (itemType === "team") {
                 // Checking for items.
                 const noneAvailable = $(".div-none-available-container");
                 if (noneAvailable) {
@@ -503,11 +503,11 @@ const ajaxAdd = function (clickEvent) {
                 }
 
                 const teamName = data["new_team_name"];
-                const sportID = data["team_sport_id"];
+                const sportID = data["new_team_sport_id"];
                 const sportName = data["team_sport_name"];
-                const leagueID = data["team_league_id"];
+                const leagueID = data["new_team_league_id"];
                 const leagueName = data["team_league_name"];
-                const seasonID = data["team_season_id"];
+                const seasonID = data["new_team_season_id"];
                 const seasonYear = data["team_season_year"];
                 const maxPlayers = data["new_team_max_players"];
                 const homeColors = data["new_team_home_color"];
@@ -534,9 +534,8 @@ const ajaxAdd = function (clickEvent) {
                                 </p>
                             </li>
                         </ul>
-                        <form class='form form-info form-${previousRowID} hide-element' action='../process/process-admin.php'>
-                            <input type='hidden' name='sport_id' value='${sportID}'>
-                            <input type='hidden' name='team_id' value='${previousRowID}'>
+                        <form class='form form-info form-${previousRowID} hide-element' action='/api/admin.php'>
+                            <input id='team_sport_id_${previousRowID}' type='hidden' name='sport_id' value='${sportID}'>
                             <div class='div-multi-input-containers custom-2-column-grid'>
                                 <div class='div-input-container required-container'>
                                     <label for='team_name_${previousRowID}'>Team Name:</label>
@@ -577,8 +576,8 @@ const ajaxAdd = function (clickEvent) {
                             </div>
                             <div class='div-multi-input-containers grid-2-columns'>
                                 <div class='grid-btn-container'>
-                                    <button class='btn btn-hollow btn-delete' type='submit' data-method='POST' data-clicked='DELETE_TEAM'>Delete</button>
-                                    <button class='btn btn-full btn-update' type='submit' data-method='POST' data-clicked='UPDATE_TEAM'>Update</button>
+                                    <button class='btn btn-hollow btn-delete' type='submit' data-method='DELETE' data-item-type='team'>Delete</button>
+                                    <button class='btn btn-full btn-update' type='submit' data-method='PUT' data-item-type='team'>Update</button>
                                 </div>
                                 <div class='grid-btn-container'>
                                     <a class='btn btn-full btn-view' href='team.php?team_id=${previousRowID}'>View Team</a>
@@ -590,7 +589,7 @@ const ajaxAdd = function (clickEvent) {
                 `);
 
                 attachViewBtnEvent($(".btn-view"));
-            } else if (itemType === "ADD_POSITION") {
+            } else if (itemType === "position") {
                 // Checking for items.
                 const noneAvailable = $(".div-none-available-container");
                 if (noneAvailable) {
@@ -609,7 +608,7 @@ const ajaxAdd = function (clickEvent) {
 
                 const positionName = data["new_position_name"];
                 const sportID = data["new_position_sport_id"];
-                const sportName = data["new_position_sport_name"];
+                const sportName = data["position_sport_name"];
 
                 scrollPositions.append(`
                     <div class='div-row-container position-row-container-${++previousRowID}' data-row-id='${previousRowID}'>
@@ -626,8 +625,8 @@ const ajaxAdd = function (clickEvent) {
                                 </p>
                             </li>
                         </ul>
-                        <form class='form form-info form-${previousRowID} hide-element' action='../process/process-admin.php'>
-                            <input type='hidden' name='position_id' value='${previousRowID}'>
+                        <form class='form form-info form-${previousRowID} hide-element' action='/api/admin.php'>
+                            <input id='position_id_${previousRowID}' type='hidden' name='position_id' value='${previousRowID}'>
                             <div class='div-multi-input-containers grid-3-columns'>
                                 <div class='div-input-container required-container'>
                                     <label for='position_name_${previousRowID}'>Team Name:</label>
@@ -643,8 +642,8 @@ const ajaxAdd = function (clickEvent) {
                                 </div>
                             </div>
                             <div class='grid-btn-container'>
-                                <button class='btn btn-hollow btn-delete' type='submit' data-method='POST' data-clicked='DELETE_POSITION'>Delete</button>
-                                <button class='btn btn-full btn-update' type='submit' data-method='POST' data-clicked='UPDATE_POSITION'>Update</button>
+                                <button class='btn btn-hollow btn-delete' type='submit' data-method='DELETE' data-item-type='position'>Delete</button>
+                                <button class='btn btn-full btn-update' type='submit' data-method='PUT' data-item-type='position'>Update</button>
                             </div>
                         </form>
                     </div>
