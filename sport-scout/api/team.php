@@ -1,16 +1,23 @@
 <?php declare(strict_types=1);
 
 require_once '../assets/class/Database.php';
+require_once '../assets/class/Encoder.php';
 require_once '../assets/class/Sanitize.php';
 require_once '../assets/class/Helper.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $clicked = $_POST['clicked'];
-    $message = 'success';
-    $data = [];
+$request = $_SERVER['REQUEST_METHOD'];
+$input = Encoder::fromJSON(file_get_contents('php://input'));
+$itemType = $input['item_type'];
+if (array_key_exists('item_id', $input)) {
+    $itemID = (int) $input['item_id'];
+}
 
-    // ADD PLAYERS & STAFF
-    if ($clicked === 'ADD_PLAYER') {
+$status = 'success';
+$return = [];
+
+// Create new item.
+if ($request === 'POST') {
+    if ($itemType === 'player') {
         $last_player_id = (int) $db->get_last_player_id()['player_id'];
 
         $sport_id = $_POST['sport_id'];
@@ -64,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $db->alter_auto_increment('players', $last_player_id);
             $db->insert_new_player($data);
         }
-    } else if ($clicked === 'ADD_STAFF') {
+    } else if ($itemType === 'staff') {
         $last_user_id = (int) $db->get_last_user_id()['user_id'];
 
         $username = Sanitize::stripString($_POST['new_username']);
@@ -110,8 +117,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // UPDATE PLAYERS & STAFF
-    if ($clicked === 'UPDATE_PLAYER') {
+    echo Encoder::toJSON($return);
+} else if ($request === 'PUT') {  // Update existing item.
+    if ($itemType === 'UPDATE_PLAYER') {
         $sport_id = (int) $_POST['sport_id'];
         $player_id = (int) $_POST['player_id'];
 
@@ -159,7 +167,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($message === 'success') {
             $db->update_team_player($data);
         }
-    } else if ($clicked === 'UPDATE_STAFF') {
+    } else if ($itemType === 'UPDATE_STAFF') {
         $staff_id = (int) $_POST['staff_id'];
 
         $username = Sanitize::stripString($_POST['username']);
@@ -188,12 +196,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // DELETE PLAYERS & STAFF
-    if ($clicked === 'DELETE_PLAYER') {
-        $db->delete_team_player_by_id($_POST['player_id']);
-    } else if ($clicked === 'DELETE_STAFF') {
-        $db->delete_user_by_id($_POST['staff_id']);
-    }
-
-    echo json_encode($data);
+    echo Encoder::toJSON($return);
+} else if ($request === 'DELETE') {  // Delete existing item.
+    $table = $itemType !== 'schedule' ? "{$itemType}s" : $itemType;
+    $db->deleteRowById($table, $itemType, $itemID);
 }

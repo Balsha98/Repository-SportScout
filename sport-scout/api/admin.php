@@ -8,6 +8,10 @@ require_once '../assets/class/Helper.php';
 $request = $_SERVER['REQUEST_METHOD'];
 $input = Encoder::fromJSON(file_get_contents('php://input'));
 $itemType = $input['item_type'];
+if (array_key_exists('item_id', $input)) {
+    $itemID = (int) $input['item_id'];
+}
+
 $status = 'success';
 $return = [];
 
@@ -273,8 +277,6 @@ if ($request === 'POST') {
 
     echo Encoder::toJSON($return);
 } else if ($request === 'PUT') {  // Update existing items.
-    $itemID = (int) $input['item_id'];
-
     if ($itemType === 'user') {
         $username = Sanitize::stripString($input["username_{$itemID}"]);
         Sanitize::fullStringSearch($status, $username, 25);
