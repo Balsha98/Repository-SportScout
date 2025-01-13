@@ -102,10 +102,10 @@ if ($request === 'POST') {
         $data = [
             'status' => $status,
             'last_user_id' => $lastRowID,
-            'new_role_id' => $roleID,
-            'new_role_name' => $roleName,
-            'new_username' => $username,
-            'new_password' => $password,
+            'new_staff_role_id' => $roleID,
+            'new_staff_role_name' => $roleName,
+            'new_staff_username' => $username,
+            'new_staff_password' => $password,
             'league_id' => $leagueID,
             'league_name' => $leagueName,
             'team_id' => $teamID

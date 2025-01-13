@@ -108,9 +108,9 @@ const resetInput = function (data) {
     }
 };
 
-const warnInputs = function (data, message) {
+const warnInputs = function (data, status) {
     for (const [key, value] of Object.entries(data)) {
-        if (message === "fail") {
+        if (status === "fail") {
             if (value === "") {
                 $(`#${key}`)?.closest(".div-input-container").addClass("red-container");
 
@@ -147,27 +147,26 @@ const ajaxAdd = function (clickEvent) {
         data[id] = $(`#${id}`).val();
     });
 
-    console.log(data);
-
     $.ajax({
         url: url,
         type: method,
         data: JSON.stringify(data),
         success: function (response) {
+            console.log(response);
             const data = JSON.parse(response);
-            const message = data["message"];
+            const status = data["status"];
 
-            if (message === "fail") {
-                warnInputs(data, message);
+            if (status === "fail") {
+                warnInputs(data, status);
                 return;
             }
 
             // Back to white.
-            warnInputs(data, message);
+            warnInputs(data, status);
 
             let previousRowID;
 
-            if (itemType === "ADD_PLAYER") {
+            if (itemType === "player") {
                 const scrollClass = scrollPlayers.attr("class").split(" ")[1];
                 const noneAvailableDiv = $(`.${scrollClass} .div-none-available-container`);
                 if (noneAvailableDiv) {
@@ -207,7 +206,7 @@ const ajaxAdd = function (clickEvent) {
                             </li>
                         </ul>
                         <form class='form form-info form-${previousRowID} hide-element' action='api/team.php'>
-                            <input type='hidden' name='player_id' value='${previousRowID}'>
+                            <input id='player_id_${previousRowID}' type='hidden' name='player_id' value='${previousRowID}'>
                             <div class='div-multi-input-containers grid-2-columns'>
                                 <div class='div-input-container'>
                                     <label for='player_first_${previousRowID}'>First Name:</label>
@@ -249,7 +248,7 @@ const ajaxAdd = function (clickEvent) {
                         </form>
                     </div>
                 `);
-            } else if (itemType === "ADD_STAFF") {
+            } else if (itemType === "staff") {
                 const scrollClass = scrollStaff.attr("class").split(" ")[1];
                 const noneAvailableDiv = $(`.${scrollClass} .div-none-available-container`);
                 if (noneAvailableDiv) {
@@ -264,9 +263,9 @@ const ajaxAdd = function (clickEvent) {
                     }
                 }
 
-                const username = data["new_username"];
-                const roleID = data["new_role_id"];
-                const roleName = data["new_role_name"];
+                const username = data["new_staff_username"];
+                const roleID = data["new_staff_role_id"];
+                const roleName = data["new_staff_role_name"];
                 const roleOption = `${roleID}|${roleName}`;
                 const leagueName = data["league_name"];
                 const leagueID = data["league_id"];
@@ -363,15 +362,15 @@ const ajaxUpdate = function (clickEvent) {
         success: function (response) {
             console.log(response);
             const data = JSON.parse(response);
-            const message = data["message"];
+            const status = data["status"];
 
-            if (message === "fail") {
-                warnInputs(data, message);
+            if (status === "fail") {
+                warnInputs(data, status);
                 return;
             }
 
             // Back to white.
-            warnInputs(data, message);
+            warnInputs(data, status);
 
             if (itemType === "UPDATE_PLAYER") {
                 const playerID = data["player_id"];

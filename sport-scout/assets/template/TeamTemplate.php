@@ -35,9 +35,9 @@ class TeamTemplate
             if ($index === 0) {
                 $return .= sprintf(
                     $popup,
-                    $teamID,
                     $sportID,
-                    $leagueName
+                    $leagueName,
+                    $teamID
                 );
 
                 continue;
@@ -45,8 +45,8 @@ class TeamTemplate
 
             $return .= sprintf(
                 $popup,
-                $teamID,
                 $leagueID,
+                $teamID,
                 $leagueName
             );
         }
@@ -108,9 +108,9 @@ class TeamTemplate
                             class='form form-info form-{$playerID} hide-element' 
                             action='" . SERVER . "/api/team.php'
                         >
-                            <input type='hidden' name='team_id' value='{$teamID}'>
-                            <input type='hidden' name='sport_id' value='{$sportID}'>
-                            <input type='hidden' name='player_id' value='{$playerID}'>
+                            <input id='player_sport_id_{$playerID}' type='hidden' name='sport_id' value='{$sportID}'>
+                            <input id='player_team_id_{$playerID}' type='hidden' name='team_id' value='{$teamID}'>
+                            <input id='player_id_{$playerID}' type='hidden' name='player_id' value='{$playerID}'>
                             <div class='div-multi-input-containers grid-2-columns'>
                                 <div class='div-input-container {$requiredContainer}'>
                                     <label for='player_first_{$playerID}'>First Name:</label>
@@ -219,8 +219,8 @@ class TeamTemplate
                             class='form form-info form-{$staffID} hide-element' 
                             action='" . SERVER . "/api/team.php'
                         >
-                            <input type='hidden' name='staff_id' value='{$staffID}'>
-                            <input type='hidden' name='league_id' value='{$leagueID}'>
+                            <input id='staff_id_{$staffID}' type='hidden' name='staff_id' value='{$staffID}'>
+                            <input id='staff_league_id_{$staffID}' type='hidden' name='league_id' value='{$leagueID}'>
                             <div class='div-multi-input-containers grid-2-columns'>
                                 <div class='div-input-container {$requiredContainer}'>
                                     <label for='staff_username_{$staffID}'>Username:</label>
