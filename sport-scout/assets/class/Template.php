@@ -18,14 +18,14 @@ class Template
         return GeneralTemplate::generatePopupOverlay();
     }
 
-    public static function generatePageHeader($page, $role_id)
+    public static function generatePageHeader($page, $roleID)
     {
-        return GeneralTemplate::generatePageHeader($page, $role_id);
+        return GeneralTemplate::generatePageHeader($page, $roleID);
     }
 
-    public static function generateDashboardLinks($role_id)
+    public static function generateDashboardLinks($roleID)
     {
-        return GeneralTemplate::generateDashboardLinks($role_id);
+        return GeneralTemplate::generateDashboardLinks($roleID);
     }
 
     public static function generatePageFooter()
@@ -33,14 +33,14 @@ class Template
         return GeneralTemplate::generatePageFooter();
     }
 
-    public static function generateAdminLinks($start_index)
+    public static function generateAdminLinks($startIndex)
     {
-        return AdminTemplate::generateLinks($start_index);
+        return AdminTemplate::generateLinks($startIndex);
     }
 
-    public static function generateAdminPopups($start_index)
+    public static function generateAdminPopups($startIndex)
     {
-        return AdminTemplate::generatePopups($start_index);
+        return AdminTemplate::generatePopups($startIndex);
     }
 
     public static function generateAdminUsersDataContainer($data)
@@ -53,54 +53,54 @@ class Template
         return AdminTemplate::generateSportsDataContainer($data);
     }
 
-    public static function generateAdminLeaguesDataContainer($data, $role_id)
+    public static function generateAdminLeaguesDataContainer($data, $roleID)
     {
-        return AdminTemplate::generateLeaguesDataContainer($data, $role_id);
+        return AdminTemplate::generateLeaguesDataContainer($data, $roleID);
     }
 
-    public static function generateAdminSeasonsDataContainer($data, $role_id)
+    public static function generateAdminSeasonsDataContainer($data, $roleID)
     {
-        return AdminTemplate::generateSeasonsDataContainer($data, $role_id);
+        return AdminTemplate::generateSeasonsDataContainer($data, $roleID);
     }
 
-    public static function generateAdminPositionsDataContainer($data, $role_id)
+    public static function generateAdminPositionsDataContainer($data, $roleID)
     {
-        return AdminTemplate::generatePositionsDataContainer($data, $role_id);
+        return AdminTemplate::generatePositionsDataContainer($data, $roleID);
     }
 
-    public static function generateAdminTeamsDataContainer($data, $role_id)
+    public static function generateAdminTeamsDataContainer($data, $roleID)
     {
-        return AdminTemplate::generateTeamsDataContainer($data, $role_id);
+        return AdminTemplate::generateTeamsDataContainer($data, $roleID);
     }
 
-    public static function generateTeamPopups($team_id)
+    public static function generateTeamPopups($teamData)
     {
-        return TeamTemplate::generatePopups($team_id);
+        return TeamTemplate::generatePopups($teamData);
     }
 
-    public static function generateTeamPlayersData($data, $role_id, $league_name)
+    public static function generateTeamPlayersData($data, $roleID, $leagueName)
     {
-        return TeamTemplate::generatePlayersData($data, $role_id, $league_name);
+        return TeamTemplate::generatePlayersData($data, $roleID, $leagueName);
     }
 
-    public static function generateTeamStaffData($data, $role_id, $league_name)
+    public static function generateTeamStaffData($data, $roleID, $leagueName)
     {
-        return TeamTemplate::generateStaffData($data, $role_id, $league_name);
+        return TeamTemplate::generateStaffData($data, $roleID, $leagueName);
     }
 
-    public static function generateSchedulePopups($team_id)
+    public static function generateSchedulePopups($teamData)
     {
-        return ScheduleTemplate::generatePopups($team_id);
+        return ScheduleTemplate::generatePopups($teamData);
     }
 
-    public static function generateScheduleTeamData($data, $role_id)
+    public static function generateScheduleTeamData($data, $roleID)
     {
-        return ScheduleTemplate::generateTeamData($data, $role_id);
+        return ScheduleTemplate::generateTeamData($data, $roleID);
     }
 
-    public static function generateScheduleGame($data, $role_id)
+    public static function generateScheduleGame($data, $roleID)
     {
-        return ScheduleTemplate::generateGame($data, $role_id);
+        return ScheduleTemplate::generateGame($data, $roleID);
     }
 
     public static function generateNoneSelectedDiv($data)

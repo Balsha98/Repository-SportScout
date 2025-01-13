@@ -24,9 +24,9 @@ class TeamData
                     <p>Fill in the following <span>fields</span> appropriately.</p>
                 </header>
                 <form class="form form-add" action="api/team.php">
-                    <input type="hidden" name="team_id" value="%s">
-                    <input type="hidden" name="sport_id" value="%s">
-                    <input type="hidden" name="league_name" value="%s">
+                    <input id="new_player_team_id" type="hidden" name="team_id" value="%s">
+                    <input id="new_player_sport_id" type="hidden" name="sport_id" value="%s">
+                    <input id="new_player_league_name" type="hidden" name="league_name" value="%s">
                     <div class="div-multi-input-containers grid-2-columns">
                         <div class="div-input-container required-container">
                             <label for="new_player_first">First Name:</label>

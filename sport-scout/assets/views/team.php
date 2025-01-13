@@ -79,9 +79,9 @@ echo Template::generatePageHeader($pageData['active'], $roleID);
                     <h2 class="heading-tertiary">Players</h2>
                 </header>
                 <?php
-                if ($teamID === 0)
+                if ($teamID === 0) {
                     echo Template::generateNoneSelectedDiv($noneSelected);
-                else {
+                } else {
                     $players = $db->getPlayersByTeamId($teamID);
                     echo Template::generateTeamPlayersData($players, $roleID, $leagueName);
                 }
