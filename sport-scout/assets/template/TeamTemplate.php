@@ -25,10 +25,10 @@ class TeamTemplate
 
     public static function generatePopups($teamData)
     {
-        [['new_player_sport_id' => $sportID]] = $teamData;
-        [['new_player_league_id' => $leagueID]] = $teamData;
-        [['new_player_league_name' => $leagueName]] = $teamData;
-        [['new_player_team_id' => $teamID]] = $teamData;
+        [['sport_id' => $sportID]] = $teamData;
+        [['league_id' => $leagueID]] = $teamData;
+        [['league_name' => $leagueName]] = $teamData;
+        [['team_id' => $teamID]] = $teamData;
 
         $return = '';
         foreach (TeamData::POPUPS as $index => $popup) {

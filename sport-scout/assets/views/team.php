@@ -36,8 +36,8 @@ if ($teamID !== 0) {
 
     // In case the team was deleted.
     if (count($teamData) > 0) {
-        $teamName = $teamData[0]['team_name'];
-        $leagueName = $teamData[0]['league_name'];
+        [['team_name' => $teamName]] = $teamData;
+        [['league_name' => $leagueName]] = $teamData;
     } else {
         $teamID = 0;
     }
@@ -94,9 +94,9 @@ echo Template::generatePageHeader($pageData['active'], $roleID);
                     <h2 class="heading-tertiary">Staff & Fans</h2>
                 </header>
                 <?php
-                if ($teamID === 0)
+                if ($teamID === 0) {
                     echo Template::generateNoneSelectedDiv($noneSelected);
-                else {
+                } else {
                     $staff = $db->getStaffByTeamId($teamID);
                     echo Template::generateTeamStaffData($staff, $roleID, $leagueName);
                 }

@@ -24,9 +24,9 @@ class TeamData
                     <p>Fill in the following <span>fields</span> appropriately.</p>
                 </header>
                 <form class="form form-add" action="api/team.php">
-                    <input id="new_player_team_id" type="hidden" name="team_id" value="%s">
                     <input id="new_player_sport_id" type="hidden" name="sport_id" value="%s">
                     <input id="new_player_league_name" type="hidden" name="league_name" value="%s">
+                    <input id="new_player_team_id" type="hidden" name="team_id" value="%s">
                     <div class="div-multi-input-containers grid-2-columns">
                         <div class="div-input-container required-container">
                             <label for="new_player_first">First Name:</label>
@@ -76,22 +76,22 @@ class TeamData
                     <p>Fill in the following <span>fields</span> appropriately.</p>
                 </header>
                 <form class="form form-add" action="api/team.php">
-                    <input type="hidden" name="team_id" value="%s">
-                    <input type="hidden" name="league_id" value="%s">
+                    <input id="new_staff_league_id" type="hidden" name="league_id" value="%s">
+                    <input id="new_staff_team_id" type="hidden" name="team_id" value="%s">
                     <div class="div-multi-input-containers grid-2-columns">
                         <div class="div-input-container required-container">
-                            <label for="new_username">Username:</label>
-                            <input id="new_username" type="text" name="new_username" required>
+                            <label for="new_staff_username">Username:</label>
+                            <input id="new_staff_username" type="text" name="username" required>
                         </div>
                         <div class="div-input-container required-container">
-                            <label for="new_password">Password:</label>
-                            <input id="new_password" type="password" name="new_password" required>
+                            <label for="new_staff_password">Password:</label>
+                            <input id="new_staff_password" type="password" name="password" required>
                         </div>
                     </div>
                     <div class="div-multi-input-containers grid-2-columns">
                         <div class=" div-input-container required-container">
-                            <label for="new_role_name">Type of Role:</label>
-                            <select id="new_role_name" name="new_role_name" required>
+                            <label for="new_staff_role_name">Type of Role:</label>
+                            <select id="new_staff_role_name" name="role_name" required>
                                 <option value="">Select Role</option>
                                 <option value="3|Team Manager">Team Manager</option>
                                 <option value="4|Team Coach">Team Coach</option>
@@ -99,8 +99,8 @@ class TeamData
                             </select>
                         </div>
                         <div class="div-input-container">
-                            <label for="league_name">League:</label>
-                            <input id="league_name" type="text" name="league_name" value="%s" readonly>
+                            <label for="new_staff_league_name">League:</label>
+                            <input id="new_staff_league_name" type="text" name="league_name" value="%s" readonly>
                         </div>
                     </div>
                     <div class="div-btn-container grid-btn-container">

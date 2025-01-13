@@ -22,7 +22,7 @@ const updateBtns = $(".btn-update");
 const deleteBtns = $(".btn-delete");
 
 // ***** VARIABLES ***** //
-const newItemInputs = {
+const newAdminInputs = {
     user: ["new_username", "new_password", "new_role_name", "new_user_league_id", "new_user_team_id"],
     sport: ["new_sport_name"],
     league: ["new_league_name", "new_league_sport_id"],
@@ -39,7 +39,7 @@ const newItemInputs = {
     position: ["new_position_name", "new_position_sport_id"],
 };
 
-const existingItemInputs = {
+const existingAdminInputs = {
     user: [
         "user_id",
         "username",
@@ -191,7 +191,7 @@ const ajaxAdd = function (clickEvent) {
 
     const data = {};
     data["item_type"] = itemType;
-    newItemInputs[itemType].forEach((id) => {
+    newAdminInputs[itemType].forEach((id) => {
         data[id] = $(`#${id}`).val();
     });
 
@@ -676,7 +676,7 @@ const ajaxUpdate = function (clickEvent) {
     const data = {};
     data["item_type"] = itemType;
     data["item_id"] = rowID;
-    existingItemInputs[itemType].forEach((id) => {
+    existingAdminInputs[itemType].forEach((id) => {
         data[`${id}_${rowID}`] = $(`#${id}_${rowID}`).val();
     });
 

@@ -14,6 +14,27 @@ const updateBtns = $(".btn-update");
 const deleteBtns = $(".btn-delete");
 
 // ***** VARIABLES ***** //
+const newTeamInputs = {
+    player: [
+        "new_player_sport_id",
+        "new_player_league_name",
+        "new_player_team_id",
+        "new_player_first",
+        "new_player_last",
+        "new_player_dob",
+        "new_position_id",
+        "new_jersey_number",
+    ],
+    staff: [
+        "new_staff_league_id",
+        "new_staff_team_id",
+        "new_staff_username",
+        "new_staff_password",
+        "new_staff_role_name",
+        "new_staff_league_name",
+    ],
+};
+
 const selectOptions = {
     "Team Manager": "3|Team Manager",
     "Team Coach": "4|Team Coach",
@@ -122,10 +143,15 @@ const ajaxAdd = function (clickEvent) {
 
     const data = {};
     data["item_type"] = itemType;
+    newTeamInputs[itemType].forEach((id) => {
+        data[id] = $(`#${id}`).val();
+    });
+
+    console.log(data);
 
     $.ajax({
-        url: form.attr("action"),
-        type: $(this).data("method"),
+        url: url,
+        type: method,
         data: JSON.stringify(data),
         success: function (response) {
             const data = JSON.parse(response);
