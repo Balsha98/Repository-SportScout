@@ -293,8 +293,8 @@ const ajaxAdd = function (clickEvent) {
                             </li>
                         </ul>
                         <form class='form form-info form-${previousRowID} hide-element' action='/api/team.php'>
-                            <input type='hidden' name='staff_id' value='${previousRowID}'>
-                            <input type='hidden' name='league_id' value='${leagueID}'>
+                            <input id='staff_id_${previousRowID}' type='hidden' name='staff_id' value='${previousRowID}'>
+                            <input id='staff_league_id_${previousRowID}' type='hidden' name='league_id' value='${leagueID}'>
                             <div class='div-multi-input-containers grid-2-columns'>
                                 <div class='div-input-container'>
                                     <label for='staff_username_${previousRowID}'>Username:</label>
