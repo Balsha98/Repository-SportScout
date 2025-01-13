@@ -13,7 +13,7 @@ const addNewBtns = $(".btn-add-new");
 const updateBtns = $(".btn-update");
 const deleteBtns = $(".btn-delete");
 
-// STAFF SELECT OPTIONS
+// ***** VARIABLES ***** //
 const selectOptions = {
     "Team Manager": "3|Team Manager",
     "Team Coach": "4|Team Coach",
@@ -114,14 +114,19 @@ const getDataRowsOnly = function (scrollContainer) {
 const ajaxAdd = function (clickEvent) {
     clickEvent.preventDefault();
 
-    const clickedBtn = $(this).data("clicked");
     const relPopup = $(this.closest(".popup-add"));
     const form = $(this.closest(".form"));
+    const url = form.attr("action");
+    const method = form.attr("method");
+    const itemType = $(this).data("item-type");
+
+    const data = {};
+    data["item_type"] = itemType;
 
     $.ajax({
         url: form.attr("action"),
         type: $(this).data("method"),
-        data: `${form.serialize()}&clicked=${clickedBtn}`,
+        data: JSON.stringify(data),
         success: function (response) {
             const data = JSON.parse(response);
             const message = data["message"];
@@ -136,7 +141,7 @@ const ajaxAdd = function (clickEvent) {
 
             let previousRowID;
 
-            if (clickedBtn === "ADD_PLAYER") {
+            if (itemType === "ADD_PLAYER") {
                 const scrollClass = scrollPlayers.attr("class").split(" ")[1];
                 const noneAvailableDiv = $(`.${scrollClass} .div-none-available-container`);
                 if (noneAvailableDiv) {
@@ -175,7 +180,7 @@ const ajaxAdd = function (clickEvent) {
                                 </p>
                             </li>
                         </ul>
-                        <form class='form form-info form-${previousRowID} hide-element' action='../process/process-team.php'>
+                        <form class='form form-info form-${previousRowID} hide-element' action='api/team.php'>
                             <input type='hidden' name='player_id' value='${previousRowID}'>
                             <div class='div-multi-input-containers grid-2-columns'>
                                 <div class='div-input-container'>
@@ -206,19 +211,19 @@ const ajaxAdd = function (clickEvent) {
                                 <button 
                                     class='btn btn-hollow btn-delete' 
                                     type='submit' data-method='POST' 
-                                    data-clicked='DELETE_PLAYER'
+                                    data-item-type='DELETE_PLAYER'
                                 >Delete</button>
                                 <button 
                                     class='btn btn-full btn-update' 
                                     type='submit' 
                                     data-method='POST' 
-                                    data-clicked='UPDATE_PLAYER'
+                                    data-item-type='UPDATE_PLAYER'
                                 >Update</button>
                             </div>
                         </form>
                     </div>
                 `);
-            } else if (clickedBtn === "ADD_STAFF") {
+            } else if (itemType === "ADD_STAFF") {
                 const scrollClass = scrollStaff.attr("class").split(" ")[1];
                 const noneAvailableDiv = $(`.${scrollClass} .div-none-available-container`);
                 if (noneAvailableDiv) {
@@ -262,7 +267,7 @@ const ajaxAdd = function (clickEvent) {
                                 </p>
                             </li>
                         </ul>
-                        <form class='form form-info form-${previousRowID} hide-element' action='../process/process-team.php'>
+                        <form class='form form-info form-${previousRowID} hide-element' action='api/team.php'>
                             <input type='hidden' name='staff_id' value='${previousRowID}'>
                             <input type='hidden' name='league_id' value='${leagueID}'>
                             <div class='div-multi-input-containers grid-2-columns'>
@@ -292,13 +297,13 @@ const ajaxAdd = function (clickEvent) {
                                 <button 
                                     class='btn btn-hollow btn-delete' 
                                     type='submit' data-method='POST' 
-                                    data-clicked='DELETE_STAFF'
+                                    data-item-type='DELETE_STAFF'
                                 >Delete</button>
                                 <button 
                                     class='btn btn-full btn-update' 
                                     type='submit' 
                                     data-method='POST' 
-                                    data-clicked='UPDATE_STAFF'
+                                    data-item-type='UPDATE_STAFF'
                                 >Update</button>
                             </div>
                         </form>
@@ -320,7 +325,7 @@ const ajaxAdd = function (clickEvent) {
 const ajaxUpdate = function (clickEvent) {
     clickEvent.preventDefault();
 
-    const clickedBtn = $(this).data("clicked");
+    const itemType = $(this).data("item-type");
     const relContainer = $(this.closest(".div-row-container"));
     const relContainerClass = relContainer.attr("class").split(" ")[1];
     const form = $(this.closest(".form"));
@@ -328,7 +333,7 @@ const ajaxUpdate = function (clickEvent) {
     $.ajax({
         url: form.attr("action"),
         type: $(this).data("method"),
-        data: `${form.serialize()}&clicked=${clickedBtn}`,
+        data: `${form.serialize()}&item-type=${itemType}`,
         success: function (response) {
             console.log(response);
             const data = JSON.parse(response);
@@ -342,7 +347,7 @@ const ajaxUpdate = function (clickEvent) {
             // Back to white.
             warnInputs(data, message);
 
-            if (clickedBtn === "UPDATE_PLAYER") {
+            if (itemType === "UPDATE_PLAYER") {
                 const playerID = data["player_id"];
                 const playerFirst = data[`player_first_${playerID}`];
                 const playerLast = data[`player_last_${playerID}`];
@@ -351,7 +356,7 @@ const ajaxUpdate = function (clickEvent) {
 
                 $(`.${relContainerClass} .full-name`).text(fullName);
                 $(`.${relContainerClass} .position-name`).text(positionName);
-            } else if (clickedBtn === "UPDATE_STAFF") {
+            } else if (itemType === "UPDATE_STAFF") {
                 const staffID = data["staff_id"];
                 const staffName = data[`staff_username_${staffID}`];
                 const staffRole = data[`staff_role_name_${staffID}`];
@@ -367,23 +372,23 @@ const ajaxUpdate = function (clickEvent) {
 const ajaxDelete = function (clickEvent) {
     clickEvent.preventDefault();
 
-    const clickedBtn = $(this).data("clicked");
+    const itemType = $(this).data("item-type");
     const relContainer = $(this.closest(".div-row-container"));
     const form = $(this.closest(".form"));
 
     $.ajax({
         url: form.attr("action"),
         type: $(this).data("method"),
-        data: `${form.serialize()}&clicked=${clickedBtn}`,
+        data: `${form.serialize()}&item-type=${itemType}`,
         success: function () {
             let members = [];
             let scrollContainer;
             let cookieKey;
 
-            if (clickedBtn === "DELETE_PLAYER") {
+            if (itemType === "DELETE_PLAYER") {
                 scrollContainer = scrollPlayers;
                 cookieKey = "player";
-            } else if (clickedBtn === "DELETE_STAFF") {
+            } else if (itemType === "DELETE_STAFF") {
                 scrollContainer = scrollStaff;
                 cookieKey = "member";
 

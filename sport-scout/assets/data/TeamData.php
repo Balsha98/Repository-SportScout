@@ -11,6 +11,7 @@ class TeamData
     ];
 
     // ***** TEAM PAGE POPUPS ***** //
+
     public const POPUPS = [
         '
             <!-- NEW PLAYER POPUP -->
@@ -57,7 +58,7 @@ class TeamData
                             <ion-icon class="arrow-icon" name="arrow-back-outline"></ion-icon>
                             <span>Cancel</span>
                         </button>
-                        <button class="btn btn-full btn-add-new" type="submit" data-method="POST" data-clicked="ADD_PLAYER">
+                        <button class="btn btn-full btn-add-new" type="submit" data-item-type="player">
                             <span>Add</span>
                         </button>
                     </div>
@@ -107,7 +108,7 @@ class TeamData
                             <ion-icon class="arrow-icon" name="arrow-back-outline"></ion-icon>
                             <span>Cancel</span>
                         </button>
-                        <button class="btn btn-full btn-add-new" type="submit" data-method="POST" data-clicked="ADD_STAFF">
+                        <button class="btn btn-full btn-add-new" type="submit" data-item-type="staff">
                             <span>Add</span>
                         </button>
                     </div>
