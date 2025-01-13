@@ -70,8 +70,8 @@ if ($request === 'POST') {
         ];
 
         if ($status === 'success') {
-            // $db->alterAutoIncrement('players', $lastRowID);
-            // $db->insertNewPlayer($return);
+            $db->alterAutoIncrement($table, $lastRowID);
+            $db->insertNewPlayer($return);
         }
     } else if ($itemType === 'user') {
         $username = Sanitize::stripString($input['new_staff_username']);
@@ -112,7 +112,7 @@ if ($request === 'POST') {
         ];
 
         if ($status === 'success') {
-            $db->alterAutoIncrement('users', $lastRowID);
+            $db->alterAutoIncrement($table, $lastRowID);
             $db->insertNewUser($return);
         }
     }
