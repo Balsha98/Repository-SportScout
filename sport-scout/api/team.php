@@ -17,182 +17,180 @@ $return = [];
 
 // Create new item.
 if ($request === 'POST') {
+    $table = $itemType === 'schedule' ? "{$itemType}s" : $itemType;
+    $lastRowID = $db->getLastRowId($table, $itemType);
+
     if ($itemType === 'player') {
-        $last_player_id = (int) $db->get_last_player_id()['player_id'];
+        $sportID = $input['sport_id'];
+        $leagueName = $input['league_name'];
+        $teamID = $input['team_id'];
 
-        $sport_id = $_POST['sport_id'];
-        $league_name = $_POST['league_name'];
-        $team_id = $_POST['team_id'];
+        $playerFirst = Sanitize::stripString($input['new_player_first']);
+        Sanitize::fullStringSearch($status, $playerFirst, 50);
 
-        $player_first = Sanitize::stripString($_POST['new_player_first']);
-        Sanitize::fullStringSearch($message, $player_first, 50);
+        $playerLast = Sanitize::stripString($input['new_player_last']);
+        Sanitize::fullStringSearch($status, $playerLast, 50);
 
-        $player_last = Sanitize::stripString($_POST['new_player_last']);
-        Sanitize::fullStringSearch($message, $player_last, 50);
-
-        $player_dob = $_POST['new_player_dob'];
-        if ($player_dob === '') {
-            $message = 'fail';
+        $playerDOB = $input['new_player_dob'];
+        if ($playerDOB === '') {
+            $status = 'fail';
         }
 
-        $position_id = '';
-        $position_name = '';
+        $positionID = '';
+        $positionName = '';
         Helper::setPositionName(
             $db,
-            $message,
-            $sport_id,
-            $position_id,
-            $position_name,
+            $input,
+            $status,
+            $sportID,
+            $positionID,
+            $positionName,
             'new_position_id'
         );
 
-        $jersey_number = (int) $_POST['new_jersey_number'];
-        if ($jersey_number === '') {
-            $message = 'fail';
-        } else if ($jersey_number < 0) {
-            $message = 'fail';
-            $jersey_number = '';
+        $jerseyNumber = (int) $input['new_jersey_number'];
+        if ($jerseyNumber === '') {
+            $status = 'fail';
+        } else if ($jerseyNumber < 0) {
+            $status = 'fail';
+            $jerseyNumber = '';
         }
 
         $data = [
-            'message' => $message,
-            'last_player_id' => $last_player_id,
-            'team_id' => $team_id,
-            'league_name' => $league_name,
-            'new_player_first' => $player_first,
-            'new_player_last' => $player_last,
-            'new_player_dob' => $player_dob,
-            'new_position_id' => $position_id,
-            'new_position_name' => $position_name,
-            'new_jersey_number' => $jersey_number,
+            'status' => $status,
+            'last_player_id' => $lastRowID,
+            'team_id' => $teamID,
+            'league_name' => $leagueName,
+            'new_player_first' => $playerFirst,
+            'new_player_last' => $playerLast,
+            'new_player_dob' => $playerDOB,
+            'new_position_id' => $positionID,
+            'new_position_name' => $positionName,
+            'new_jersey_number' => $jerseyNumber,
         ];
 
-        if ($message === 'success') {
-            $db->alter_auto_increment('players', $last_player_id);
-            $db->insert_new_player($data);
+        if ($status === 'success') {
+            $db->alterAutoIncrement('players', $lastRowID);
+            $db->insertNewPlayer($data);
         }
     } else if ($itemType === 'staff') {
-        $last_user_id = (int) $db->get_last_user_id()['user_id'];
+        $username = Sanitize::stripString($input['new_username']);
+        Sanitize::fullStringSearch($status, $username, 25);
 
-        $username = Sanitize::stripString($_POST['new_username']);
-        Sanitize::fullStringSearch($message, $username, 25);
-
-        $password = Sanitize::stripString($_POST['new_password']);
+        $password = Sanitize::stripString($input['new_password']);
         if ($password === '') {
-            $message = 'fail';
+            $status = 'fail';
         } else if (!Sanitize::isShorter($password, 64)) {
-            $message = 'fail';
+            $status = 'fail';
             $password = '';
         }
 
-        $role_id = '';
-        $role_name = '';
-        $role = explode('|', $_POST['new_role_name']);
+        $roleID = '';
+        $roleName = '';
+        $role = explode('|', $input['new_role_name']);
         if (count($role) !== 2) {
-            $message = 'fail';
+            $status = 'fail';
         } else {
-            $role_id = $role[0];
-            $role_name = $role[1];
+            $roleID = $role[0];
+            $roleName = $role[1];
         }
 
-        $league_id = (int) $_POST['league_id'];
-        $league_name = $_POST['league_name'];
-        $team_id = (int) $_POST['team_id'];
+        $leagueID = (int) $input['league_id'];
+        $leagueName = $input['league_name'];
+        $teamID = (int) $input['team_id'];
 
         $data = [
-            'message' => $message,
-            'last_user_id' => $last_user_id,
-            'new_role_id' => $role_id,
-            'new_role_name' => $role_name,
+            'status' => $status,
+            'last_user_id' => $lastRowID,
+            'new_role_id' => $roleID,
+            'new_role_name' => $roleName,
             'new_username' => $username,
             'new_password' => $password,
-            'league_id' => $league_id,
-            'league_name' => $league_name,
-            'team_id' => $team_id
+            'league_id' => $leagueID,
+            'league_name' => $leagueName,
+            'team_id' => $teamID
         ];
 
-        if ($message === 'success') {
-            $db->alter_auto_increment('users', $last_user_id);
-            $db->insert_new_user($data);
+        if ($status === 'success') {
+            $db->alterAutoIncrement('users', $lastRowID);
+            $db->insertNewUser($data);
         }
     }
 
     echo Encoder::toJSON($return);
 } else if ($request === 'PUT') {  // Update existing item.
-    if ($itemType === 'UPDATE_PLAYER') {
-        $sport_id = (int) $_POST['sport_id'];
-        $player_id = (int) $_POST['player_id'];
+    if ($itemType === 'player') {
+        $sportID = (int) $input['sport_id'];
 
-        $player_first = Sanitize::stripString($_POST['player_first']);
-        Sanitize::fullStringSearch($message, $player_first, 50);
+        $playerFirst = Sanitize::stripString($input['player_first']);
+        Sanitize::fullStringSearch($status, $playerFirst, 50);
 
-        $player_last = Sanitize::stripString($_POST['player_last']);
-        Sanitize::fullStringSearch($message, $player_last, 50);
+        $playerLast = Sanitize::stripString($input['player_last']);
+        Sanitize::fullStringSearch($status, $playerLast, 50);
 
-        $player_dob = $_POST['player_dob'];
-        if ($player_dob === '') {
-            $message = 'fail';
+        $playerDOB = $input['player_dob'];
+        if ($playerDOB === '') {
+            $status = 'fail';
         }
 
-        $position_id = '';
-        $position_name = '';
+        $positionID = '';
+        $positionName = '';
         Helper::setPositionName(
             $db,
-            $message,
-            $sport_id,
-            $position_id,
-            $position_name,
+            $input,
+            $status,
+            $sportID,
+            $positionID,
+            $positionName,
             'player_position_id'
         );
 
-        $player_jersey = (int) $_POST['player_jersey'];
+        $player_jersey = (int) $input['player_jersey'];
         if ($player_jersey === '') {
-            $message = 'fail';
+            $status = 'fail';
         } else if ($player_jersey < 0) {
-            $message = 'fail';
+            $status = 'fail';
             $player_jersey = '';
         }
 
         $data = [
-            'message' => $message,
-            'player_id' => $player_id,
-            "player_first_{$player_id}" => $player_first,
-            "player_last_{$player_id}" => $player_last,
-            "player_dob_{$player_id}" => $player_dob,
-            "player_position_id_{$player_id}" => $position_id,
-            'player_position_name' => $position_name,
-            "player_jersey_{$player_id}" => $player_jersey,
+            'status' => $status,
+            'player_id' => $itemID,
+            "player_first_{$itemID}" => $playerFirst,
+            "player_last_{$itemID}" => $playerLast,
+            "player_dob_{$itemID}" => $playerDOB,
+            "player_position_id_{$itemID}" => $positionID,
+            'player_position_name' => $positionName,
+            "player_jersey_{$itemID}" => $player_jersey,
         ];
 
-        if ($message === 'success') {
-            $db->update_team_player($data);
+        if ($status === 'success') {
+            $db->updateTeamPlayer($data);
         }
-    } else if ($itemType === 'UPDATE_STAFF') {
-        $staff_id = (int) $_POST['staff_id'];
+    } else if ($itemType === 'staff') {
+        $username = Sanitize::stripString($input['username']);
+        Sanitize::fullStringSearch($status, $username, 50);
 
-        $username = Sanitize::stripString($_POST['username']);
-        Sanitize::fullStringSearch($message, $username, 50);
-
-        $role_id = '';
-        $role_name = '';
-        $role = explode('|', $_POST['role_name']);
+        $roleID = '';
+        $roleName = '';
+        $role = explode('|', $input['role_name']);
         if (count($role) !== 2) {
-            $message = 'fail';
+            $status = 'fail';
         } else {
-            $role_id = $role[0];
-            $role_name = $role[1];
+            $roleID = $role[0];
+            $roleName = $role[1];
         }
 
         $data = [
-            'message' => $message,
-            'staff_id' => $staff_id,
-            "staff_username_{$staff_id}" => $username,
-            'staff_role_id' => $role_id,
-            "staff_role_name_{$staff_id}" => $role_name
+            'status' => $status,
+            'staff_id' => $itemID,
+            "staff_username_{$itemID}" => $username,
+            'staff_role_id' => $roleID,
+            "staff_role_name_{$itemID}" => $roleName
         ];
 
-        if ($message === 'success') {
-            $db->update_team_staff($data);
+        if ($status === 'success') {
+            $db->updateTeamStaff($data);
         }
     }
 
