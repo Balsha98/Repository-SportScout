@@ -22,10 +22,10 @@ const newTeamInputs = {
         "new_player_first",
         "new_player_last",
         "new_player_dob",
-        "new_position_id",
-        "new_jersey_number",
+        "new_player_position_id",
+        "new_player_jersey_number",
     ],
-    staff: [
+    user: [
         "new_staff_league_id",
         "new_staff_team_id",
         "new_staff_username",
@@ -205,7 +205,7 @@ const ajaxAdd = function (clickEvent) {
                                 </p>
                             </li>
                         </ul>
-                        <form class='form form-info form-${previousRowID} hide-element' action='api/team.php'>
+                        <form class='form form-info form-${previousRowID} hide-element' action='/api/team.php'>
                             <input id='player_id_${previousRowID}' type='hidden' name='player_id' value='${previousRowID}'>
                             <div class='div-multi-input-containers grid-2-columns'>
                                 <div class='div-input-container'>
@@ -292,7 +292,7 @@ const ajaxAdd = function (clickEvent) {
                                 </p>
                             </li>
                         </ul>
-                        <form class='form form-info form-${previousRowID} hide-element' action='api/team.php'>
+                        <form class='form form-info form-${previousRowID} hide-element' action='/api/team.php'>
                             <input type='hidden' name='staff_id' value='${previousRowID}'>
                             <input type='hidden' name='league_id' value='${leagueID}'>
                             <div class='div-multi-input-containers grid-2-columns'>

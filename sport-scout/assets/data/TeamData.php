@@ -23,33 +23,33 @@ class TeamData
                     <h2>Add New Player?</h2>
                     <p>Fill in the following <span>fields</span> appropriately.</p>
                 </header>
-                <form class="form form-add" action="api/team.php">
+                <form class="form form-add" action="/api/team.php" method="POST">
                     <input id="new_player_sport_id" type="hidden" name="sport_id" value="%s">
                     <input id="new_player_league_name" type="hidden" name="league_name" value="%s">
                     <input id="new_player_team_id" type="hidden" name="team_id" value="%s">
                     <div class="div-multi-input-containers grid-2-columns">
                         <div class="div-input-container required-container">
                             <label for="new_player_first">First Name:</label>
-                            <input id="new_player_first" type="text" name="new_player_first" required>
+                            <input id="new_player_first" type="text" name="first_name" required>
                         </div>
                         <div class="div-input-container required-container">
                             <label for="new_player_last">Last Name:</label>
-                            <input id="new_player_last" type="tel" name="new_player_last" required>
+                            <input id="new_player_last" type="tel" name="last_name" required>
                         </div>
                     </div>
                     <div class="div-multi-input-containers grid-2-columns">
                         <div class="div-input-container required-container">
                             <label for="new_player_dob">Date of Birth:</label>
-                            <input id="new_player_dob" type="date" name="new_player_dob" required>
+                            <input id="new_player_dob" type="date" name="dob" required>
                         </div>
                         <div class="div-multi-input-containers grid-2-columns">
                             <div class="div-input-container required-container">
-                                <label for="new_position_id">Position ID:</label>
-                                <input id="new_position_id" type="number" name="new_position_id" min="1" required>
+                                <label for="new_player_position_id">Position ID:</label>
+                                <input id="new_player_position_id" type="number" name="position_id" min="1" required>
                             </div>
                             <div class="div-input-container required-container">
-                                <label for="new_jersey_number">Jersey:</label>
-                                <input id="new_jersey_number" type="number" name="new_jersey_number" min="0" required>
+                                <label for="new_player_jersey_number">Jersey:</label>
+                                <input id="new_player_jersey_number" type="number" name="jersey_number" min="0" required>
                             </div>
                         </div>
                     </div>
@@ -75,7 +75,7 @@ class TeamData
                     <h2>Add New Staff?</h2>
                     <p>Fill in the following <span>fields</span> appropriately.</p>
                 </header>
-                <form class="form form-add" action="api/team.php">
+                <form class="form form-add" action="/api/team.php" method="POST">
                     <input id="new_staff_league_id" type="hidden" name="league_id" value="%s">
                     <input id="new_staff_team_id" type="hidden" name="team_id" value="%s">
                     <div class="div-multi-input-containers grid-2-columns">
@@ -108,7 +108,7 @@ class TeamData
                             <ion-icon class="arrow-icon" name="arrow-back-outline"></ion-icon>
                             <span>Cancel</span>
                         </button>
-                        <button class="btn btn-full btn-add-new" type="submit" data-item-type="staff">
+                        <button class="btn btn-full btn-add-new" type="submit" data-item-type="user">
                             <span>Add</span>
                         </button>
                     </div>
