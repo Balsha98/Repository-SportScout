@@ -113,7 +113,6 @@ const warnInputs = function (data, status) {
         if (status === "fail") {
             if (value === "") {
                 $(`#${key}`)?.closest(".div-input-container").addClass("red-container");
-
                 continue;
             }
         }

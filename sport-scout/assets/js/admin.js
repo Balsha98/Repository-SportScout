@@ -155,9 +155,10 @@ const resetInput = function (data) {
 const warnInputs = function (data, status) {
     for (const [key, value] of Object.entries(data)) {
         if (status === "fail") {
-            if (value === "") $(`#${key}`)?.closest(".div-input-container").addClass("red-container");
-
-            continue;
+            if (value === "") {
+                $(`#${key}`)?.closest(".div-input-container").addClass("red-container");
+                continue;
+            }
         }
 
         $(`#${key}`)?.closest(".div-input-container").removeClass("red-container");
