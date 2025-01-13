@@ -187,8 +187,8 @@ const ajaxAdd = function (clickEvent) {
                 const playerLast = data["new_player_last"];
                 const fullName = `${playerFirst} ${playerLast}`;
                 const playerDOB = data["new_player_dob"];
-                const positionName = data["new_position_name"];
-                const jerseyNumber = data["new_jersey_number"];
+                const positionName = data["new_player_position_name"];
+                const jerseyNumber = data["new_player_jersey_number"];
 
                 scrollPlayers.append(`
                     <div class='div-row-container row-container-${++previousRowID}' data-row-id='${previousRowID}'>
@@ -235,14 +235,15 @@ const ajaxAdd = function (clickEvent) {
                             <div class='grid-btn-container'>
                                 <button 
                                     class='btn btn-hollow btn-delete' 
-                                    type='submit' data-method='POST' 
-                                    data-item-type='DELETE_PLAYER'
+                                    type='submit' 
+                                    data-method='DELETE' 
+                                    data-item-type='player'
                                 >Delete</button>
                                 <button 
                                     class='btn btn-full btn-update' 
                                     type='submit' 
-                                    data-method='POST' 
-                                    data-item-type='UPDATE_PLAYER'
+                                    data-method='PUT' 
+                                    data-item-type='player'
                                 >Update</button>
                             </div>
                         </form>
@@ -321,14 +322,15 @@ const ajaxAdd = function (clickEvent) {
                             <div class='grid-btn-container'>
                                 <button 
                                     class='btn btn-hollow btn-delete' 
-                                    type='submit' data-method='POST' 
-                                    data-item-type='DELETE_STAFF'
+                                    type='submit' 
+                                    data-method='DELETE' 
+                                    data-item-type='user'
                                 >Delete</button>
                                 <button 
                                     class='btn btn-full btn-update' 
                                     type='submit' 
-                                    data-method='POST' 
-                                    data-item-type='UPDATE_STAFF'
+                                    data-method='PUT' 
+                                    data-item-type='user'
                                 >Update</button>
                             </div>
                         </form>
