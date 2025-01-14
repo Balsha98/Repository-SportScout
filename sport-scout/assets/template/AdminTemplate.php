@@ -647,7 +647,7 @@ class AdminTemplate
                             <input id='position_id_{$positionID}' type='hidden' name='position_id' value='{$positionID}'>
                             <div class='div-multi-input-containers grid-3-columns'>
                                 <div class='div-input-container {$requiredContainer}'>
-                                    <label for='position_name_{$positionID}'>Team Name:</label>
+                                    <label for='position_name_{$positionID}'>Position Name:</label>
                                     <input id='position_name_{$positionID}' type='text' name='position_name' value='{$positionName}' autocomplete='off' {$required}>
                                 </div>
                                 <div class='div-input-container'>

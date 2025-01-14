@@ -53,7 +53,7 @@ class Sanitize
         } else if (!self::isShorter($input, $limit)) {
             $status = 'fail';
             $input = '';
-        } else if (self::contains('/[^a-zA-Z]/', $input)) {
+        } else if (self::contains('/[^a-zA-Z ]/', $input)) {
             $status = 'fail';
             $input = '';
         }

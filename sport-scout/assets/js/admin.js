@@ -714,7 +714,7 @@ const ajaxUpdate = function (clickEvent) {
                 if (rowID === +getCookie("user_id")) {
                     if (oldRoleID !== newRoleID) {
                         setCookie("new_role_id", newRoleID);
-                        // reloadWindow(1);
+                        reloadWindow(1);
                     }
                 }
 
@@ -722,30 +722,30 @@ const ajaxUpdate = function (clickEvent) {
                 $(`#user_league_name_${rowID}`).val(data[`user_league_name_${rowID}`]);
                 $(`#user_team_name_${rowID}`).val(data[`user_team_name_${rowID}`]);
             } else if (itemType === "sport") {
-                $(`.${relContainerClass} .sport-name`).text(data[`sport_name`]);
+                $(`.${relContainerClass} .sport-name`).text(data[`sport_name_${rowID}`]);
 
                 reloadWindow(1);
             } else if (itemType === "league") {
-                $(`.${relContainerClass} .league-name`).text(data[`league_name`]);
-                $(`#league_sport_name_${rowID}`).val(data[`league_sport_name`]);
+                $(`.${relContainerClass} .league-name`).text(data[`league_name_${rowID}`]);
+                $(`#league_sport_name_${rowID}`).val(data[`league_sport_name_${rowID}`]);
 
                 reloadWindow(1);
             } else if (itemType === "season") {
-                $(`.${relContainerClass} .season-year`).text(data[`season_year`]);
-                $(`.${relContainerClass} .season-desc`).text(data[`season_desc`]);
-                $(`#season_sport_name_${rowID}`).val(data[`season_sport_name`]);
-                $(`#season_league_name_${rowID}`).val(data[`season_league_name`]);
+                $(`.${relContainerClass} .season-year`).text(data[`season_year_${rowID}`]);
+                $(`.${relContainerClass} .season-desc`).text(data[`season_desc_${rowID}`]);
+                $(`#season_sport_name_${rowID}`).val(data[`season_sport_name_${rowID}`]);
+                $(`#season_league_name_${rowID}`).val(data[`season_league_name_${rowID}`]);
 
                 reloadWindow(1);
             } else if (itemType === "team") {
-                $(`.${relContainerClass} .team-name`).text(data[`team_name`]);
-                $(`.${relContainerClass} .league-name`).text(data[`team_league_name`]);
-                $(`.${relContainerClass} .season-year`).text(data[`team_season_year`]);
+                $(`.${relContainerClass} .team-name`).text(data[`team_name_${rowID}`]);
+                $(`.${relContainerClass} .league-name`).text(data[`team_league_name_${rowID}`]);
+                $(`.${relContainerClass} .season-year`).text(data[`team_season_year_${rowID}`]);
 
                 reloadWindow(1);
             } else if (itemType === "position") {
-                $(`.${relContainerClass} .position-name`).text(data[`position_name`]);
-                $(`#position_sport_name_${rowID}`).val(data[`position_sport_name`]);
+                $(`.${relContainerClass} .position-name`).text(data[`position_name_${rowID}`]);
+                $(`#position_sport_name_${rowID}`).val(data[`position_sport_name_${rowID}`]);
             }
         },
     });

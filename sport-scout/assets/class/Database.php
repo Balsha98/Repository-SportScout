@@ -156,6 +156,7 @@ class Database
             WHERE user_id = :user_id;
         ';
 
+        // Get user id.
         $userID = $data['user_id'];
 
         // Preparing statement.
@@ -164,7 +165,7 @@ class Database
         $result->bindParam(':username', $data["username_{$userID}"], PDO::PARAM_STR);
         $result->bindParam(':league_id', $data["user_league_id_{$userID}"], PDO::PARAM_INT);
         $result->bindParam(':team_id', $data["user_team_id_{$userID}"], PDO::PARAM_INT);
-        $result->bindParam(':user_id', $data[$userID], PDO::PARAM_INT);
+        $result->bindParam(':user_id', $data['user_id'], PDO::PARAM_INT);
 
         // Execution.
         $result->execute();
@@ -204,9 +205,12 @@ class Database
             WHERE sports.sport_id = :sport_id;
         ';
 
+        // Get sport id.
+        $sportID = $data['sport_id'];
+
         // Prepare statement.
         $result = $this->db->prepare($query);
-        $result->bindParam(':sport_name', $data['sport_name'], PDO::PARAM_STR);
+        $result->bindParam(':sport_name', $data["sport_name_{$sportID}"], PDO::PARAM_STR);
         $result->bindParam(':sport_id', $data['sport_id'], PDO::PARAM_INT);
 
         $result->execute();
@@ -289,10 +293,13 @@ class Database
             WHERE league_id = :league_id;   
         ';
 
+        // Get league id.
+        $leagueID = $data['league_id'];
+
         // Preparing statement.
         $result = $this->db->prepare($query);
-        $result->bindParam(':league_name', $data['league_name'], PDO::PARAM_STR);
-        $result->bindParam(':sport_id', $data['league_sport_id'], PDO::PARAM_INT);
+        $result->bindParam(':league_name', $data["league_name_{$leagueID}"], PDO::PARAM_STR);
+        $result->bindParam(':sport_id', $data["league_sport_id_{$leagueID}"], PDO::PARAM_INT);
         $result->bindParam(':league_id', $data['league_id'], PDO::PARAM_INT);
 
         // Execution.
@@ -368,11 +375,14 @@ class Database
             WHERE season_id = :season_id;
         ';
 
+        // Get season id.
+        $seasonID = $data['season_id'];
+
         // Preparing statement.
         $result = $this->db->prepare($query);
-        $result->bindParam(':league_id', $data['season_league_id'], PDO::PARAM_INT);
-        $result->bindParam(':season_year', $data['season_year'], PDO::PARAM_STR);
-        $result->bindParam(':season_desc', $data['season_desc'], PDO::PARAM_STR);
+        $result->bindParam(':league_id', $data["season_league_id_{$seasonID}"], PDO::PARAM_INT);
+        $result->bindParam(':season_year', $data["season_year_{$seasonID}"], PDO::PARAM_STR);
+        $result->bindParam(':season_desc', $data["season_desc_{$seasonID}"], PDO::PARAM_STR);
         $result->bindParam(':season_id', $data['season_id'], PDO::PARAM_INT);
 
         // Execution.
@@ -495,14 +505,17 @@ class Database
             WHERE team_id = :team_id;
         ';
 
+        // Get team id.
+        $teamID = $data['team_id'];
+
         // Preparing statement.
         $result = $this->db->prepare($query);
-        $result->bindParam(':team_name', $data['team_name'], PDO::PARAM_STR);
-        $result->bindParam(':league_id', $data['team_league_id'], PDO::PARAM_INT);
-        $result->bindParam(':season_id', $data['team_season_id'], PDO::PARAM_INT);
-        $result->bindParam(':max_players', $data['team_max_players'], PDO::PARAM_INT);
-        $result->bindParam(':home_color', $data['team_home_color'], PDO::PARAM_STR);
-        $result->bindParam(':away_color', $data['team_away_color'], PDO::PARAM_STR);
+        $result->bindParam(':team_name', $data["team_name_{$teamID}"], PDO::PARAM_STR);
+        $result->bindParam(':league_id', $data["team_league_id_{$teamID}"], PDO::PARAM_INT);
+        $result->bindParam(':season_id', $data["team_season_id_{$teamID}"], PDO::PARAM_INT);
+        $result->bindParam(':max_players', $data["team_max_players_{$teamID}"], PDO::PARAM_INT);
+        $result->bindParam(':home_color', $data["team_home_color_{$teamID}"], PDO::PARAM_STR);
+        $result->bindParam(':away_color', $data["team_away_color_{$teamID}"], PDO::PARAM_STR);
         $result->bindParam(':team_id', $data['team_id'], PDO::PARAM_INT);
 
         // Execution.
@@ -641,10 +654,13 @@ class Database
             WHERE position_id = :position_id;
         ';
 
+        // Get position id.
+        $positionID = $data['position_id'];
+
         // Preparing statement.
         $result = $this->db->prepare($query);
-        $result->bindParam(':position_name', $data['position_name'], PDO::PARAM_STR);
-        $result->bindParam(':sport_id', $data['position_sport_id'], PDO::PARAM_INT);
+        $result->bindParam(':position_name', $data["position_name_{$positionID}"], PDO::PARAM_STR);
+        $result->bindParam(':sport_id', $data["position_sport_id_{$positionID}"], PDO::PARAM_INT);
         $result->bindParam(':position_id', $data['position_id'], PDO::PARAM_INT);
 
         // Execution.

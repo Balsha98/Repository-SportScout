@@ -329,7 +329,7 @@ if ($request === 'POST') {
         $return = [
             'status' => $status,
             'sport_id' => $itemID,
-            'sport_name' => $sportName
+            "sport_name_{$itemID}" => $sportName
         ];
 
         if ($status === 'success') {
@@ -353,9 +353,9 @@ if ($request === 'POST') {
         $return = [
             'status' => $status,
             'league_id' => $itemID,
-            'league_name' => $leagueName,
-            'league_sport_id' => $sportID,
-            'league_sport_name' => $sportName
+            "league_name_{$itemID}" => $leagueName,
+            "league_sport_id_{$itemID}" => $sportID,
+            "league_sport_name_{$itemID}" => $sportName
         ];
 
         if ($status === 'success') {
@@ -407,12 +407,12 @@ if ($request === 'POST') {
         $return = [
             'status' => $status,
             'season_id' => $itemID,
-            'season_year' => $seasonYear,
-            'season_desc' => $seasonDesc,
-            'season_sport_id' => $sportID,
-            'season_sport_name' => $sportName,
-            'season_league_id' => $leagueID,
-            'season_league_name' => $leagueName
+            "season_year_{$itemID}" => $seasonYear,
+            "season_desc_{$itemID}" => $seasonDesc,
+            "season_sport_id_{$itemID}" => $sportID,
+            "season_sport_name_{$itemID}" => $sportName,
+            "season_league_id_{$itemID}" => $leagueID,
+            "season_league_name_{$itemID}" => $leagueName
         ];
 
         if ($status === 'success') {
@@ -466,14 +466,14 @@ if ($request === 'POST') {
         $return = [
             'status' => $status,
             'team_id' => $itemID,
-            'team_name' => $teamName,
-            'team_league_id' => $leagueID,
-            'team_league_name' => $leagueName,
-            'team_season_id' => $seasonID,
-            'team_season_year' => $seasonYear,
-            'team_max_players' => $maxPlayers,
-            'team_home_color' => $homeColor,
-            'team_away_color' => $awayColor,
+            "team_name_{$itemID}" => $teamName,
+            "team_league_id_{$itemID}" => $leagueID,
+            "team_league_name_{$itemID}" => $leagueName,
+            "team_season_id_{$itemID}" => $seasonID,
+            "team_season_year_{$itemID}" => $seasonYear,
+            "team_max_players_{$itemID}" => $maxPlayers,
+            "team_home_color_{$itemID}" => $homeColor,
+            "team_away_color_{$itemID}" => $awayColor,
         ];
 
         if ($status === 'success') {
@@ -496,10 +496,10 @@ if ($request === 'POST') {
 
         $return = [
             'status' => $status,
-            'position_id' => $position_id,
-            'position_name' => $positionName,
-            'position_sport_id' => $sportID,
-            'position_sport_name' => $sportName
+            'position_id' => $itemID,
+            "position_name_{$itemID}" => $positionName,
+            "position_sport_id_{$itemID}" => $sportID,
+            "position_sport_name_{$itemID}" => $sportName
         ];
 
         if ($status === 'success') {
