@@ -281,20 +281,6 @@ INSERT INTO players (player_first, player_last, player_dob, team_id, position_id
 ('Robert', 'Lewandowski', '1988-08-21', 5, 9, '9'),
 ('Ferran', 'Torres', '2000-02-29', 5, 9, '7');
 
--- SELECT * FROM players;
-
--- TABLE PLAYER_POSITIONS
--- DROP TABLE IF EXISTS player_positions;
-
--- CREATE TABLE player_positions(
---     player_id INT NOT NULL,
---     position_id INT NOT NULL,
---     FOREIGN KEY (player_id) REFERENCES players (id),
---     FOREIGN KEY (position_id) REFERENCES positions (id)
--- );
-
--- SELECT * FROM player_positions;
-
 -- TABLE USERS
 DROP TABLE IF EXISTS users;
 

@@ -156,13 +156,15 @@ class Database
             WHERE user_id = :user_id;
         ';
 
+        $userID = $data['user_id'];
+
         // Preparing statement.
         $result = $this->db->prepare($query);
         $result->bindParam(':role_id', $data['role_id'], PDO::PARAM_INT);
-        $result->bindParam(':username', $data['username'], PDO::PARAM_STR);
-        $result->bindParam(':league_id', $data['user_league_id'], PDO::PARAM_INT);
-        $result->bindParam(':team_id', $data['user_team_id'], PDO::PARAM_INT);
-        $result->bindParam(':user_id', $data['user_id'], PDO::PARAM_INT);
+        $result->bindParam(':username', $data["username_{$userID}"], PDO::PARAM_STR);
+        $result->bindParam(':league_id', $data["user_league_id_{$userID}"], PDO::PARAM_INT);
+        $result->bindParam(':team_id', $data["user_team_id_{$userID}"], PDO::PARAM_INT);
+        $result->bindParam(':user_id', $data[$userID], PDO::PARAM_INT);
 
         // Execution.
         $result->execute();

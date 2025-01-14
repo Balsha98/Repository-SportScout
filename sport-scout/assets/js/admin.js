@@ -700,27 +700,27 @@ const ajaxUpdate = function (clickEvent) {
             warnInputs(data, status);
 
             if (itemType === "user") {
-                const username = data[`username`];
+                const username = data[`username_${rowID}`];
                 $(`.${relContainerClass} .username`).text(username);
                 if (rowID === +getCookie("user_id")) {
                     setCookie("new_username", username);
                     $(".span-username").text(username);
                 }
 
-                const newRoleID = data["role_id"];
+                const newRoleID = +data["role_id"];
                 const oldRoleID = $(`.${relContainerClass} .role-name`).data("old-role-id");
                 $(`.${relContainerClass} .role-name`).data("old-role-id", newRoleID);
 
-                if (userID === +getCookie("user_id")) {
-                    if (oldRoleID !== +newRoleID) {
+                if (rowID === +getCookie("user_id")) {
+                    if (oldRoleID !== newRoleID) {
                         setCookie("new_role_id", newRoleID);
-                        reloadWindow(1);
+                        // reloadWindow(1);
                     }
                 }
 
-                $(`.${relContainerClass} .role-name`).text(data[`user_role_name`]);
-                $(`#user_league_name_${rowID}`).val(data[`user_league_name`]);
-                $(`#user_team_name_${rowID}`).val(data[`user_team_name`]);
+                $(`.${relContainerClass} .role-name`).text(data[`user_role_name_${rowID}`]);
+                $(`#user_league_name_${rowID}`).val(data[`user_league_name_${rowID}`]);
+                $(`#user_team_name_${rowID}`).val(data[`user_team_name_${rowID}`]);
             } else if (itemType === "sport") {
                 $(`.${relContainerClass} .sport-name`).text(data[`sport_name`]);
 

@@ -13,7 +13,7 @@ if (isset($_COOKIE['new_username'])) {
 
 // Check if the role was changed.
 if (isset($_COOKIE['new_role_id'])) {
-    Session::setSessionVar('username', $_COOKIE['new_role_id']);
+    Session::setSessionVar('role_id', $_COOKIE['new_role_id']);
     Cookie::unsetCookie('new_role_id');
 }
 

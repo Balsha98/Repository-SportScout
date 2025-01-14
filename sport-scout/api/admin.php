@@ -310,13 +310,13 @@ if ($request === 'POST') {
         $return = [
             'status' => $status,
             'user_id' => $itemID,
-            'username' => $username,
+            "username_{$itemID}" => $username,
             'role_id' => $roleID,
-            'user_role_name' => $roleName,
-            'user_league_id' => $leagueID,
-            'user_league_name' => $leagueName,
-            'user_team_id' => $teamID,
-            'user_team_name' => $teamName,
+            "user_role_name_{$itemID}" => $roleName,
+            "user_league_id_{$itemID}" => $leagueID,
+            "user_league_name_{$itemID}" => $leagueName,
+            "user_team_id_{$itemID}" => $teamID,
+            "user_team_name_{$itemID}" => $teamName,
         ];
 
         if ($status === 'success') {
