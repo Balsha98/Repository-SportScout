@@ -752,6 +752,37 @@ class Database
         $result->execute();
     }
 
+    public function insertNewScheduleGame($data)
+    {
+        $query = '
+            INSERT INTO schedule (
+                sport_id, league_id, season_id, 
+                home_team_id, away_team_id, home_score, 
+                away_score, scheduled, status
+            ) 
+            VALUES (
+                :sport_id, :league_id, :season_id, 
+                :home_team_id, :away_team_id, :home_score, 
+                :away_score, :scheduled, :status
+            );
+        ';
+
+        // Preparing statement.
+        $result = $this->db->prepare($query);
+        $result->bindParam(':sport_id', $data['new_schedule_sport_id'], PDO::PARAM_INT);
+        $result->bindParam(':league_id', $data['new_schedule_league_id'], PDO::PARAM_INT);
+        $result->bindParam(':season_id', $data['new_schedule_season_id'], PDO::PARAM_INT);
+        $result->bindParam(':home_team_id', $data['new_schedule_home_team_id'], PDO::PARAM_INT);
+        $result->bindParam(':away_team_id', $data['new_schedule_away_team_id'], PDO::PARAM_INT);
+        $result->bindParam(':home_score', $data['new_schedule_home_score'], PDO::PARAM_INT);
+        $result->bindParam(':away_score', $data['new_schedule_away_score'], PDO::PARAM_INT);
+        $result->bindParam(':scheduled', $data['new_schedule_date'], PDO::PARAM_STR);
+        $result->bindParam(':status', $data['new_schedule_completion_status'], PDO::PARAM_INT);
+
+        // Execution.
+        $result->execute();
+    }
+
     public function updateScheduleGame($data)
     {
         $query = '
@@ -770,37 +801,6 @@ class Database
         $result->bindParam(':scheduled', $data['edit_scheduled'], PDO::PARAM_STR);
         $result->bindParam(':status', $data['edit_status'], PDO::PARAM_INT);
         $result->bindParam(':schedule_id', $data['schedule_id'], PDO::PARAM_INT);
-
-        // Execution.
-        $result->execute();
-    }
-
-    public function insertNewScheduleGame($data)
-    {
-        $query = '
-            INSERT INTO schedule (
-                sport_id, league_id, season_id, 
-                home_team_id, away_team_id, home_score, 
-                away_score, scheduled, status
-            ) 
-            VALUES (
-                :sport_id, :league_id, :season_id, 
-                :home_team_id, :away_team_id, :home_score, 
-                :away_score, :scheduled, :status
-            );
-        ';
-
-        // Preparing statement.
-        $result = $this->db->prepare($query);
-        $result->bindParam(':sport_id', $data['sport_id'], PDO::PARAM_INT);
-        $result->bindParam(':league_id', $data['league_id'], PDO::PARAM_INT);
-        $result->bindParam(':season_id', $data['new_season_id'], PDO::PARAM_INT);
-        $result->bindParam(':home_team_id', $data['new_home_team_id'], PDO::PARAM_INT);
-        $result->bindParam(':away_team_id', $data['new_away_team_id'], PDO::PARAM_INT);
-        $result->bindParam(':home_score', $data['new_home_score'], PDO::PARAM_INT);
-        $result->bindParam(':away_score', $data['new_away_score'], PDO::PARAM_INT);
-        $result->bindParam(':scheduled', $data['new_scheduled'], PDO::PARAM_STR);
-        $result->bindParam(':status', $data['new_status'], PDO::PARAM_INT);
 
         // Execution.
         $result->execute();

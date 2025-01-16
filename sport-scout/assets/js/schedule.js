@@ -32,16 +32,18 @@ const newItemInputs = {
     ],
 };
 
-const editableValues = [
-    "schedule_id",
-    "edit_home_team_id",
-    "edit_home_score",
-    "edit_away_team_id",
-    "edit_away_score",
-    "edit_season_id",
-    "edit_status",
-    "edit_scheduled",
-];
+const existingItemInputs = {
+    schedule: [
+        "edit_schedule_id",
+        "edit_schedule_season_id",
+        "edit_schedule_home_team_id",
+        "edit_schedule_home_score",
+        "edit_schedule_away_team_id",
+        "edit_schedule_away_score",
+        "edit_schedule_date",
+        "edit_schedule_completion_status",
+    ],
+};
 
 // ***** FUNCTIONS ***** //
 const killAllEventListeners = function (el) {
@@ -68,7 +70,7 @@ const toggleEditGamePopup = function () {
     // Setting the values.
     const length = editableValues.length - 1;
     for (let i = 0; i < length; i++) {
-        $(`.${editPopupClass} #${editableValues[i]}`).val(gameData[i]);
+        $(`#${editableValues[i]}`).val(gameData[i]);
     }
 
     $(`.${editPopupClass} #${editableValues[length]}`).val(gameData[length]);

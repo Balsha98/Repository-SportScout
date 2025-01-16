@@ -237,9 +237,9 @@ class ScheduleTemplate
                                         <label for='scheduled_{$scheduleID}'>Game Date:</label>
                                         <input id='scheduled_{$scheduleID}' type='date' name='scheduled' value='{$date}' readonly>
                                     </div>
-                                    <div class='div-completion-status {$css}' data-completion-index='{$status}'>
+                                    <span class='span-completion-status {$css}' data-completion-index='{$status}'>
                                         <ion-icon class='status-icon' name='{$icon}-outline'></ion-icon>
-                                    </div>
+                                    </span>
                                 </div>
                                 <div class='div-hidden-inputs-container'>
                                     <input id='schedule_season_id_{$scheduleID}' type='hidden' name='season_id' value='{$seasonID}'>

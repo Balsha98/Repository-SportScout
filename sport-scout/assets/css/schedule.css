@@ -312,7 +312,7 @@
     column-gap: 2.4rem;
 }
 
-.div-completion-status {
+.span-completion-status {
     align-self: end;
     display: flex;
     align-items: center;
