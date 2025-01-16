@@ -127,12 +127,12 @@ if ($request === 'POST') {
         $status = 'fail';
     }
 
-    $status = (int) $input['new_schedule_completion_status'];
-    if ($status === '') {
+    $completionStatus = (int) $input['new_schedule_completion_status'];
+    if ($completionStatus === '') {
         $status = 'fail';
-    } else if ($status === 0) {
+    } else if ($completionStatus === 0) {
         $status = 'fail';
-        $status = '';
+        $completionStatus = '';
     }
 
     $return = [
@@ -149,7 +149,7 @@ if ($request === 'POST') {
         'new_away_team_name' => $awayTeamName,
         'new_schedule_away_score' => $awayScore,
         'new_schedule_date' => $scheduled,
-        'new_schedule_completion_status' => $status
+        'new_schedule_completion_status' => $completionStatus
     ];
 
     if ($status === 'success') {

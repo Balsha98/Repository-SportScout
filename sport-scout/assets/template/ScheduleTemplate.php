@@ -91,9 +91,6 @@ class ScheduleTemplate
                         class='form form-team-data' 
                         action='" . SERVER . "/api/schedule.php'
                     >
-                        <input type='hidden' name='sport_id' value='{$sportID}'>
-                        <input type='hidden' name='league_id' value='{$leagueID}'>
-                        <input type='hidden' name='season_id' value='{$seasonID}'>
                         <div class='div-multi-input-containers custom-2-column-grid'>
                             <div class='div-input-container {$requiredContainer}'>
                                 <label for='team_name'>Team Name:</label>
@@ -142,6 +139,11 @@ class ScheduleTemplate
                             </div>
                         </div>
                         {$submitBtns}
+                        <div class='div-hidden-inputs-container'>
+                            <input type='hidden' name='sport_id' value='{$sportID}'>
+                            <input type='hidden' name='league_id' value='{$leagueID}'>
+                            <input type='hidden' name='season_id' value='{$seasonID}'>
+                        </div>
                     </form>
                 ";
             }
