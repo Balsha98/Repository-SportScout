@@ -310,7 +310,7 @@ formUpdateBtns?.each((_, btn) => {
         }
 
         existingItemInputs[itemType].forEach((id) => {
-            if (scheduleID) data[`edit_${id}`] = $(`#edit_${id}`).val();
+            if (itemType === "schedule") data[`edit_${id}`] = $(`#edit_${id}`).val();
             else data[`${id}`] = $(`#${id}`).val();
         });
 

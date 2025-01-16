@@ -794,10 +794,10 @@ class Database
 
         // Preparing statement.
         $result = $this->db->prepare($query);
-        $result->bindParam(':home_score', $data['edit_home_score'], PDO::PARAM_INT);
-        $result->bindParam(':away_score', $data['edit_away_score'], PDO::PARAM_INT);
+        $result->bindParam(':home_score', $data['edit_schedule_home_score'], PDO::PARAM_INT);
+        $result->bindParam(':away_score', $data['edit_schedule_away_score'], PDO::PARAM_INT);
         $result->bindParam(':scheduled', $data['edit_schedule_date'], PDO::PARAM_STR);
-        $result->bindParam(':status', $data['edit_completion_status'], PDO::PARAM_INT);
+        $result->bindParam(':status', $data['edit_schedule_completion_status'], PDO::PARAM_INT);
         $result->bindParam(':schedule_id', $data['schedule_id'], PDO::PARAM_INT);
 
         // Execution.
