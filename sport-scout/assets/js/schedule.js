@@ -34,7 +34,6 @@ const newItemInputs = {
 
 const existingItemInputs = {
     schedule: [
-        "schedule_id",
         "schedule_team_id",
         "schedule_season_id",
         "schedule_home_team_id",
@@ -61,6 +60,7 @@ const toggleEditGamePopup = function () {
     // Get the the schedule id and set the data.
     const scheduleID = $(this.closest(".div-schedule-game")).data("schedule-id");
     existingItemInputs["schedule"].forEach((id) => $(`#edit_${id}`).val($(`#${id}_${scheduleID}`).val()));
+    $("#edit_schedule_id").val($(`#schedule_id_${scheduleID}`).val());
 
     // Show the popup.
     toggleElement(editPopup);
@@ -314,6 +314,8 @@ formUpdateBtns?.each((_, btn) => {
             else data[`${id}`] = $(`#${id}`).val();
         });
 
+        console.log(data);
+
         $.ajax({
             url: url,
             type: method,
@@ -347,25 +349,21 @@ formUpdateBtns?.each((_, btn) => {
                         }
                     });
                 } else if (itemType === "schedule") {
-                    const relGame = [...scrollContainer.children()].find(
-                        (div) => +$(div).data("schedule-id") === scheduleID
+                    existingItemInputs[itemType].forEach((id) =>
+                        $(`#${id}_${scheduleID}`).val(data[`edit_${id}`] ? data[`edit_${id}`] : "")
                     );
 
-                    const relGameClass = $(relGame).attr("class").split(" ")[1];
-
-                    existingItemInputs[itemType].forEach((id) => $(`#${id}_${scheduleID}`).val(data[`edit_${id}`]));
-
                     // Update each visual individually.
-                    $(`.${relGameClass} .home-score`).text(data["edit_schedule_home_score"]);
-                    $(`.${relGameClass} .away-score`).text(data["edit_schedule_away_score"]);
+                    $(`.game-${scheduleID} .home-score`).text(data["edit_schedule_home_score"]);
+                    $(`.game-${scheduleID} .away-score`).text(data["edit_schedule_away_score"]);
                     $(`#schedule_date_${scheduleID}`).val(data["edit_schedule_date"]);
 
                     const [css, icon] = getVisuals(data["edit_schedule_completion_status"]);
-                    const statusSpan = $(`.${relGameClass} .span-completion-status`);
+                    const statusSpan = $(`.game-${scheduleID} .span-completion-status`);
                     statusSpan.attr("class", `span-completion-status ${css}`);
                     statusSpan.data("completion-index", data["edit_schedule_completion_status"]);
 
-                    $(`.${relGameClass} .status-icon`).attr("name", `${icon}-outline`);
+                    $(`.game-${scheduleID} .status-icon`).attr("name", `${icon}-outline`);
 
                     toggleElement(editPopup);
                 }
