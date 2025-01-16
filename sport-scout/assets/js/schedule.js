@@ -217,21 +217,21 @@ addNewGameBtn?.click(function (clickEvent) {
             }
 
             // Getting the season id.
-            const seasonID = data["new_season_id"];
+            const seasonID = data["new_schedule_season_id"];
 
             // Getting the home team.
-            const homeID = data["new_home_team_id"];
+            const homeID = data["new_schedule_home_team_id"];
             const homeName = data["new_home_team_name"];
-            const homeScore = data["new_home_score"];
+            const homeScore = data["new_schedule_home_score"];
 
             // Getting the away team.
-            const awayID = data["new_away_team_id"];
+            const awayID = data["new_schedule_away_team_id"];
             const awayName = data["new_away_team_name"];
-            const awayScore = data["new_away_score"];
+            const awayScore = data["new_schedule_away_score"];
 
             // Getting the date & status.
-            const newDate = data["new_scheduled"];
-            const compStatus = +data["new_status"];
+            const newDate = data["new_schedule_date"];
+            const compStatus = +data["new_schedule_completion_status"];
 
             // Visuals.
             const [css, icon] = getVisuals(compStatus);

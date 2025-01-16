@@ -138,18 +138,18 @@ if ($request === 'POST') {
     $return = [
         'status' => $status,
         'last_schedule_id' => $lastRowID,
-        'sport_id' => $sportID,
-        'league_id' => $leagueID,
-        'team_id' => $teamID,
-        'new_season_id' => $seasonID,
-        'new_home_team_id' => $homeTeamID,
+        'new_schedule_sport_id' => $sportID,
+        'new_schedule_league_id' => $leagueID,
+        'new_schedule_team_id' => $teamID,
+        'new_schedule_season_id' => $seasonID,
+        'new_schedule_home_team_id' => $homeTeamID,
         'new_home_team_name' => $homeTeamName,
-        'new_home_score' => $homeScore,
-        'new_away_team_id' => $awayTeamID,
+        'new_schedule_home_score' => $homeScore,
+        'new_schedule_away_team_id' => $awayTeamID,
         'new_away_team_name' => $awayTeamName,
-        'new_away_score' => $awayScore,
-        'new_scheduled' => $scheduled,
-        'new_status' => $status
+        'new_schedule_away_score' => $awayScore,
+        'new_schedule_date' => $scheduled,
+        'new_schedule_completion_status' => $status
     ];
 
     if ($status === 'success') {
