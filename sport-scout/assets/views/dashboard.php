@@ -99,7 +99,7 @@ echo Template::generatePageHeader($pageData['active'], $roleID);
                 </div>
             </div>
             <div class="page-footer">
-                <p>&copy; 2024 <span>SportScout</span>, Inc. | All rights reserved.</p>
+                <p>&copy; <?php echo date('Y'); ?> <span>SportScout</span>, Inc. | All rights reserved.</p>
             </div>
         </main>
     </div>
