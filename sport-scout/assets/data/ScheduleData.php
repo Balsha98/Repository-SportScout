@@ -13,7 +13,7 @@ class ScheduleData
                     <h2>Add New Game?</h2>
                     <p>Fill in the following <span>fields</span> appropriately.</p>
                 </header>
-                <form class="form form-add" action="api/schedule.php">
+                <form class="form form-add" action="/api/schedule.php" method="POST">
                     <input type="hidden" name="team_id" value="%s">
                     <input type="hidden" name="sport_id" value="%s">
                     <input type="hidden" name="league_id" value="%s">
@@ -69,7 +69,7 @@ class ScheduleData
                             <ion-icon class="arrow-icon" name="arrow-back-outline"></ion-icon>
                             <span>Cancel</span>
                         </button>
-                        <button class="btn btn-full btn-add-new" type="submit" data-method="POST" data-clicked="ADD_GAME">Add</button>
+                        <button class="btn btn-full btn-add-new" type="submit" data-item-type="schedule">Add</button>
                     </div>
                 </form>
             </div>
@@ -84,7 +84,7 @@ class ScheduleData
                     <h2>Edit Current Game?</h2>
                     <p>Fill in the following <span>fields</span> appropriately.</p>
                 </header>
-                <form class="form form-edit" action="api/schedule.php">
+                <form class="form form-edit" action="/api/schedule.php">
                     <input type="hidden" name="team_id" value="%s">
                     <input id="schedule_id" type="hidden" name="schedule_id">
                     <div class="div-multi-input-containers grid-4-columns">
@@ -125,8 +125,8 @@ class ScheduleData
                         </div>
                     </div>
                     <div class="div-btn-container grid-btn-container">
-                        <button class="btn btn-hollow btn-delete" type="submit" data-method="POST" data-clicked="DELETE_GAME">Delete</button>
-                        <button class="btn btn-full btn-update" type="submit" data-method="POST" data-clicked="UPDATE_GAME">Update</button>
+                        <button class="btn btn-hollow btn-delete" type="submit" data-method="DELETE" data-item-type="schedule">Delete</button>
+                        <button class="btn btn-full btn-update" type="submit" data-method="PUT" data-item-type="schedule">Update</button>
                     </div>
                 </form>
             </div>

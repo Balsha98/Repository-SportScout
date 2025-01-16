@@ -16,7 +16,7 @@ const showEditPopupBtns = $(".btn-edit");
 const formUpdateBtns = $(".btn-update");
 const formDeleteBtns = $(".btn-delete");
 
-// Inputs.
+// ***** VARIABLES ***** //
 const editableValues = [
     "schedule_id",
     "edit_home_team_id",
@@ -93,7 +93,8 @@ setTeamColors();
 const resetInput = function (data) {
     for (const key of Object.keys(data)) {
         const input = $(`#${key}`);
-        if (input.attr("readonly") === "readonly") continue;
+        if (input.attr("readonly")) continue;
+
         input.val("");
     }
 };
@@ -125,7 +126,6 @@ const getOnlyGames = function () {
 const getVisuals = function (status) {
     let css = "";
     let icon = "";
-
     switch (status) {
         case 1:
             css = "canceled";
