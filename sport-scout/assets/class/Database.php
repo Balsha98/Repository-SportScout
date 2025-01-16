@@ -134,10 +134,10 @@ class Database
         $result = $this->db->prepare($query);
 
         // Hashing the password.
-        $hashedPassword = hash('sha256', $data['new_password']);
+        $hashedPassword = hash('sha256', $data['new_user_password']);
 
         // Binding each value individually.
-        $result->bindParam(':role_id', $data['new_role_id'], PDO::PARAM_INT);
+        $result->bindParam(':role_id', $data['new_user_role_id'], PDO::PARAM_INT);
         $result->bindParam(':username', $data['new_username'], PDO::PARAM_STR);
         $result->bindParam(':password', $hashedPassword, PDO::PARAM_STR);
         $result->bindParam(':league_id', $data['new_user_league_id'], PDO::PARAM_INT);

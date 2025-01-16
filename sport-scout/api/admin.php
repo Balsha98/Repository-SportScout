@@ -24,7 +24,7 @@ if ($request === 'POST') {
         $username = Sanitize::stripString($input['new_username']);
         Sanitize::fullStringSearch($status, $username, 25);
 
-        $password = Sanitize::stripString($input['new_password']);
+        $password = Sanitize::stripString($input['new_user_password']);
         if ($password === '') {
             $status = 'fail';
         } else if (!Sanitize::isShorter($password, 64)) {
@@ -39,7 +39,7 @@ if ($request === 'POST') {
             $status,
             $roleID,
             $roleName,
-            'new_role_name'
+            'new_user_role_name'
         );
 
         $leagueID = '';
@@ -62,13 +62,13 @@ if ($request === 'POST') {
             'status' => $status,
             'last_user_id' => $lastRowID,
             'new_username' => $username,
-            'new_password' => $password,
-            'new_role_id' => $roleID,
-            'new_role_name' => $roleName,
+            'new_user_password' => $password,
+            'new_user_role_id' => $roleID,
+            'new_user_role_name' => $roleName,
             'new_user_league_id' => $leagueID,
-            'league_name' => $leagueName,
+            'new_user_league_name' => $leagueName,
             'new_user_team_id' => $teamID,
-            'team_name' => $teamName
+            'new_user_team_name' => $teamName
         ];
 
         if ($status === 'success') {

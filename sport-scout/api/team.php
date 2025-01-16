@@ -18,7 +18,7 @@ $return = [];
 // Create new item.
 if ($request === 'POST') {
     $table = $itemType !== 'schedule' ? "{$itemType}s" : $itemType;
-    $lastRowID = $db->getLastRowId($table, $itemType);
+    $lastRowID = $db->getLastRowId($table, $itemType)['id'];
 
     if ($itemType === 'player') {
         $sportID = $input['new_player_sport_id'];
@@ -74,10 +74,10 @@ if ($request === 'POST') {
             $db->insertNewPlayer($return);
         }
     } else if ($itemType === 'user') {
-        $username = Sanitize::stripString($input['new_staff_username']);
+        $username = Sanitize::stripString($input['new_username']);
         Sanitize::fullStringSearch($status, $username, 25);
 
-        $password = Sanitize::stripString($input['new_staff_password']);
+        $password = Sanitize::stripString($input['new_user_password']);
         if ($password === '') {
             $status = 'fail';
         } else if (!Sanitize::isShorter($password, 64)) {
@@ -87,28 +87,28 @@ if ($request === 'POST') {
 
         $roleID = '';
         $roleName = '';
-        $role = explode('|', $input['new_staff_role_name']);
-        if (count($role) !== 2) {
-            $status = 'fail';
-        } else {
-            $roleID = $role[0];
-            $roleName = $role[1];
-        }
+        Helper::setRoleIdAndName(
+            $input,
+            $status,
+            $roleID,
+            $roleName,
+            'new_user_role_name',
+        );
 
-        $leagueID = (int) $input['new_staff_league_id'];
-        $leagueName = $input['new_staff_league_name'];
-        $teamID = (int) $input['new_staff_team_id'];
+        $leagueID = (int) $input['new_user_league_id'];
+        $leagueName = $input['new_user_league_name'];
+        $teamID = (int) $input['new_user_team_id'];
 
         $return = [
             'status' => $status,
             'last_user_id' => $lastRowID,
-            'new_staff_role_id' => $roleID,
-            'new_staff_role_name' => $roleName,
-            'new_staff_username' => $username,
-            'new_staff_password' => $password,
-            'league_id' => $leagueID,
-            'league_name' => $leagueName,
-            'team_id' => $teamID
+            'new_user_role_id' => $roleID,
+            'new_user_role_name' => $roleName,
+            'new_username' => $username,
+            'new_user_password' => $password,
+            'new_user_league_id' => $leagueID,
+            'new_user_league_name' => $leagueName,
+            'new_user_team_id' => $teamID
         ];
 
         if ($status === 'success') {

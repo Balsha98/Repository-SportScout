@@ -26,12 +26,12 @@ const newTeamInputs = {
         "new_player_jersey_number",
     ],
     user: [
-        "new_staff_league_id",
-        "new_staff_team_id",
-        "new_staff_username",
-        "new_staff_password",
-        "new_staff_role_name",
-        "new_staff_league_name",
+        "new_user_league_id",
+        "new_user_team_id",
+        "new_username",
+        "new_user_password",
+        "new_user_role_name",
+        "new_user_league_name",
     ],
 };
 
@@ -260,7 +260,7 @@ const ajaxAdd = function (clickEvent) {
                         </form>
                     </div>
                 `);
-            } else if (itemType === "staff") {
+            } else if (itemType === "user") {
                 const scrollClass = scrollStaff.attr("class").split(" ")[1];
                 const noneAvailableDiv = $(`.${scrollClass} .div-none-available-container`);
                 if (noneAvailableDiv) {
@@ -275,13 +275,13 @@ const ajaxAdd = function (clickEvent) {
                     }
                 }
 
-                const username = data["new_staff_username"];
-                const roleID = data["new_staff_role_id"];
-                const roleName = data["new_staff_role_name"];
+                const username = data["new__username"];
+                const roleID = data["new_user_role_id"];
+                const roleName = data["new_user_role_name"];
                 const roleOption = `${roleID}|${roleName}`;
-                const leagueName = data["league_name"];
-                const leagueID = data["league_id"];
-                const teamID = data["team_id"];
+                const leagueName = data["new_user_league_name"];
+                const leagueID = data["new_user_league_id"];
+                const teamID = data["new_user_team_id"];
 
                 let options = "";
                 for (const [key, value] of Object.entries(selectOptions)) {
@@ -365,7 +365,7 @@ const ajaxUpdate = function (clickEvent) {
 
     const relContainer = $(this.closest(".div-row-container"));
     const relContainerClass = relContainer.attr("class").split(" ")[1];
-    const rowID = relContainer.data("row-id");
+    const rowID = +relContainer.data("row-id");
     const form = $(this.closest(".form"));
     const url = form.attr("action");
     const method = $(this).data("method");
@@ -412,34 +412,33 @@ const ajaxUpdate = function (clickEvent) {
 const ajaxDelete = function (clickEvent) {
     clickEvent.preventDefault();
 
-    const itemType = $(this).data("item-type");
     const relContainer = $(this.closest(".div-row-container"));
+    const rowID = +relContainer.data("row-id");
     const form = $(this.closest(".form"));
+    const url = form.attr("action");
+    const method = $(this).data("method");
+    const itemType = $(this).data("item-type");
+
+    const data = {};
+    data["item_id"] = rowID;
+    data["item_type"] = itemType;
 
     $.ajax({
-        url: form.attr("action"),
-        type: $(this).data("method"),
-        data: `${form.serialize()}&item-type=${itemType}`,
+        url: url,
+        type: method,
+        data: JSON.stringify(data),
         success: function () {
             let members = [];
-            let scrollContainer;
-            let cookieKey;
+            const scrollContainer = itemType === "player" ? scrollPlayers : scrollStaff;
 
-            if (itemType === "DELETE_PLAYER") {
-                scrollContainer = scrollPlayers;
-                cookieKey = "player";
-            } else if (itemType === "DELETE_STAFF") {
-                scrollContainer = scrollStaff;
-                cookieKey = "member";
-
-                const delRowID = +relContainer.data("row-id");
-                if (+getCookie("user_id") === delRowID) {
-                    window.open("logout.php", "_self");
+            if (itemType === "user") {
+                if (+getCookie("user_id") === rowID) {
+                    window.open("logout", "_self");
                 }
             }
 
             members = getDataRowsOnly(scrollContainer);
-            setCookie(`last_team_${cookieKey}_id`, $(members[members.length - 1]).data("row-id"));
+            setCookie(`last_team_${itemType}_id`, $(members[members.length - 1]).data("row-id"));
             // Getting the last deleted row makes no sense... it kind of does.
 
             relContainer.remove();
@@ -451,8 +450,8 @@ const ajaxDelete = function (clickEvent) {
                     <div class='div-none-available-container'>
                         <ion-icon class='none-available-icon' name='alert-circle-outline'></ion-icon>
                         <div class='none-available-text'>
-                            <h2>No ${cookieKey}s at the moment.</h2>
-                            <p>Start off by adding a <span>new</span> ${cookieKey} to the team.</p>
+                            <h2>No ${itemType}s at the moment.</h2>
+                            <p>Start off by adding a <span>new</span> ${itemType} to the team.</p>
                         </div>
                     </div>
                 `);

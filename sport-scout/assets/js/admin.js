@@ -23,7 +23,7 @@ const deleteBtns = $(".btn-delete");
 
 // ***** VARIABLES ***** //
 const newAdminInputs = {
-    user: ["new_username", "new_password", "new_role_name", "new_user_league_id", "new_user_team_id"],
+    user: ["new_username", "new_user_password", "new_user_role_name", "new_user_league_id", "new_user_team_id"],
     sport: ["new_sport_name"],
     league: ["new_league_name", "new_league_sport_id"],
     season: ["new_season_year", "new_season_sport_id", "new_season_league_id", "new_season_desc"],
@@ -232,13 +232,13 @@ const ajaxAdd = function (clickEvent) {
                 }
 
                 const username = data["new_username"];
-                const roleID = data["new_role_id"];
-                const roleName = data["new_role_name"];
+                const roleID = data["new_user_role_id"];
+                const roleName = data["new_user_role_name"];
                 const roleOption = `${roleID}|${roleName}`;
                 const leagueID = data["new_user_league_id"];
-                const leagueName = data["league_name"];
+                const leagueName = data["new_user_league_name"];
                 const teamID = data["new_user_team_id"];
-                const teamName = data["team_name"];
+                const teamName = data["new_user_team_name"];
 
                 let options = "";
                 for (const [key, value] of Object.entries(selectOptions)) {

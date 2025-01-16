@@ -65,14 +65,14 @@ class AdminData
                             <input id="new_username" type="text" name="username" autocomplete="off" required>
                         </div>
                         <div class="div-input-container required-container">
-                            <label for="new_password">Password:</label>
-                            <input id="new_password" type="password" name="password" autocomplete="off" required>
+                            <label for="new_user_password">Password:</label>
+                            <input id="new_user_password" type="password" name="password" autocomplete="off" required>
                         </div>
                     </div>
                     <div class="div-multi-input-containers grid-2-columns">
                         <div class="div-input-container required-container">
-                            <label for="new_role_name">Type of Role:</label>
-                            <select id="new_role_name" name="role_name" autocomplete="off" required>
+                            <label for="new_user_role_name">Type of Role:</label>
+                            <select id="new_user_role_name" name="role_name" autocomplete="off" required>
                                 <option value="">Select Role</option>
                                 <option value="1|Administrator">Administrator</option>
                                 <option value="2|League Manager">League Manager</option>
