@@ -17,6 +17,21 @@ const formUpdateBtns = $(".btn-update");
 const formDeleteBtns = $(".btn-delete");
 
 // ***** VARIABLES ***** //
+const newItemInputs = {
+    schedule: [
+        "new_schedule_team_id",
+        "new_schedule_sport_id",
+        "new_schedule_league_id",
+        "new_schedule_season_id",
+        "new_schedule_home_team_id",
+        "new_schedule_home_score",
+        "new_schedule_away_team_id",
+        "new_schedule_away_score",
+        "new_schedule_date",
+        "new_schedule_completion_status",
+    ],
+};
+
 const editableValues = [
     "schedule_id",
     "edit_home_team_id",
@@ -165,11 +180,14 @@ addNewGameBtn?.click(function (clickEvent) {
 
     const form = $(this.closest(".form"));
     const url = form.attr("action");
-    const method = $(this).data("method");
+    const method = form.attr("method");
     const itemType = $(this).data("item-type");
 
     const data = {};
     data["item_type"] = itemType;
+    newItemInputs[itemType].forEach((id) => {
+        data[id] = $(`#${id}`).val();
+    });
 
     $.ajax({
         url: url,
@@ -234,13 +252,6 @@ addNewGameBtn?.click(function (clickEvent) {
                         </button>
                     </div>
                     <div class="div-scoreboard-container">
-                        <input id="schedule_season_id_${prevScheduleID}" type="hidden" name="season_id" value="${seasonID}">
-                        <input id="schedule_home_id_${prevScheduleID}" type="hidden" name="home_id" value="${homeID}">
-                        <input id="schedule_home_score_${prevScheduleID}" type="hidden" name="home_score" value="${homeScore}">
-                        <input id="schedule_away_id_${prevScheduleID}" type="hidden" name="away_id" value="${awayID}">
-                        <input id="schedule_away_score_${prevScheduleID}" type="hidden" name="away_score" value="${awayScore}">
-                        <input id="schedule_completion_${prevScheduleID}" type="hidden" name="completion" value="${compStatus}">
-                        <input id="schedule_date_${prevScheduleID}" type="hidden" name="date" value="${newDate}">
                         <div class="div-grid-score-container">
                             <p class="home-score">${homeScore}</p>
                             <p>:</p>
@@ -266,6 +277,15 @@ addNewGameBtn?.click(function (clickEvent) {
                         <div class="div-completion-status ${css}" data-completion-index="${compStatus}">
                             <ion-icon class="status-icon" name="${icon}-outline"></ion-icon>
                         </div>
+                    </div>
+                    <div class="div-hidden-inputs-container">
+                        <input id="schedule_season_id_${prevScheduleID}" type="hidden" name="season_id" value="${seasonID}">
+                        <input id="schedule_home_id_${prevScheduleID}" type="hidden" name="home_id" value="${homeID}">
+                        <input id="schedule_home_score_${prevScheduleID}" type="hidden" name="home_score" value="${homeScore}">
+                        <input id="schedule_away_id_${prevScheduleID}" type="hidden" name="away_id" value="${awayID}">
+                        <input id="schedule_away_score_${prevScheduleID}" type="hidden" name="away_score" value="${awayScore}">
+                        <input id="schedule_completion_${prevScheduleID}" type="hidden" name="completion" value="${compStatus}">
+                        <input id="schedule_date_${prevScheduleID}" type="hidden" name="date" value="${newDate}">
                     </div>
                 </div>
             `);

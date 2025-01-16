@@ -6,7 +6,7 @@ require_once '../assets/class/Sanitize.php';
 require_once '../assets/class/Helper.php';
 
 $request = $_SERVER['REQUEST_METHOD'];
-$input = Encoder::fromJSON('php://input');
+$input = Encoder::fromJSON(file_get_contents('php://input'));
 $itemType = $input['item_type'];
 if (array_key_exists('item_id', $input)) {
     $itemID = (int) $input['item_id'];
@@ -20,11 +20,11 @@ if ($request === 'POST') {
     $table = $itemType !== 'schedule' ? "{$itemType}s" : $itemType;
     ['id' => $lastRowID] = $db->getLastRowId($table, $itemType);
 
-    $sportID = (int) $input['sport_id'];
-    $leagueID = (int) $input['league_id'];
-    $teamID = (int) $input['team_id'];
+    $sportID = (int) $input['new_schedule_sport_id'];
+    $leagueID = (int) $input['new_schedule_league_id'];
+    $teamID = (int) $input['new_schedule_team_id'];
 
-    $seasonID = (int) $input['new_season_id'];
+    $seasonID = (int) $input['new_schedule_season_id'];
     if ($seasonID === '') {
         $status = 'fail';
     } else if ($seasonID <= 0) {
@@ -40,10 +40,10 @@ if ($request === 'POST') {
         $status,
         $homeTeamID,
         $homeTeamName,
-        'new_home_team_id'
+        'new_schedule_home_team_id'
     );
 
-    $homeScore = (int) $input['new_home_score'];
+    $homeScore = (int) $input['new_schedule_home_score'];
     if ($homeScore === '') {
         $status = 'fail';
     } else if ($homeScore < 0) {
@@ -59,10 +59,10 @@ if ($request === 'POST') {
         $status,
         $awayTeamID,
         $awayTeamName,
-        'new_away_team_id'
+        'new_schedule_away_team_id'
     );
 
-    $awayScore = (int) $input['new_away_score'];
+    $awayScore = (int) $input['new_schedule_away_score'];
     if ($awayScore === '') {
         $status = 'fail';
     } else if ($awayScore < 0) {
@@ -72,10 +72,10 @@ if ($request === 'POST') {
 
     // Correct teams.
     if ($seasonID !== '') {
-        $seasonData = $db->get_seasons_by_league_id($leagueID);
+        $seasonData = $db->getSeasonsByLeagueId($leagueID);
 
         if (count($seasonData) > 0) {
-            $teamData = $db->get_teams_by_season_id($seasonID);
+            $teamData = $db->getTeamsBySeasonId($seasonID);
             if (count($teamData) > 0) {
                 Helper::validateSeason(
                     $teamData,
@@ -122,12 +122,12 @@ if ($request === 'POST') {
         }
     }
 
-    $scheduled = $input['new_scheduled'];
+    $scheduled = $input['new_schedule_date'];
     if ($scheduled === '') {
         $status = 'fail';
     }
 
-    $status = (int) $input['new_status'];
+    $status = (int) $input['new_schedule_completion_status'];
     if ($status === '') {
         $status = 'fail';
     } else if ($status === 0) {
@@ -137,7 +137,7 @@ if ($request === 'POST') {
 
     $return = [
         'status' => $status,
-        'last_schedule_id' => $last_schedule_id,
+        'last_schedule_id' => $lastRowID,
         'sport_id' => $sportID,
         'league_id' => $leagueID,
         'team_id' => $teamID,
@@ -153,7 +153,7 @@ if ($request === 'POST') {
     ];
 
     if ($status === 'success') {
-        $db->alterAutoIncrement($itemType, $last_schedule_id);
+        $db->alterAutoIncrement($itemType, $lastRowID);
         $db->insertNewScheduleGame($return);
     }
 
@@ -162,21 +162,21 @@ if ($request === 'POST') {
     if ($itemType === 'team') {
         $teamID = (int) $input['team_id'];
 
-        $team_name = Sanitize::stripString($input['team_name']);
-        Sanitize::fullStringSearch($status, $team_name, 50);
+        $teamName = Sanitize::stripString($input['team_name']);
+        Sanitize::fullStringSearch($status, $teamName, 50);
 
-        $home_color = Sanitize::stripString($input['home_color']);
-        Sanitize::fullColorSearch($status, $home_color, 25);
+        $homeColor = Sanitize::stripString($input['home_color']);
+        Sanitize::fullColorSearch($status, $homeColor, 25);
 
-        $away_color = Sanitize::stripString($input['away_color']);
-        Sanitize::fullColorSearch($status, $away_color, 25);
+        $awayColor = Sanitize::stripString($input['away_color']);
+        Sanitize::fullColorSearch($status, $awayColor, 25);
 
         $return = [
             'status' => $status,
             'team_id' => $teamID,
-            'team_name' => $team_name,
-            'home_color' => $home_color,
-            'away_color' => $away_color,
+            'team_name' => $teamName,
+            'home_color' => $homeColor,
+            'away_color' => $awayColor,
         ];
 
         if ($status === 'success') {
