@@ -6,7 +6,7 @@ const dashboardGrid = $(".grid-dashboard");
 // In case the user is logged in.
 const btnStart = $(".btn-start");
 const btnLogOut = $(".btn-logout");
-if (getCookie("user")) switchBtns(btnStart);
+if (getCookie("active")) switchBtns(btnStart);
 
 const welcomeContainer = $(".div-welcome-info-container");
 const pagesContainer = $(".div-pages-container");
@@ -34,13 +34,13 @@ const months = [
 
 // ***** FUNCTIONS ***** //
 function setDate(date = new Date()) {
-    const seconds = date.getSeconds(),
-        minutes = date.getMinutes(),
-        hours = date.getHours(),
-        wDay = days[date.getDay()],
-        mDay = date.getDate(),
-        month = months[date.getMonth()],
-        year = date.getFullYear();
+    const seconds = date.getSeconds();
+    const minutes = date.getMinutes();
+    const hours = date.getHours();
+    const wDay = days[date.getDay()];
+    const mDay = date.getDate();
+    const month = months[date.getMonth()];
+    const year = date.getFullYear();
 
     let suffix = "";
     switch (mDay) {
@@ -58,7 +58,7 @@ function setDate(date = new Date()) {
     }
 
     // prettier-ignore
-    dateText.innerHTML = `
+    dateText[0].innerHTML = `
         <span>
             ${wDay}, ${month} ${mDay}<sup>${suffix}</sup> ${year}.
         </span>  
@@ -71,11 +71,8 @@ function setDate(date = new Date()) {
 }
 
 function switchBtns(btn) {
-    // Switch divs.
-    dashboardGrid.classList.add("switch-divs");
-    btnLogOut.classList.add("span-across-all");
-
-    // Remove button.
+    dashboardGrid.addClass("switch-divs");
+    btnLogOut.addClass("span-across-all");
     btn.remove();
 }
 
@@ -83,15 +80,13 @@ setInterval(setDate, 1000);
 setDate();
 
 // ***** EVENT LISTENERS ***** //
-btnStart?.addEventListener("click", function () {
-    setCookie("user", "active");
+btnStart?.click(function () {
+    setCookie("active", "yes");
     switchBtns(this);
 });
 
-pagesListItems.forEach((item, i) => {
-    item.addEventListener("click", function () {
-        // Get page link item.
-        const pageLinks = $(".page-link");
-        window.open(pageLinks[i].getAttribute("href"), "_self");
+pagesListItems.each((i, item) => {
+    $(item).click(function () {
+        window.open($(".page-link")[i].getAttribute("href"), "_self");
     });
 });
