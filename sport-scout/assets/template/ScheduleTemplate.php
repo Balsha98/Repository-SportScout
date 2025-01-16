@@ -79,7 +79,7 @@ class ScheduleTemplate
                 // Submit buttons.
                 $submitBtns = '';
                 if ($roleID !== 5) {
-                    $submitBtns = ReusableTemplate::generateFormSubmitBtns('TEAM');
+                    $submitBtns = ReusableTemplate::generateFormSubmitBtns('team');
                 }
 
                 // Prevent the fan from changing input data.
@@ -110,15 +110,15 @@ class ScheduleTemplate
                                     <li class='team-color-list-item'>
                                         <div class='team-color' data-colors='{$homeColor}'>&nbsp;</div>
                                         <div class='div-input-container {$requiredContainer}'>
-                                            <label for='home_color'>Home:</label>
-                                            <input id='home_color' type='text' name='home_color' value='{$homeColor}' {$required}>
+                                            <label for='team_home_color'>Home:</label>
+                                            <input id='team_home_color' type='text' name='home_color' value='{$homeColor}' {$required}>
                                         </div>
                                     </li>
                                     <li class='team-color-list-item'>
                                         <div class='team-color' data-colors='{$awayColor}'>&nbsp;</div>
                                         <div class='div-input-container {$requiredContainer}'>
-                                            <label for='away_color'>Away:</label>
-                                            <input id='away_color' type='text' name='away_color' value='{$awayColor}' {$required}>
+                                            <label for='team_away_color'>Away:</label>
+                                            <input id='team_away_color' type='text' name='away_color' value='{$awayColor}' {$required}>
                                         </div>
                                     </li>
                                 </ul>
@@ -140,9 +140,9 @@ class ScheduleTemplate
                         </div>
                         {$submitBtns}
                         <div class='div-hidden-inputs-container'>
-                            <input type='hidden' name='sport_id' value='{$sportID}'>
-                            <input type='hidden' name='league_id' value='{$leagueID}'>
-                            <input type='hidden' name='season_id' value='{$seasonID}'>
+                            <input id='team_sport_id' type='hidden' name='sport_id' value='{$sportID}'>
+                            <input id='team_league_id' type='hidden' name='league_id' value='{$leagueID}'>
+                            <input id='team_season_id' type='hidden' name='season_id' value='{$seasonID}'>
                         </div>
                     </form>
                 ";

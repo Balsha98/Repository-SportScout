@@ -137,18 +137,18 @@ if ($request === 'POST') {
         $teamName = Sanitize::stripString($input['team_name']);
         Sanitize::fullStringSearch($status, $teamName, 50);
 
-        $homeColor = Sanitize::stripString($input['home_color']);
+        $homeColor = Sanitize::stripString($input['team_home_color']);
         Sanitize::fullColorSearch($status, $homeColor, 25);
 
-        $awayColor = Sanitize::stripString($input['away_color']);
+        $awayColor = Sanitize::stripString($input['team_away_color']);
         Sanitize::fullColorSearch($status, $awayColor, 25);
 
         $return = [
             'status' => $status,
             'team_id' => $teamID,
             'team_name' => $teamName,
-            'home_color' => $homeColor,
-            'away_color' => $awayColor,
+            'team_home_color' => $homeColor,
+            'team_away_color' => $awayColor,
         ];
 
         if ($status === 'success') {

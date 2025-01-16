@@ -43,6 +43,7 @@ const existingItemInputs = {
         "schedule_date",
         "schedule_completion_status",
     ],
+    team: ["team_name", "team_home_color", "team_away_color"],
 };
 
 // ***** FUNCTIONS ***** //
