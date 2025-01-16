@@ -67,6 +67,7 @@ const setDate = function (date = new Date()) {
 };
 
 setInterval(setDate, 1000);
+setDate();
 
 const switchBtns = function (btn) {
     dashboardGrid.addClass("switch-divs");
@@ -75,7 +76,7 @@ const switchBtns = function (btn) {
 };
 
 if (getCookie("active")) {
-    switchBtns(btnStart);
+    switchBtns(startBtn);
 }
 
 // ***** EVENT LISTENERS ***** //
