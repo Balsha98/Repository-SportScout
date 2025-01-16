@@ -105,18 +105,18 @@ echo Template::generatePageHead($pageData);
                             echo Template::generateAdminTeamsDataContainer($teamsData, $roleID);
 
                             if (count($leaguesData) > 0) {
-                                ['sport_id' => $sportID] = $leaguesData;
+                                [['sport_id' => $sportID]] = $leaguesData;
                                 $positionsData = $db->getPositionsBySportId($sportID);
                                 echo Template::generateAdminPositionsDataContainer($positionsData, $roleID);
                             }
                             break;
                         case 3:
                         case 4:
-                            $team_data = $db->getTeamDataByTeamId('*', $teamID);
-                            echo Template::generateAdminTeamsDataContainer($team_data, $roleID);
+                            $teamData = $db->getTeamDataByTeamId('*', $teamID);
+                            echo Template::generateAdminTeamsDataContainer($teamData, $roleID);
 
-                            if (count($team_data) > 0) {
-                                ['sport_id' => $sportID] = $team_data;
+                            if (count($teamData) > 0) {
+                                [['sport_id' => $sportID]] = $teamData;
                                 $positionsData = $db->getPositionsBySportId($sportID);
                                 echo Template::generateAdminPositionsDataContainer($positionsData, $roleID);
                             }
