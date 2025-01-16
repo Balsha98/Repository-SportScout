@@ -787,19 +787,17 @@ class Database
     {
         $query = '
             UPDATE schedule SET 
-            home_team_id = :home_team_id, home_score = :home_score, away_team_id = :away_team_id,
-            away_score = :away_score, scheduled = :scheduled, status = :status 
+            home_score = :home_score, away_score = :away_score, 
+            scheduled = :scheduled, status = :status 
             WHERE schedule_id = :schedule_id;
         ';
 
         // Preparing statement.
         $result = $this->db->prepare($query);
-        $result->bindParam(':home_team_id', $data['edit_home_team_id'], PDO::PARAM_INT);
         $result->bindParam(':home_score', $data['edit_home_score'], PDO::PARAM_INT);
-        $result->bindParam(':away_team_id', $data['edit_away_team_id'], PDO::PARAM_INT);
         $result->bindParam(':away_score', $data['edit_away_score'], PDO::PARAM_INT);
-        $result->bindParam(':scheduled', $data['edit_scheduled'], PDO::PARAM_STR);
-        $result->bindParam(':status', $data['edit_status'], PDO::PARAM_INT);
+        $result->bindParam(':scheduled', $data['edit_schedule_date'], PDO::PARAM_STR);
+        $result->bindParam(':status', $data['edit_completion_status'], PDO::PARAM_INT);
         $result->bindParam(':schedule_id', $data['schedule_id'], PDO::PARAM_INT);
 
         // Execution.

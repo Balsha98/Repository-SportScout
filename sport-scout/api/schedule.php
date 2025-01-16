@@ -221,7 +221,7 @@ if ($request === 'POST') {
         ];
 
         if ($status === 'success') {
-            // $db->updateScheduleGame($return);
+            $db->updateScheduleGame($return);
         }
     }
 
