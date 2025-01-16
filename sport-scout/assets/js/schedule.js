@@ -349,9 +349,7 @@ formUpdateBtns?.each((_, btn) => {
                         }
                     });
                 } else if (itemType === "schedule") {
-                    existingItemInputs[itemType].forEach((id) =>
-                        $(`#${id}_${scheduleID}`).val(data[`edit_${id}`] ? data[`edit_${id}`] : "")
-                    );
+                    existingItemInputs[itemType].forEach((id) => $(`#${id}_${scheduleID}`).val(data[`edit_${id}`]));
 
                     // Update each visual individually.
                     $(`.game-${scheduleID} .home-score`).text(data["edit_schedule_home_score"]);
@@ -359,6 +357,7 @@ formUpdateBtns?.each((_, btn) => {
                     $(`#schedule_date_${scheduleID}`).val(data["edit_schedule_date"]);
 
                     const [css, icon] = getVisuals(data["edit_schedule_completion_status"]);
+
                     const statusSpan = $(`.game-${scheduleID} .span-completion-status`);
                     statusSpan.attr("class", `span-completion-status ${css}`);
                     statusSpan.data("completion-index", data["edit_schedule_completion_status"]);
