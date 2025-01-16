@@ -190,7 +190,7 @@ if ($request === 'POST') {
         ];
 
         if ($status === 'success') {
-            // $db->updateTeamStaff($return);
+            $db->updateTeamStaff($return);
         }
     }
 
