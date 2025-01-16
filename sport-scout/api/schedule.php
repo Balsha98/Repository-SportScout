@@ -155,7 +155,7 @@ if ($request === 'POST') {
             $db->updateScheduleTeamData($return);
         }
     } else if ($itemType === 'schedule') {
-        $homeTeamID = (int) $input['home_team_id'];
+        $homeTeamID = (int) $input['edit_schedule_home_team_id'];
         if ($homeTeamID === '') {
             $status = 'fail';
         } else if ($homeTeamID <= 0) {
@@ -163,7 +163,7 @@ if ($request === 'POST') {
             $homeTeamID = '';
         }
 
-        $homeScore = (int) $input['home_score'];
+        $homeScore = (int) $input['edit_schedule_home_score'];
         if ($homeScore === '') {
             $status = 'fail';
         } else if ($homeScore < 0) {
@@ -171,7 +171,7 @@ if ($request === 'POST') {
             $homeScore = '';
         }
 
-        $awayTeamID = (int) $input['away_team_id'];
+        $awayTeamID = (int) $input['edit_schedule_away_team_id'];
         if ($awayTeamID === '') {
             $status = 'fail';
         } else if ($awayTeamID <= 0) {
@@ -179,7 +179,7 @@ if ($request === 'POST') {
             $awayTeamID = '';
         }
 
-        $awayScore = (int) $input['away_score'];
+        $awayScore = (int) $input['edit_schedule_away_score'];
         if ($awayScore === '') {
             $status = 'fail';
         } else if ($awayScore < 0) {
@@ -187,7 +187,7 @@ if ($request === 'POST') {
             $awayScore = '';
         }
 
-        $seasonID = (int) $input['season_id'];
+        $seasonID = (int) $input['edit_schedule_season_id'];
         if ($seasonID === '') {
             $status = '';
         } else if ($seasonID <= 0) {
@@ -195,33 +195,33 @@ if ($request === 'POST') {
             $seasonID = '';
         }
 
-        $scheduled = $input['scheduled'];
+        $scheduled = $input['edit_schedule_date'];
         if ($scheduled === '') {
             $status = 'fail';
         }
 
-        $status = (int) $input['status'];
-        if ($status === '') {
+        $completionStatus = (int) $input['edit_schedule_completion_status'];
+        if ($completionStatus === '') {
             $status = 'fail';
-        } else if ($status === 0) {
+        } else if ($completionStatus === 0) {
             $status = 'fail';
-            $status = '';
+            $completionStatus = '';
         }
 
         $return = [
             'status' => $status,
             'schedule_id' => $itemID,
-            'edit_home_team_id' => $homeTeamID,
-            'edit_home_score' => $homeScore,
-            'edit_away_team_id' => $awayTeamID,
-            'edit_away_score' => $awayScore,
-            'edit_season_id' => $seasonID,
-            'edit_scheduled' => $scheduled,
-            'edit_status' => $status
+            'edit_schedule_home_team_id' => $homeTeamID,
+            'edit_schedule_home_score' => $homeScore,
+            'edit_schedule_away_team_id' => $awayTeamID,
+            'edit_schedule_away_score' => $awayScore,
+            'edit_schedule_season_id' => $seasonID,
+            'edit_schedule_date' => $scheduled,
+            'edit_schedule_completion_status' => $completionStatus
         ];
 
         if ($status === 'success') {
-            $db->updateScheduleGame($return);
+            // $db->updateScheduleGame($return);
         }
     }
 

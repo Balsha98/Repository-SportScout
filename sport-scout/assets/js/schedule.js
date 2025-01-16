@@ -264,7 +264,7 @@ addNewGameBtn?.click(function (clickEvent) {
                             <label for="date_${prevScheduleID}">Game Date:</label>
                             <input id="date_${prevScheduleID}" type="date" name="date_${prevScheduleID}" value="${newDate}" disabled>
                         </div>
-                        <div class="div-completion-status ${css}" data-completion-index="${compStatus}">
+                        <div class="span-completion-status ${css}" data-completion-index="${compStatus}">
                             <ion-icon class="status-icon" name="${icon}-outline"></ion-icon>
                         </div>
                     </div>
@@ -300,15 +300,17 @@ formUpdateBtns?.each((_, btn) => {
         const method = $(this).data("method");
         const itemType = $(this).data("item-type");
 
-        let scheduleID;
-        if (itemType === "schedule") {
-            scheduleID = $("#edit_schedule_id").val();
-        }
-
         const data = {};
         data["item_type"] = itemType;
+
+        let scheduleID;
+        if (itemType === "schedule") {
+            scheduleID = +$("#edit_schedule_id").val();
+            data["item_id"] = scheduleID;
+        }
+
         existingItemInputs[itemType].forEach((id) => {
-            if (scheduleID) data[`${id}_${scheduleID}`] = $(`#${id}_${scheduleID}`).val();
+            if (scheduleID) data[`edit_${id}`] = $(`#${id}_${scheduleID}`).val();
             else data[`${id}`] = $(`#${id}`).val();
         });
 
@@ -345,35 +347,23 @@ formUpdateBtns?.each((_, btn) => {
                         }
                     });
                 } else if (itemType === "schedule") {
-                    const editPopupClass = editPopup.attr("class").split(" ")[1];
                     const relGame = [...scrollContainer.children()].find(
-                        (div) => +$(div).data("schedule-id") === +$(`.${editPopupClass} #schedule_id`).val()
+                        (div) => +$(div).data("schedule-id") === scheduleID
                     );
 
                     const relGameClass = $(relGame).attr("class").split(" ")[1];
 
-                    const scheduleID = data["schedule_id"];
-                    const homeID = data["edit_home_team_id"];
-                    const homeScore = data["edit_home_score"];
-                    const awayID = data["edit_away_team_id"];
-                    const awayScore = data["edit_away_score"];
-                    const seasonID = data["edit_season_id"];
-                    const scheduled = data["edit_scheduled"];
-                    const compStatus = +data["edit_status"];
-
-                    const dataset = `${homeID}|${homeScore}|${awayID}|${awayScore}|${seasonID}|${compStatus}|${scheduled}`;
-                    $(relGame).data("editable-data", dataset);
+                    existingItemInputs[itemType].forEach((id) => $(`#${id}_${scheduleID}`).val(data[`edit_${id}`]));
 
                     // Update each visual individually.
-                    $(`.${relGameClass} .home-score`).text(homeScore);
-                    $(`.${relGameClass} .away-score`).text(awayScore);
-                    $(`.${relGameClass} #scheduled_${scheduleID}`).val(scheduled);
+                    $(`.${relGameClass} .home-score`).text(data["edit_schedule_home_score"]);
+                    $(`.${relGameClass} .away-score`).text(data["edit_schedule_away_score"]);
+                    $(`#schedule_date_${scheduleID}`).val(data["edit_schedule_date"]);
 
-                    const [css, icon] = getVisuals(compStatus);
-
-                    const statusDiv = $(`.${relGameClass} .div-completion-status`);
-                    statusDiv.attr("class", `div-completion-status ${css}`);
-                    statusDiv.data("completion-index", compStatus);
+                    const [css, icon] = getVisuals(data["edit_schedule_completion_status"]);
+                    const statusSpan = $(`.${relGameClass} .span-completion-status`);
+                    statusSpan.attr("class", `span-completion-status ${css}`);
+                    statusSpan.data("completion-index", data["edit_schedule_completion_status"]);
 
                     $(`.${relGameClass} .status-icon`).attr("name", `${icon}-outline`);
 
