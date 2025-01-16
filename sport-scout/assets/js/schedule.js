@@ -43,7 +43,7 @@ const existingItemInputs = {
         "schedule_date",
         "schedule_completion_status",
     ],
-    team: ["team_name", "team_home_color", "team_away_color"],
+    team: ["team_id", "team_name", "team_home_color", "team_away_color"],
 };
 
 // ***** FUNCTIONS ***** //
@@ -315,8 +315,6 @@ formUpdateBtns?.each((_, btn) => {
             else data[`${id}`] = $(`#${id}`).val();
         });
 
-        console.log(data);
-
         $.ajax({
             url: url,
             type: method,
@@ -335,16 +333,14 @@ formUpdateBtns?.each((_, btn) => {
                 warnInputs(data, status);
 
                 if (itemType === "team") {
-                    setTeamColors([data["home_color"], data["away_color"]]);
+                    setTeamColors([data["team_home_color"], data["team_away_color"]]);
 
                     const inTeamName = $("#team_name");
                     const newTeamName = inTeamName.val();
                     const oldTeamName = inTeamName.data("prev-team-name");
                     inTeamName.data("prev-team-name", newTeamName);
 
-                    const homeTeamNames = $(".home-team");
-                    const awayTeamNames = $(".away-team");
-                    [...homeTeamNames, ...awayTeamNames].forEach((teamName) => {
+                    [...$(".home-team"), ...$(".away-team")].forEach((teamName) => {
                         if ($(teamName).text() === oldTeamName) {
                             $(teamName).text(newTeamName);
                         }

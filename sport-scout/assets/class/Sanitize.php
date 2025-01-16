@@ -15,16 +15,16 @@ class Sanitize
             $array = explode('/', $year);
             if (count($array) === 2) {
                 $lengths = [4, 2];
-                $valid_counter = 0;
+                $validCounter = 0;
                 foreach ($array as $i => $value) {
                     if (!self::contains('/[a-zA-Z]/', $value)) {
                         if (strlen($value) === $lengths[$i]) {
-                            $valid_counter++;
+                            $validCounter++;
                         }
                     }
                 }
 
-                return count($array) === $valid_counter;
+                return count($array) === $validCounter;
             }
         }
 
@@ -64,14 +64,14 @@ class Sanitize
         if (str_contains($colors, '/')) {
             $array = explode('/', $colors);
             if (count($array) === 2) {
-                $valid_counter = 0;
+                $validCounter = 0;
                 foreach ($array as $value) {
                     if (self::contains('/[^a-zA-Z]/', $value)) {
-                        $valid_counter++;
+                        $validCounter++;
                     }
                 }
 
-                return count($array) === $valid_counter;
+                return count($array) === $validCounter;
             }
         }
 
