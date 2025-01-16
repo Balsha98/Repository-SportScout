@@ -361,7 +361,6 @@ formUpdateBtns?.each((_, btn) => {
                     const statusSpan = $(`.game-${scheduleID} .span-completion-status`);
                     statusSpan.attr("class", `span-completion-status ${css}`);
                     statusSpan.data("completion-index", data["edit_schedule_completion_status"]);
-
                     $(`.game-${scheduleID} .status-icon`).attr("name", `${icon}-outline`);
 
                     toggleElement(editPopup);
