@@ -34,49 +34,39 @@ const newItemInputs = {
 
 const existingItemInputs = {
     schedule: [
-        "edit_schedule_id",
-        "edit_schedule_team_id",
-        "edit_schedule_season_id",
-        "edit_schedule_home_team_id",
-        "edit_schedule_home_score",
-        "edit_schedule_away_team_id",
-        "edit_schedule_away_score",
-        "edit_schedule_date",
-        "edit_schedule_completion_status",
+        "schedule_id",
+        "schedule_team_id",
+        "schedule_season_id",
+        "schedule_home_team_id",
+        "schedule_home_score",
+        "schedule_away_team_id",
+        "schedule_away_score",
+        "schedule_date",
+        "schedule_completion_status",
     ],
 };
 
 // ***** FUNCTIONS ***** //
-const killAllEventListeners = function (el) {
-    $(el).off();
+const killAllEventListeners = function (element) {
+    $(element).off();
 };
 
-const showHideEl = function (popup) {
-    [popup, popupOverlay]?.forEach((el) => {
-        $(el)?.toggleClass("hide-element");
+const toggleElement = function (popup) {
+    [popup, popupOverlay]?.forEach((element) => {
+        $(element)?.toggleClass("hide-element");
     });
 };
 
 const toggleEditGamePopup = function () {
-    const editPopupClass = editPopup.attr("class").split(" ")[1];
-
-    // Fetch the data from the div and edit it.
-    const gameDiv = $(this.closest(".div-schedule-game"));
-    const scheduleID = gameDiv.data("schedule-id");
+    // Get the the schedule id..
+    const scheduleID = $(this.closest(".div-schedule-game")).data("schedule-id");
 
     // Get schedule data.
-    const gameData = gameDiv.data("editable-data").split("|");
-    gameData.unshift(scheduleID);
+    existingItemInputs["schedule"].forEach((id) => {
+        $(`#edit_${id}`).val($(`#${id}_${scheduleID}`).val());
+    });
 
-    // Setting the values.
-    const length = editableValues.length - 1;
-    for (let i = 0; i < length; i++) {
-        $(`#${editableValues[i]}`).val(gameData[i]);
-    }
-
-    $(`.${editPopupClass} #${editableValues[length]}`).val(gameData[length]);
-
-    showHideEl(editPopup);
+    toggleElement(editPopup);
 };
 
 const attachEditBtnEvent = function (btns) {
@@ -165,13 +155,13 @@ const getVisuals = function (status) {
 // POPUP CLOSE & CANCEL BUTTONS
 [...popupCloseBtns, cancelBtn].forEach((btn) => {
     $(btn)?.click(function () {
-        showHideEl($(this.closest(".popup")));
+        toggleElement($(this.closest(".popup")));
     });
 });
 
 // SHOW ADD POPUP BUTTON
 showAddPopupBtn.click(function () {
-    showHideEl(addPopup);
+    toggleElement(addPopup);
 });
 
 // SHOW EDIT POPUP BUTTONS
@@ -297,7 +287,7 @@ addNewGameBtn?.click(function (clickEvent) {
             attachEditBtnEvent($(".btn-edit"));
 
             // Close popup.
-            showHideEl(addPopup);
+            toggleElement(addPopup);
         },
     });
 });
@@ -322,7 +312,7 @@ formUpdateBtns?.each((_, btn) => {
         data["item_type"] = itemType;
         existingItemInputs[itemType].forEach((id) => {
             if (scheduleID) data[`${id}_${scheduleID}`] = $(`#${id}_${scheduleID}`).val();
-            data[`${id}`] = $(`#${id}`).val();
+            else data[`${id}`] = $(`#${id}`).val();
         });
 
         $.ajax({
@@ -390,7 +380,7 @@ formUpdateBtns?.each((_, btn) => {
 
                     $(`.${relGameClass} .status-icon`).attr("name", `${icon}-outline`);
 
-                    showHideEl(editPopup);
+                    toggleElement(editPopup);
                 }
             },
         });
@@ -455,7 +445,7 @@ formDeleteBtns?.each((_, btn) => {
                         `);
                     }
 
-                    showHideEl(editPopup);
+                    toggleElement(editPopup);
                 }
             },
         });
