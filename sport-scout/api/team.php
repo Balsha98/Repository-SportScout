@@ -120,15 +120,15 @@ if ($request === 'POST') {
     echo Encoder::toJSON($return);
 } else if ($request === 'PUT') {  // Update existing item.
     if ($itemType === 'player') {
-        $sportID = (int) $input['sport_id'];
+        $sportID = (int) $input["player_sport_id_{$itemID}"];
 
-        $playerFirst = Sanitize::stripString($input['player_first']);
+        $playerFirst = Sanitize::stripString($input["player_first_{$itemID}"]);
         Sanitize::fullStringSearch($status, $playerFirst, 50);
 
-        $playerLast = Sanitize::stripString($input['player_last']);
+        $playerLast = Sanitize::stripString($input["player_last_{$itemID}"]);
         Sanitize::fullStringSearch($status, $playerLast, 50);
 
-        $playerDOB = $input['player_dob'];
+        $playerDOB = $input["player_dob_{$itemID}"];
         if ($playerDOB === '') {
             $status = 'fail';
         }
@@ -142,10 +142,10 @@ if ($request === 'POST') {
             $sportID,
             $positionID,
             $positionName,
-            'player_position_id'
+            "player_position_id_{$itemID}"
         );
 
-        $player_jersey = (int) $input['player_jersey'];
+        $player_jersey = (int) $input["player_jersey_number_{$itemID}"];
         if ($player_jersey === '') {
             $status = 'fail';
         } else if ($player_jersey < 0) {
@@ -161,25 +161,25 @@ if ($request === 'POST') {
             "player_dob_{$itemID}" => $playerDOB,
             "player_position_id_{$itemID}" => $positionID,
             'player_position_name' => $positionName,
-            "player_jersey_{$itemID}" => $player_jersey,
+            "player_jersey_number_{$itemID}" => $player_jersey,
         ];
 
         if ($status === 'success') {
             $db->updateTeamPlayer($return);
         }
-    } else if ($itemType === 'staff') {
-        $username = Sanitize::stripString($input['username']);
+    } else if ($itemType === 'user') {
+        $username = Sanitize::stripString($input["staff_username_{$itemID}"]);
         Sanitize::fullStringSearch($status, $username, 50);
 
         $roleID = '';
         $roleName = '';
-        $role = explode('|', $input['role_name']);
-        if (count($role) !== 2) {
-            $status = 'fail';
-        } else {
-            $roleID = $role[0];
-            $roleName = $role[1];
-        }
+        Helper::setRoleIdAndName(
+            $input,
+            $status,
+            $roleID,
+            $roleName,
+            "staff_role_name_{$itemID}",
+        );
 
         $return = [
             'status' => $status,
@@ -190,7 +190,7 @@ if ($request === 'POST') {
         ];
 
         if ($status === 'success') {
-            $db->updateTeamStaff($return);
+            // $db->updateTeamStaff($return);
         }
     }
 

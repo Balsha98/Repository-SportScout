@@ -661,7 +661,7 @@ class Database
         $result = $this->db->prepare($query);
         $result->bindParam(':position_name', $data["position_name_{$positionID}"], PDO::PARAM_STR);
         $result->bindParam(':sport_id', $data["position_sport_id_{$positionID}"], PDO::PARAM_INT);
-        $result->bindParam(':position_id', $data['position_id'], PDO::PARAM_INT);
+        $result->bindParam(':position_id', $positionID, PDO::PARAM_INT);
 
         // Execution.
         $result->execute();

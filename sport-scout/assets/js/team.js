@@ -35,6 +35,18 @@ const newTeamInputs = {
     ],
 };
 
+const existingTeamInputs = {
+    player: [
+        "player_sport_id",
+        "player_first",
+        "player_last",
+        "player_dob",
+        "player_position_id",
+        "player_jersey_number",
+    ],
+    user: ["staff_username", "staff_role_name"],
+};
+
 const selectOptions = {
     "Team Manager": "3|Team Manager",
     "Team Coach": "4|Team Coach",
@@ -351,15 +363,25 @@ const ajaxAdd = function (clickEvent) {
 const ajaxUpdate = function (clickEvent) {
     clickEvent.preventDefault();
 
-    const itemType = $(this).data("item-type");
     const relContainer = $(this.closest(".div-row-container"));
     const relContainerClass = relContainer.attr("class").split(" ")[1];
+    const rowID = relContainer.data("row-id");
     const form = $(this.closest(".form"));
+    const url = form.attr("action");
+    const method = $(this).data("method");
+    const itemType = $(this).data("item-type");
+
+    const data = {};
+    data["item_id"] = rowID;
+    data["item_type"] = itemType;
+    existingTeamInputs[itemType].forEach((id) => {
+        data[`${id}_${rowID}`] = $(`#${id}_${rowID}`).val();
+    });
 
     $.ajax({
-        url: form.attr("action"),
-        type: $(this).data("method"),
-        data: `${form.serialize()}&item-type=${itemType}`,
+        url: url,
+        type: method,
+        data: JSON.stringify(data),
         success: function (response) {
             console.log(response);
             const data = JSON.parse(response);
@@ -373,23 +395,15 @@ const ajaxUpdate = function (clickEvent) {
             // Back to white.
             warnInputs(data, status);
 
-            if (itemType === "UPDATE_PLAYER") {
-                const playerID = data["player_id"];
-                const playerFirst = data[`player_first_${playerID}`];
-                const playerLast = data[`player_last_${playerID}`];
-                const fullName = `${playerFirst} ${playerLast}`;
-                const positionName = data["player_position_name"];
+            if (itemType === "player") {
+                $(`.${relContainerClass} .full-name`).text(
+                    `${data[`player_first_${rowID}`]} ${data[`player_last_${rowID}`]}`
+                );
 
-                $(`.${relContainerClass} .full-name`).text(fullName);
-                $(`.${relContainerClass} .position-name`).text(positionName);
-            } else if (itemType === "UPDATE_STAFF") {
-                const staffID = data["staff_id"];
-                const staffName = data[`staff_username_${staffID}`];
-                const staffRole = data[`staff_role_name_${staffID}`];
-
-                // Update row header.
-                $(`.${relContainerClass} .staff-name`).text(staffName);
-                $(`.${relContainerClass} .staff-role`).text(staffRole);
+                $(`.${relContainerClass} .position-name`).text(data["player_position_name"]);
+            } else if (itemType === "user") {
+                $(`.${relContainerClass} .staff-name`).text(data[`staff_username_${rowID}`]);
+                $(`.${relContainerClass} .staff-role`).text(data[`staff_role_name_${rowID}`]);
             }
         },
     });

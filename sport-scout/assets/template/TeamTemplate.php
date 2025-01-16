@@ -82,7 +82,7 @@ class TeamTemplate
 
                 $submitBtns = '';
                 if ($roleID !== 5) {
-                    $submitBtns = ReusableTemplate::generateFormSubmitBtns('PLAYER');
+                    $submitBtns = ReusableTemplate::generateFormSubmitBtns('player');
                 }
 
                 // Prevent the fan from changing input data.
@@ -114,11 +114,11 @@ class TeamTemplate
                             <div class='div-multi-input-containers grid-2-columns'>
                                 <div class='div-input-container {$requiredContainer}'>
                                     <label for='player_first_{$playerID}'>First Name:</label>
-                                    <input id='player_first_{$playerID}' type='text' name='player_first' value='{$playerFirstName}' autocomplete='off' {$required}>
+                                    <input id='player_first_{$playerID}' type='text' name='first' value='{$playerFirstName}' autocomplete='off' {$required}>
                                 </div>
                                 <div class='div-input-container {$requiredContainer}'>
                                     <label for='player_last_{$playerID}'>Last Name:</label>
-                                    <input id='player_last_{$playerID}' type='text' name='player_last' value='{$playerLastName}' autocomplete='off' {$required}>
+                                    <input id='player_last_{$playerID}' type='text' name='last' value='{$playerLastName}' autocomplete='off' {$required}>
                                 </div>
                             </div>
                             <div class='div-multi-input-containers grid-2-columns'>
@@ -128,17 +128,17 @@ class TeamTemplate
                                 </div>
                                 <div class='div-input-container {$requiredContainer}'>
                                     <label for='player_dob_{$playerID}'>Date of Birth:</label>
-                                    <input id='player_dob_{$playerID}' type='date' name='player_dob' value='{$playerDOB}' autocomplete='off' {$required}>
+                                    <input id='player_dob_{$playerID}' type='date' name='dob' value='{$playerDOB}' autocomplete='off' {$required}>
                                 </div>
                             </div>
                             <div class='div-multi-input-containers grid-2-columns'>
                                 <div class='div-input-container {$requiredContainer}'>
                                     <label for='player_position_id_{$playerID}'>Position ID:</label>
-                                    <input id='player_position_id_{$playerID}' type='number' name='player_position_id' min='0' value='{$positionID}' autocomplete='off' {$required}>
+                                    <input id='player_position_id_{$playerID}' type='number' name='position_id' min='0' value='{$positionID}' autocomplete='off' {$required}>
                                 </div>
                                 <div class='div-input-container {$requiredContainer}'>
-                                    <label for='player_jersey_{$playerID}'>Jersey:</label>
-                                    <input id='player_jersey_{$playerID}' type='number' name='player_jersey' min='0' value='{$playerJersey}' autocomplete='off' {$required}>
+                                    <label for='player_jersey_number_{$playerID}'>Jersey:</label>
+                                    <input id='player_jersey_number_{$playerID}' type='number' name='jersey_number' min='0' value='{$playerJersey}' autocomplete='off' {$required}>
                                 </div>
                             </div>
                             {$submitBtns}
@@ -192,7 +192,7 @@ class TeamTemplate
 
                 $submitBtns = '';
                 if ($roleID !== 5) {
-                    $submitBtns = ReusableTemplate::generateFormSubmitBtns('STAFF');
+                    $submitBtns = ReusableTemplate::generateFormSubmitBtns('user');
                 }
 
                 // Prevent the fan from changing input data.
