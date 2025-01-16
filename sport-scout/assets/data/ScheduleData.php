@@ -14,9 +14,6 @@ class ScheduleData
                     <p>Fill in the following <span>fields</span> appropriately.</p>
                 </header>
                 <form class="form form-add" action="/api/schedule.php" method="POST">
-                    <input id="new_schedule_team_id" type="hidden" name="team_id" value="%s">
-                    <input id="new_schedule_sport_id" type="hidden" name="sport_id" value="%s">
-                    <input id="new_schedule_league_id" type="hidden" name="league_id" value="%s">
                     <div class="div-multi-input-containers grid-3-columns">
                         <div class="div-input-container">
                             <label for="new_schedule_sport_name">Sport:</label>

@@ -70,9 +70,9 @@ echo Template::generatePageHeader($pageData['active'], $roleID);
                     <h2 class="heading-tertiary">Team</h2>
                 </header>
                 <?php
-                if ($teamID === 0)
+                if ($teamID === 0) {
                     echo Template::generateNoneSelectedDiv($noneSelected);
-                else {
+                } else {
                     $teamData = $db->getTeamDataByTeamId('*', $teamID);
                     echo Template::generateScheduleTeamData($teamData, $roleID);
                 }
@@ -84,9 +84,9 @@ echo Template::generatePageHeader($pageData['active'], $roleID);
                     <h2 class="heading-tertiary">Schedule</h2>
                 </header>
                 <?php
-                if ($teamID === 0)
+                if ($teamID === 0) {
                     echo Template::generateNoneSelectedDiv($noneSelected);
-                else {
+                } else {
                     $schedule_data = $db->getScheduleByTeamId($teamID);
                     echo Template::generateScheduleGame($schedule_data, $roleID);
                 }
