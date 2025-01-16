@@ -30,13 +30,15 @@ const resetInput = function (data) {
 loginBtn.click(function (event) {
     event.preventDefault();
 
-    // Get parent form.
-    const form = $(this.closest("form"));
+    const form = $(this.closest(".form"));
+    const url = form.attr("action");
+    const method = form.attr("method");
+    const data = form.serialize();
 
     $.ajax({
-        url: form.attr("action"),
-        type: form.attr("method"),
-        data: form.serialize(),
+        url: url,
+        type: method,
+        data: data,
         success: function (response) {
             const data = JSON.parse(response);
             const status = data["status"];

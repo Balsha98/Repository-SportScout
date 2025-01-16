@@ -87,7 +87,7 @@ echo Template::generatePageHead($pageData);
                 </form>
             </div>
             <footer class="page-footer">
-                <p>&copy; 2024 <span>SportScout</span>, Inc.</p>
+                <p>&copy; <?php echo date('Y'); ?> <span>SportScout</span>, Inc.</p>
             </footer>
         </section>
     </div>
