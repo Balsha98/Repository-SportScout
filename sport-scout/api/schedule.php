@@ -70,34 +70,6 @@ if ($request === 'POST') {
         $awayScore = '';
     }
 
-    // Correct teams.
-    if ($seasonID !== '') {
-        $seasonData = $db->getSeasonsByLeagueId($leagueID);
-
-        if (count($seasonData) > 0) {
-            $teamData = $db->getTeamsBySeasonId($seasonID);
-            if (count($teamData) > 0) {
-                Helper::validateSeason(
-                    $teamData,
-                    $status,
-                    $homeTeamID,
-                );
-
-                Helper::validateSeason(
-                    $teamData,
-                    $status,
-                    $awayTeamID,
-                );
-            } else {
-                $status = 'fail';
-                $seasonID = '';
-            }
-        } else {
-            $status = 'fail';
-            $seasonID = '';
-        }
-    }
-
     // Can't be the same.
     if ($homeTeamID === $awayTeamID) {
         $status = 'fail';

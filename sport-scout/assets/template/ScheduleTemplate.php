@@ -243,13 +243,14 @@ class ScheduleTemplate
                                 </div>
                                 <div class='div-hidden-inputs-container'>
                                     <input id='schedule_id_{$scheduleID}' type='hidden' name='schedule_id' value='{$scheduleID}'>
+                                    <input id='schedule_team_id_{$scheduleID}' type='hidden' name='team_id' value='{$scheduleID}'>
                                     <input id='schedule_season_id_{$scheduleID}' type='hidden' name='season_id' value='{$seasonID}'>
-                                    <input id='schedule_home_id_{$scheduleID}' type='hidden' name='home_id' value='{$homeTeamID}'>
+                                    <input id='schedule_home_team_id_{$scheduleID}' type='hidden' name='home_team_id' value='{$homeTeamID}'>
                                     <input id='schedule_home_score_{$scheduleID}' type='hidden' name='home_score' value='{$homeScore}'>
-                                    <input id='schedule_away_id_{$scheduleID}' type='hidden' name='away_id' value='{$awayTeamID}'>
+                                    <input id='schedule_away_team_id_{$scheduleID}' type='hidden' name='away_team_id' value='{$awayTeamID}'>
                                     <input id='schedule_away_score_{$scheduleID}' type='hidden' name='away_score' value='{$awayScore}'>
                                     <input id='schedule_date_{$scheduleID}' type='hidden' name='date' value='{$date}'>
-                                    <input id='schedule_completion_{$scheduleID}' type='hidden' name='completion' value='{$status}'>
+                                    <input id='schedule_completion_status_{$scheduleID}' type='hidden' name='completion_status' value='{$status}'>
                                 </div>
                             </div>
                         ";

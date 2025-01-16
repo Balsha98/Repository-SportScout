@@ -58,14 +58,11 @@ const toggleElement = function (popup) {
 };
 
 const toggleEditGamePopup = function () {
-    // Get the the schedule id..
+    // Get the the schedule id and set the data.
     const scheduleID = $(this.closest(".div-schedule-game")).data("schedule-id");
+    existingItemInputs["schedule"].forEach((id) => $(`#edit_${id}`).val($(`#${id}_${scheduleID}`).val()));
 
-    // Get schedule data.
-    existingItemInputs["schedule"].forEach((id) => {
-        $(`#edit_${id}`).val($(`#${id}_${scheduleID}`).val());
-    });
-
+    // Show the popup.
     toggleElement(editPopup);
 };
 
