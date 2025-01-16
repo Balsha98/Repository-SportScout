@@ -85,8 +85,8 @@ class ScheduleData
                     <p>Fill in the following <span>fields</span> appropriately.</p>
                 </header>
                 <form class="form form-edit" action="/api/schedule.php">
-                    <input id="edit_schedule_team_id" type="hidden" name="team_id" value="%s">
                     <input id="edit_schedule_id" id="schedule_id" type="hidden" name="schedule_id">
+                    <input id="edit_schedule_team_id" type="hidden" name="team_id" value="%s">
                     <div class="div-multi-input-containers grid-4-columns">
                         <div class="div-input-container">
                             <label for="edit_schedule_home_team_id">Home ID:</label>

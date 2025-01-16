@@ -35,6 +35,7 @@ const newItemInputs = {
 const existingItemInputs = {
     schedule: [
         "edit_schedule_id",
+        "edit_schedule_team_id",
         "edit_schedule_season_id",
         "edit_schedule_home_team_id",
         "edit_schedule_home_score",
@@ -306,14 +307,28 @@ formUpdateBtns?.each((_, btn) => {
     $(btn)?.click(function (clickEvent) {
         clickEvent.preventDefault();
 
-        const itemType = $(this).data("clicked");
         const editPopup = $(this.closest(".popup-edit"));
         const form = $(this.closest("form"));
+        const url = form.attr("action");
+        const method = $(this).data("method");
+        const itemType = $(this).data("item-type");
+
+        let scheduleID;
+        if (itemType === "schedule") {
+            scheduleID = $("#edit_schedule_id").val();
+        }
+
+        const data = {};
+        data["item_type"] = itemType;
+        existingItemInputs[itemType].forEach((id) => {
+            if (scheduleID) data[`${id}_${scheduleID}`] = $(`#${id}_${scheduleID}`).val();
+            data[`${id}`] = $(`#${id}`).val();
+        });
 
         $.ajax({
-            url: form.attr("action"),
-            type: $(this).data("method"),
-            data: `${form.serialize()}&clicked=${itemType}`,
+            url: url,
+            type: method,
+            data: JSON.stringify(data),
             success: function (response) {
                 console.log(response);
                 const data = JSON.parse(response);
@@ -327,7 +342,7 @@ formUpdateBtns?.each((_, btn) => {
                 // Back to white.
                 warnInputs(data, status);
 
-                if (itemType === "UPDATE_TEAM") {
+                if (itemType === "team") {
                     setTeamColors([data["home_color"], data["away_color"]]);
 
                     const inTeamName = $("#team_name");
@@ -342,7 +357,7 @@ formUpdateBtns?.each((_, btn) => {
                             $(teamName).text(newTeamName);
                         }
                     });
-                } else if (itemType === "UPDATE_GAME") {
+                } else if (itemType === "schedule") {
                     const editPopupClass = editPopup.attr("class").split(" ")[1];
                     const relGame = [...scrollContainer.children()].find(
                         (div) => +$(div).data("schedule-id") === +$(`.${editPopupClass} #schedule_id`).val()
