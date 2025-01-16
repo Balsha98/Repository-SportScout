@@ -99,9 +99,9 @@ const resetInput = function (data) {
     }
 };
 
-const warnInputs = function (data, message) {
+const warnInputs = function (data, status) {
     for (const [key, value] of Object.entries(data)) {
-        if (message === "fail") {
+        if (status === "fail") {
             if (value === "") {
                 $(`#${key}`).closest(".div-input-container").addClass("red-container");
 
@@ -163,26 +163,31 @@ attachEditBtnEvent(showEditPopupBtns);
 addNewGameBtn?.click(function (clickEvent) {
     clickEvent.preventDefault();
 
-    const clickedBtn = $(this).data("clicked");
     const form = $(this.closest(".form"));
+    const url = form.attr("action");
+    const method = $(this).data("method");
+    const itemType = $(this).data("item-type");
+
+    const data = {};
+    data["item_type"] = itemType;
 
     $.ajax({
-        url: form.attr("action"),
-        type: $(this).data("method"),
-        data: `${form.serialize()}&clicked=${clickedBtn}`,
+        url: url,
+        type: method,
+        data: JSON.stringify(data),
         success: function (response) {
             console.log(response);
             const data = JSON.parse(response);
-            const message = data["message"];
+            const status = data["status"];
 
             // An error occurs.
-            if (message === "fail") {
-                warnInputs(data, message);
+            if (status === "fail") {
+                warnInputs(data, status);
                 return;
             }
 
             // Back to white.
-            warnInputs(data, message);
+            warnInputs(data, status);
             resetInput(data);
 
             // Last known id, or starting from scratch.
@@ -207,11 +212,8 @@ addNewGameBtn?.click(function (clickEvent) {
             const awayScore = data["new_away_score"];
 
             // Getting the date & status.
-            const newScheduled = data["new_scheduled"];
+            const newDate = data["new_scheduled"];
             const compStatus = +data["new_status"];
-
-            // Setting the editable dataset.
-            const dataset = `${homeID}|${homeScore}|${awayID}|${awayScore}|${seasonID}|${compStatus}|${newScheduled}`;
 
             // Visuals.
             const [css, icon] = getVisuals(compStatus);
@@ -225,37 +227,44 @@ addNewGameBtn?.click(function (clickEvent) {
 
             // Display new game.
             scrollContainer.append(`
-                <div class='div-schedule-game game-${++prevScheduleID}' data-schedule-id='${prevScheduleID}' data-editable-data='${dataset}'>
+                <div class="div-schedule-game game-${++prevScheduleID}" data-schedule-id="${prevScheduleID}">
                     <div class="div-btn-edit">
                         <button class="btn-edit">
                             <ion-icon class="btn-edit-icon" name="create-outline"></ion-icon>
                         </button>
                     </div>
-                    <div class='div-scoreboard-container'>
-                            <div class='div-grid-score-container'>
+                    <div class="div-scoreboard-container">
+                        <input id="schedule_season_id_${prevScheduleID}" type="hidden" name="season_id" value="${seasonID}">
+                        <input id="schedule_home_id_${prevScheduleID}" type="hidden" name="home_id" value="${homeID}">
+                        <input id="schedule_home_score_${prevScheduleID}" type="hidden" name="home_score" value="${homeScore}">
+                        <input id="schedule_away_id_${prevScheduleID}" type="hidden" name="away_id" value="${awayID}">
+                        <input id="schedule_away_score_${prevScheduleID}" type="hidden" name="away_score" value="${awayScore}">
+                        <input id="schedule_completion_${prevScheduleID}" type="hidden" name="completion" value="${compStatus}">
+                        <input id="schedule_date_${prevScheduleID}" type="hidden" name="date" value="${newDate}">
+                        <div class="div-grid-score-container">
                             <p class="home-score">${homeScore}</p>
                             <p>:</p>
                             <p class="away-score">${awayScore}</p>
                         </div>
-                        <div class='div-grid-score-container'>
-                            <div class='div-team-name-container'>
+                        <div class="div-grid-score-container">
+                            <div class="div-team-name-container">
                                 <p>${homeName}</p>
                                 <span>Home</span>
                             </div>
                             <p>&nbsp;</p>
-                            <div class='div-team-name-container'>
+                            <div class="div-team-name-container">
                                 <p>${awayName}</p>
                                 <span>Away</span>
                             </div>
                         </div>
                     </div>
-                    <div class='div-date-completion-container'>
-                            <div class='div-input-container'>
-                            <label for='scheduled_${prevScheduleID}'>Game Date:</label>
-                            <input id='scheduled_${prevScheduleID}' type='date' name='scheduled_${prevScheduleID}' value='${newScheduled}' disabled>
+                    <div class="div-date-completion-container">
+                        <div class="div-input-container">
+                            <label for="date_${prevScheduleID}">Game Date:</label>
+                            <input id="date_${prevScheduleID}" type="date" name="date_${prevScheduleID}" value="${newDate}" disabled>
                         </div>
-                        <div class='div-completion-status ${css}' data-completion-index='${compStatus}'>
-                            <ion-icon class='status-icon' name='${icon}-outline'></ion-icon>
+                        <div class="div-completion-status ${css}" data-completion-index="${compStatus}">
+                            <ion-icon class="status-icon" name="${icon}-outline"></ion-icon>
                         </div>
                     </div>
                 </div>
@@ -275,28 +284,28 @@ formUpdateBtns?.each((_, btn) => {
     $(btn)?.click(function (clickEvent) {
         clickEvent.preventDefault();
 
-        const clickedBtn = $(this).data("clicked");
+        const itemType = $(this).data("clicked");
         const editPopup = $(this.closest(".popup-edit"));
         const form = $(this.closest("form"));
 
         $.ajax({
             url: form.attr("action"),
             type: $(this).data("method"),
-            data: `${form.serialize()}&clicked=${clickedBtn}`,
+            data: `${form.serialize()}&clicked=${itemType}`,
             success: function (response) {
                 console.log(response);
                 const data = JSON.parse(response);
-                const message = data["message"];
+                const status = data["status"];
 
-                if (message === "fail") {
-                    warnInputs(data, message);
+                if (status === "fail") {
+                    warnInputs(data, status);
                     return;
                 }
 
                 // Back to white.
-                warnInputs(data, message);
+                warnInputs(data, status);
 
-                if (clickedBtn === "UPDATE_TEAM") {
+                if (itemType === "UPDATE_TEAM") {
                     setTeamColors([data["home_color"], data["away_color"]]);
 
                     const inTeamName = $("#team_name");
@@ -311,7 +320,7 @@ formUpdateBtns?.each((_, btn) => {
                             $(teamName).text(newTeamName);
                         }
                     });
-                } else if (clickedBtn === "UPDATE_GAME") {
+                } else if (itemType === "UPDATE_GAME") {
                     const editPopupClass = editPopup.attr("class").split(" ")[1];
                     const relGame = [...scrollContainer.children()].find(
                         (div) => +$(div).data("schedule-id") === +$(`.${editPopupClass} #schedule_id`).val()
@@ -356,31 +365,31 @@ formDeleteBtns?.each((_, btn) => {
     $(btn).click(function (clickEvent) {
         clickEvent.preventDefault();
 
-        const clickedBtn = $(this).data("clicked");
+        const itemType = $(this).data("clicked");
         const editPopup = $(this.closest(".popup-edit"));
         const form = $(this.closest("form"));
 
         $.ajax({
             url: form.attr("action"),
             type: $(this).data("method"),
-            data: `${form.serialize()}&clicked=${clickedBtn}`,
+            data: `${form.serialize()}&clicked=${itemType}`,
             success: function () {
-                if (clickedBtn === "DELETE_TEAM") {
+                if (itemType === "DELETE_TEAM") {
                     $(".form-team-data").remove();
                     scrollContainer.remove();
 
                     [teamInfoContainer, scheduleContainer].forEach((div) => {
                         $(div).append(`
-                            <div class='div-none-selected-container'>
-                                <ion-icon class='none-selected-icon' name='alert-circle-outline'></ion-icon>
-                                <div class='none-selected-text'>
+                            <div class="div-none-selected-container">
+                                <ion-icon class="none-selected-icon" name="alert-circle-outline"></ion-icon>
+                                <div class="none-selected-text">
                                     <h2>No schedule has been selected.</h2>
-                                    <p>Please select one of the teams from the <a href='admin.php'>Admin</a> page.</p>
+                                    <p>Please select one of the teams from the <a href="admin.php">Admin</a> page.</p>
                                 </div>
                             </div>    
                         `);
                     });
-                } else if (clickedBtn === "DELETE_GAME") {
+                } else if (itemType === "DELETE_GAME") {
                     let scheduleGames = getOnlyGames();
 
                     const delGame = $(
@@ -399,9 +408,9 @@ formDeleteBtns?.each((_, btn) => {
                     if (scheduleGames.length === 0) {
                         scrollContainer.addClass("flex-center");
                         scrollContainer.append(`
-                            <div class='div-none-available-container'>
-                                <ion-icon class='none-available-icon' name='alert-circle-outline'></ion-icon>
-                                <div class='none-available-text'>
+                            <div class="div-none-available-container">
+                                <ion-icon class="none-available-icon" name="alert-circle-outline"></ion-icon>
+                                <div class="none-available-text">
                                     <h2>No games have been scheduled.</h2>
                                     <p>Start off by adding a new game to the schedule.</p>
                                 </div>
