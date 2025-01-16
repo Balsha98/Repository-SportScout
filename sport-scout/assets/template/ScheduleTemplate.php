@@ -45,11 +45,11 @@ class ScheduleTemplate
         foreach (ScheduleData::POPUPS as $popup) {
             $return .= sprintf(
                 $popup,
+                $sportName,
+                $leagueName,
                 $teamID,
                 $sportID,
-                $leagueID,
-                $sportName,
-                $leagueName
+                $leagueID
             );
         }
 

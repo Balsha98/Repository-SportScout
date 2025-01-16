@@ -71,6 +71,11 @@ class ScheduleData
                         </button>
                         <button class="btn btn-full btn-add-new" type="submit" data-item-type="schedule">Add</button>
                     </div>
+                    <div class="div-hidden-inputs-container">
+                        <input id="new_schedule_team_id" type="hidden" name="team_id" value="%s">
+                        <input id="new_schedule_sport_id" type="hidden" name="sport_id" value="%s">
+                        <input id="new_schedule_league_id" type="hidden" name="league_id" value="%s">
+                    </div>
                 </form>
             </div>
         ',
@@ -85,8 +90,6 @@ class ScheduleData
                     <p>Fill in the following <span>fields</span> appropriately.</p>
                 </header>
                 <form class="form form-edit" action="/api/schedule.php">
-                    <input id="edit_schedule_id" id="schedule_id" type="hidden" name="schedule_id">
-                    <input id="edit_schedule_team_id" type="hidden" name="team_id" value="%s">
                     <div class="div-multi-input-containers grid-4-columns">
                         <div class="div-input-container">
                             <label for="edit_schedule_home_team_id">Home ID:</label>
@@ -127,6 +130,10 @@ class ScheduleData
                     <div class="div-btn-container grid-btn-container">
                         <button class="btn btn-hollow btn-delete" type="submit" data-method="DELETE" data-item-type="schedule">Delete</button>
                         <button class="btn btn-full btn-update" type="submit" data-method="PUT" data-item-type="schedule">Update</button>
+                    </div>
+                    <div class="div-hidden-inputs-container">
+                        <input id="edit_schedule_id" id="schedule_id" type="hidden" name="schedule_id">
+                        <input id="edit_schedule_team_id" type="hidden" name="team_id" value="%s">
                     </div>
                 </form>
             </div>

@@ -374,14 +374,20 @@ formDeleteBtns?.each((_, btn) => {
     $(btn).click(function (clickEvent) {
         clickEvent.preventDefault();
 
-        const itemType = $(this).data("clicked");
         const editPopup = $(this.closest(".popup-edit"));
         const form = $(this.closest("form"));
+        const url = form.attr("action");
+        const method = $(this).data("method");
+        const itemType = $(this).data("item-type");
+
+        const data = {};
+        data["item_type"] = itemType;
+        data["item_id"];
 
         $.ajax({
-            url: form.attr("action"),
-            type: $(this).data("method"),
-            data: `${form.serialize()}&clicked=${itemType}`,
+            url: url,
+            type: method,
+            data: JSON.stringify(data),
             success: function () {
                 if (itemType === "DELETE_TEAM") {
                     $(".form-team-data").remove();
