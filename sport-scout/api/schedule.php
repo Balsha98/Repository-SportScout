@@ -20,11 +20,11 @@ if ($request === 'POST') {
     $table = $itemType !== 'schedule' ? "{$itemType}s" : $itemType;
     ['id' => $lastRowID] = $db->getLastRowId($table, $itemType);
 
-    $sportID = (int) $_POST['sport_id'];
-    $leagueID = (int) $_POST['league_id'];
-    $teamID = (int) $_POST['team_id'];
+    $sportID = (int) $input['sport_id'];
+    $leagueID = (int) $input['league_id'];
+    $teamID = (int) $input['team_id'];
 
-    $seasonID = (int) $_POST['new_season_id'];
+    $seasonID = (int) $input['new_season_id'];
     if ($seasonID === '') {
         $status = 'fail';
     } else if ($seasonID <= 0) {
@@ -43,7 +43,7 @@ if ($request === 'POST') {
         'new_home_team_id'
     );
 
-    $homeScore = (int) $_POST['new_home_score'];
+    $homeScore = (int) $input['new_home_score'];
     if ($homeScore === '') {
         $status = 'fail';
     } else if ($homeScore < 0) {
@@ -62,7 +62,7 @@ if ($request === 'POST') {
         'new_away_team_id'
     );
 
-    $awayScore = (int) $_POST['new_away_score'];
+    $awayScore = (int) $input['new_away_score'];
     if ($awayScore === '') {
         $status = 'fail';
     } else if ($awayScore < 0) {
@@ -122,12 +122,12 @@ if ($request === 'POST') {
         }
     }
 
-    $scheduled = $_POST['new_scheduled'];
+    $scheduled = $input['new_scheduled'];
     if ($scheduled === '') {
         $status = 'fail';
     }
 
-    $status = (int) $_POST['new_status'];
+    $status = (int) $input['new_status'];
     if ($status === '') {
         $status = 'fail';
     } else if ($status === 0) {
@@ -160,15 +160,15 @@ if ($request === 'POST') {
     echo Encoder::toJSON($return);
 } else if ($request === 'PUT') {
     if ($itemType === 'team') {
-        $teamID = (int) $_POST['team_id'];
+        $teamID = (int) $input['team_id'];
 
-        $team_name = Sanitize::stripString($_POST['team_name']);
+        $team_name = Sanitize::stripString($input['team_name']);
         Sanitize::fullStringSearch($status, $team_name, 50);
 
-        $home_color = Sanitize::stripString($_POST['home_color']);
+        $home_color = Sanitize::stripString($input['home_color']);
         Sanitize::fullColorSearch($status, $home_color, 25);
 
-        $away_color = Sanitize::stripString($_POST['away_color']);
+        $away_color = Sanitize::stripString($input['away_color']);
         Sanitize::fullColorSearch($status, $away_color, 25);
 
         $return = [
@@ -183,7 +183,7 @@ if ($request === 'POST') {
             $db->updateScheduleTeamData($return);
         }
     } else if ($itemType === 'schedule') {
-        $homeTeamID = (int) $_POST['home_team_id'];
+        $homeTeamID = (int) $input['home_team_id'];
         if ($homeTeamID === '') {
             $status = 'fail';
         } else if ($homeTeamID <= 0) {
@@ -191,7 +191,7 @@ if ($request === 'POST') {
             $homeTeamID = '';
         }
 
-        $homeScore = (int) $_POST['home_score'];
+        $homeScore = (int) $input['home_score'];
         if ($homeScore === '') {
             $status = 'fail';
         } else if ($homeScore < 0) {
@@ -199,7 +199,7 @@ if ($request === 'POST') {
             $homeScore = '';
         }
 
-        $awayTeamID = (int) $_POST['away_team_id'];
+        $awayTeamID = (int) $input['away_team_id'];
         if ($awayTeamID === '') {
             $status = 'fail';
         } else if ($awayTeamID <= 0) {
@@ -207,7 +207,7 @@ if ($request === 'POST') {
             $awayTeamID = '';
         }
 
-        $awayScore = (int) $_POST['away_score'];
+        $awayScore = (int) $input['away_score'];
         if ($awayScore === '') {
             $status = 'fail';
         } else if ($awayScore < 0) {
@@ -215,7 +215,7 @@ if ($request === 'POST') {
             $awayScore = '';
         }
 
-        $seasonID = (int) $_POST['season_id'];
+        $seasonID = (int) $input['season_id'];
         if ($seasonID === '') {
             $status = '';
         } else if ($seasonID <= 0) {
@@ -223,12 +223,12 @@ if ($request === 'POST') {
             $seasonID = '';
         }
 
-        $scheduled = $_POST['scheduled'];
+        $scheduled = $input['scheduled'];
         if ($scheduled === '') {
             $status = 'fail';
         }
 
-        $status = (int) $_POST['status'];
+        $status = (int) $input['status'];
         if ($status === '') {
             $status = 'fail';
         } else if ($status === 0) {
