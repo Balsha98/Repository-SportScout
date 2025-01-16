@@ -2,12 +2,8 @@
 
 // ***** DOM ELEMENTS ***** //
 const dashboardGrid = $(".grid-dashboard");
-
-// In case the user is logged in.
-const btnStart = $(".btn-start");
-const btnLogOut = $(".btn-logout");
-if (getCookie("active")) switchBtns(btnStart);
-
+const startBtn = $(".btn-start");
+const logoutBtn = $(".btn-logout");
 const welcomeContainer = $(".div-welcome-info-container");
 const pagesContainer = $(".div-pages-container");
 const pagesHeroContainer = $(".div-pages-hero-container");
@@ -33,7 +29,7 @@ const months = [
 ];
 
 // ***** FUNCTIONS ***** //
-function setDate(date = new Date()) {
+const setDate = function (date = new Date()) {
     const seconds = date.getSeconds();
     const minutes = date.getMinutes();
     const hours = date.getHours();
@@ -68,19 +64,22 @@ function setDate(date = new Date()) {
             `<small>${seconds < 10 ? `0${seconds}` : seconds}</small>
         </span>
     `;
-}
-
-function switchBtns(btn) {
-    dashboardGrid.addClass("switch-divs");
-    btnLogOut.addClass("span-across-all");
-    btn.remove();
-}
+};
 
 setInterval(setDate, 1000);
-setDate();
+
+const switchBtns = function (btn) {
+    dashboardGrid.addClass("switch-divs");
+    logoutBtn.addClass("span-across-all");
+    btn.remove();
+};
+
+if (getCookie("active")) {
+    switchBtns(btnStart);
+}
 
 // ***** EVENT LISTENERS ***** //
-btnStart?.click(function () {
+startBtn?.click(function () {
     setCookie("active", "yes");
     switchBtns(this);
 });
