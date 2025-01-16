@@ -737,15 +737,17 @@ class Database
     {
         $query = '
             UPDATE teams SET 
-            team_name = :team_name, home_color = :home_color, away_color = :away_color 
+            team_name = :team_name, 
+            home_color = :home_color, 
+            away_color = :away_color 
             WHERE team_id = :team_id;
         ';
 
         // Preparing statement.
         $result = $this->db->prepare($query);
         $result->bindParam(':team_name', $data['team_name'], PDO::PARAM_STR);
-        $result->bindParam(':home_color', $data['home_color'], PDO::PARAM_STR);
-        $result->bindParam(':away_color', $data['away_color'], PDO::PARAM_STR);
+        $result->bindParam(':home_color', $data['team_home_color'], PDO::PARAM_STR);
+        $result->bindParam(':away_color', $data['team_away_color'], PDO::PARAM_STR);
         $result->bindParam(':team_id', $data['team_id'], PDO::PARAM_INT);
 
         // Execution.

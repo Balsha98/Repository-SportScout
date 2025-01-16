@@ -66,7 +66,7 @@ class Sanitize
             if (count($array) === 2) {
                 $validCounter = 0;
                 foreach ($array as $value) {
-                    if (self::contains('/[^a-zA-Z]/', $value)) {
+                    if (!self::contains('/[^a-zA-Z]/', $value)) {
                         $validCounter++;
                     }
                 }

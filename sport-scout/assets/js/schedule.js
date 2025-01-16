@@ -315,6 +315,8 @@ formUpdateBtns?.each((_, btn) => {
             else data[`${id}`] = $(`#${id}`).val();
         });
 
+        console.log(data);
+
         $.ajax({
             url: url,
             type: method,
