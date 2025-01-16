@@ -381,15 +381,15 @@ formDeleteBtns?.each((_, btn) => {
         const itemType = $(this).data("item-type");
 
         const data = {};
+        data["item_id"] = $(`#${itemType === "schedule" ? `edit_${itemType}` : itemType}_id`).val();
         data["item_type"] = itemType;
-        data["item_id"];
 
         $.ajax({
             url: url,
             type: method,
             data: JSON.stringify(data),
             success: function () {
-                if (itemType === "DELETE_TEAM") {
+                if (itemType === "team") {
                     $(".form-team-data").remove();
                     scrollContainer.remove();
 
@@ -404,23 +404,13 @@ formDeleteBtns?.each((_, btn) => {
                             </div>    
                         `);
                     });
-                } else if (itemType === "DELETE_GAME") {
-                    let scheduleGames = getOnlyGames();
-
-                    const delGame = $(
-                        scheduleGames.find((div) => {
-                            const popupName = editPopup.attr("class").split(" ")[1];
-                            return +$(div).data("schedule-id") === +$(`.${popupName} #schedule_id`).val();
-                        })
-                    );
-
+                } else if (itemType === "schedule") {
+                    const delGame = $(`.game-${data["item_id"]}`);
                     setCookie("last_deleted_game", delGame.data("schedule-id"));
-                    // Getting the last deleted row makes no sense... it kind of does.
-
                     delGame.remove();
 
-                    scheduleGames = getOnlyGames();
-                    if (scheduleGames.length === 0) {
+                    const remainingGames = getOnlyGames();
+                    if (remainingGames.length === 0) {
                         scrollContainer.addClass("flex-center");
                         scrollContainer.append(`
                             <div class="div-none-available-container">
