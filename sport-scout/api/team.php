@@ -18,7 +18,7 @@ $return = [];
 // Create new item.
 if ($request === 'POST') {
     $table = $itemType !== 'schedule' ? "{$itemType}s" : $itemType;
-    $lastRowID = $db->getLastRowId($table, $itemType)['id'];
+    ['id' => $lastRowID] = $db->getLastRowId($table, $itemType);
 
     if ($itemType === 'player') {
         $sportID = $input['new_player_sport_id'];

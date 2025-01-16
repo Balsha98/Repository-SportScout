@@ -1,18 +1,26 @@
 <?php declare(strict_types=1);
 
-require_once '../class/Database.php';
-require_once '../class/Sanitize.php';
-require_once '../class/Helper.php';
+require_once '../assets/class/Database.php';
+require_once '../assets/class/Encoder.php';
+require_once '../assets/class/Sanitize.php';
+require_once '../assets/class/Helper.php';
 
-// Adding a new game.
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $message = 'success';
-    $clicked = $_POST['clicked'];
+$request = $_SERVER['REQUEST_METHOD'];
+$input = Encoder::fromJSON('php://input');
+$itemType = $input['item_type'];
+if (array_key_exists('item_id', $input)) {
+    $itemID = (int) $input['item_id'];
+}
 
-    // ADD NEW GAME
-    if ($clicked === 'ADD_GAME') {
-        $last_schedule_id = (int) $db->get_last_scheduled_game_id()['schedule_id'];
+$status = 'success';
+$return = [];
 
+// Creating a new item.
+if ($request === 'POST') {
+    $table = $itemType !== 'schedule' ? "{$itemType}s" : $itemType;
+    ['id' => $lastRowID] = $db->getLastRowId($table, $itemType);
+
+    if ($itemType === 'schedule') {
         $sport_id = (int) $_POST['sport_id'];
         $league_id = (int) $_POST['league_id'];
         $team_id = (int) $_POST['team_id'];
@@ -150,7 +158,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // UPDATE TEAM & STAFF
-    if ($clicked === 'UPDATE_TEAM') {
+    if ($itemType === 'UPDATE_TEAM') {
         $team_id = (int) $_POST['team_id'];
 
         $team_name = Sanitize::stripString($_POST['team_name']);
@@ -173,7 +181,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($message === 'success') {
             $db->update_schedule_team_data($data);
         }
-    } else if ($clicked === 'UPDATE_GAME') {
+    } else if ($itemType === 'UPDATE_GAME') {
         $schedule_id = (int) $_POST['schedule_id'];
 
         $home_team_id = (int) $_POST['home_team_id'];
@@ -247,11 +255,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // DELETE TEAM & GAME
-    if ($clicked === 'DELETE_TEAM') {
+    if ($itemType === 'DELETE_TEAM') {
         $db->delete_team_by_id($_POST['team_id']);
-    } else if ($clicked === 'DELETE_GAME') {
+    } else if ($itemType === 'DELETE_GAME') {
         $db->delete_schedule_game_by_id($_POST['schedule_id']);
     }
-
-    echo json_encode($data);
 }
