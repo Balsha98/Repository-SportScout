@@ -1,43 +1,38 @@
 "use strict";
 
 // ***** DOM ELEMENTS ***** //
-const dashboardGrid = query(".grid-dashboard");
+const dashboardGrid = $(".grid-dashboard");
 
 // In case the user is logged in.
-const btnStart = query(".btn-start");
-const btnLogOut = query(".btn-logout");
+const btnStart = $(".btn-start");
+const btnLogOut = $(".btn-logout");
 if (getCookie("user")) switchBtns(btnStart);
 
-const welcomeContainer = query(".div-welcome-info-container");
-const pagesContainer = query(".div-pages-container");
-const pagesHeroContainer = query(".div-pages-hero-container");
-const pagesListContainer = query(".div-pages-list-container");
-const pagesListItems = queryAll(".pages-list-item");
-const dateText = query(".date-text");
+const welcomeContainer = $(".div-welcome-info-container");
+const pagesContainer = $(".div-pages-container");
+const pagesHeroContainer = $(".div-pages-hero-container");
+const pagesListContainer = $(".div-pages-list-container");
+const pagesListItems = $(".pages-list-item");
+const dateText = $(".date-text");
 
 // ***** VARIABLES ***** //
-// prettier-ignore
-const days = [
-    "Sunday", "Monday", "Tuesday", 
-    "Wednesday", "Thursday", "Friday", "Saturday",
-];
-
-// prettier-ignore
+const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 const months = [
-    "January", "February", "March", "April",
-    "May", "June", "July", "August",
-    "September", "October","November", "December",
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
 ];
 
 // ***** FUNCTIONS ***** //
-function query(idClass) {
-    return document.querySelector(idClass);
-}
-
-function queryAll(idClass) {
-    return document.querySelectorAll(idClass);
-}
-
 function setDate(date = new Date()) {
     const seconds = date.getSeconds(),
         minutes = date.getMinutes(),
@@ -96,7 +91,7 @@ btnStart?.addEventListener("click", function () {
 pagesListItems.forEach((item, i) => {
     item.addEventListener("click", function () {
         // Get page link item.
-        const pageLinks = queryAll(".page-link");
+        const pageLinks = $(".page-link");
         window.open(pageLinks[i].getAttribute("href"), "_self");
     });
 });
