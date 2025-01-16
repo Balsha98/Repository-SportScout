@@ -20,244 +20,241 @@ if ($request === 'POST') {
     $table = $itemType !== 'schedule' ? "{$itemType}s" : $itemType;
     ['id' => $lastRowID] = $db->getLastRowId($table, $itemType);
 
-    if ($itemType === 'schedule') {
-        $sport_id = (int) $_POST['sport_id'];
-        $league_id = (int) $_POST['league_id'];
-        $team_id = (int) $_POST['team_id'];
+    $sportID = (int) $_POST['sport_id'];
+    $leagueID = (int) $_POST['league_id'];
+    $teamID = (int) $_POST['team_id'];
 
-        $season_id = (int) $_POST['new_season_id'];
-        if ($season_id === '') {
-            $message = 'fail';
-        } else if ($season_id <= 0) {
-            $message = 'fail';
-            $season_id = '';
-        }
+    $seasonID = (int) $_POST['new_season_id'];
+    if ($seasonID === '') {
+        $status = 'fail';
+    } else if ($seasonID <= 0) {
+        $status = 'fail';
+        $seasonID = '';
+    }
 
-        $home_team_id = '';
-        $home_team_name = '';
-        Helper::setTeamName(
-            $db,
-            $message,
-            $home_team_id,
-            $home_team_name,
-            'new_home_team_id'
-        );
+    $homeTeamID = '';
+    $homeTeamName = '';
+    Helper::setTeamName(
+        $db,
+        $input,
+        $status,
+        $homeTeamID,
+        $homeTeamName,
+        'new_home_team_id'
+    );
 
-        $home_score = (int) $_POST['new_home_score'];
-        if ($home_score === '') {
-            $message = 'fail';
-        } else if ($home_score < 0) {
-            $message = 'fail';
-            $home_score = '';
-        }
+    $homeScore = (int) $_POST['new_home_score'];
+    if ($homeScore === '') {
+        $status = 'fail';
+    } else if ($homeScore < 0) {
+        $status = 'fail';
+        $homeScore = '';
+    }
 
-        $away_team_id = '';
-        $away_team_name = '';
-        Helper::setTeamName(
-            $db,
-            $message,
-            $away_team_id,
-            $away_team_name,
-            'new_away_team_id'
-        );
+    $awayTeamID = '';
+    $awayTeamName = '';
+    Helper::setTeamName(
+        $db,
+        $input,
+        $status,
+        $awayTeamID,
+        $awayTeamName,
+        'new_away_team_id'
+    );
 
-        $away_score = (int) $_POST['new_away_score'];
-        if ($away_score === '') {
-            $message = 'fail';
-        } else if ($away_score < 0) {
-            $message = 'fail';
-            $away_score = '';
-        }
+    $awayScore = (int) $_POST['new_away_score'];
+    if ($awayScore === '') {
+        $status = 'fail';
+    } else if ($awayScore < 0) {
+        $status = 'fail';
+        $awayScore = '';
+    }
 
-        // Correct teams.
-        if ($season_id !== '') {
-            $season_data = $db->get_seasons_by_league_id($league_id);
+    // Correct teams.
+    if ($seasonID !== '') {
+        $seasonData = $db->get_seasons_by_league_id($leagueID);
 
-            if (count($season_data) > 0) {
-                $team_data = $db->get_teams_by_season_id($season_id);
-                if (count($team_data) > 0) {
-                    Helper::validateSeason(
-                        $team_data,
-                        $message,
-                        $home_team_id,
-                    );
+        if (count($seasonData) > 0) {
+            $teamData = $db->get_teams_by_season_id($seasonID);
+            if (count($teamData) > 0) {
+                Helper::validateSeason(
+                    $teamData,
+                    $status,
+                    $homeTeamID,
+                );
 
-                    Helper::validateSeason(
-                        $team_data,
-                        $message,
-                        $away_team_id,
-                    );
-                } else {
-                    $message = 'fail';
-                    $season_id = '';
-                }
+                Helper::validateSeason(
+                    $teamData,
+                    $status,
+                    $awayTeamID,
+                );
             } else {
-                $message = 'fail';
-                $season_id = '';
+                $status = 'fail';
+                $seasonID = '';
             }
-        }
-
-        // Can't be the same.
-        if ($home_team_id === $away_team_id) {
-            $message = 'fail';
-            $home_team_id = '';
-            $away_team_id = '';
-        }
-
-        // Must be selected team.
-        if ($home_team_id !== '' && $away_team_id !== '') {
-            $is_selected = false;
-            foreach ([$home_team_id, $away_team_id] as $id) {
-                if ((int) $id === $team_id) {
-                    $is_selected = true;
-                    break;
-                }
-            }
-
-            if (!$is_selected) {
-                $message = 'fail';
-                $home_team_id = '';
-                $away_team_id = '';
-            }
-        }
-
-        $scheduled = $_POST['new_scheduled'];
-        if ($scheduled === '') {
-            $message = 'fail';
-        }
-
-        $status = (int) $_POST['new_status'];
-        if ($status === '') {
-            $message = 'fail';
-        } else if ($status === 0) {
-            $message = 'fail';
-            $status = '';
-        }
-
-        $data = [
-            'message' => $message,
-            'last_schedule_id' => $last_schedule_id,
-            'sport_id' => $sport_id,
-            'league_id' => $league_id,
-            'team_id' => $team_id,
-            'new_season_id' => $season_id,
-            'new_home_team_id' => $home_team_id,
-            'new_home_team_name' => $home_team_name,
-            'new_home_score' => $home_score,
-            'new_away_team_id' => $away_team_id,
-            'new_away_team_name' => $away_team_name,
-            'new_away_score' => $away_score,
-            'new_scheduled' => $scheduled,
-            'new_status' => $status
-        ];
-
-        if ($message === 'success') {
-            $db->alter_auto_increment('schedule', $last_schedule_id);
-            $db->insert_new_schedule_game($data);
+        } else {
+            $status = 'fail';
+            $seasonID = '';
         }
     }
 
-    // UPDATE TEAM & STAFF
-    if ($itemType === 'UPDATE_TEAM') {
-        $team_id = (int) $_POST['team_id'];
+    // Can't be the same.
+    if ($homeTeamID === $awayTeamID) {
+        $status = 'fail';
+        $homeTeamID = '';
+        $awayTeamID = '';
+    }
+
+    // Must be selected team.
+    if ($homeTeamID !== '' && $awayTeamID !== '') {
+        $isSelected = false;
+        foreach ([$homeTeamID, $awayTeamID] as $id) {
+            if ((int) $id === $teamID) {
+                $isSelected = true;
+                break;
+            }
+        }
+
+        if (!$isSelected) {
+            $status = 'fail';
+            $homeTeamID = '';
+            $awayTeamID = '';
+        }
+    }
+
+    $scheduled = $_POST['new_scheduled'];
+    if ($scheduled === '') {
+        $status = 'fail';
+    }
+
+    $status = (int) $_POST['new_status'];
+    if ($status === '') {
+        $status = 'fail';
+    } else if ($status === 0) {
+        $status = 'fail';
+        $status = '';
+    }
+
+    $return = [
+        'status' => $status,
+        'last_schedule_id' => $last_schedule_id,
+        'sport_id' => $sportID,
+        'league_id' => $leagueID,
+        'team_id' => $teamID,
+        'new_season_id' => $seasonID,
+        'new_home_team_id' => $homeTeamID,
+        'new_home_team_name' => $homeTeamName,
+        'new_home_score' => $homeScore,
+        'new_away_team_id' => $awayTeamID,
+        'new_away_team_name' => $awayTeamName,
+        'new_away_score' => $awayScore,
+        'new_scheduled' => $scheduled,
+        'new_status' => $status
+    ];
+
+    if ($status === 'success') {
+        $db->alterAutoIncrement($itemType, $last_schedule_id);
+        $db->insertNewScheduleGame($return);
+    }
+
+    echo Encoder::toJSON($return);
+} else if ($request === 'PUT') {
+    if ($itemType === 'team') {
+        $teamID = (int) $_POST['team_id'];
 
         $team_name = Sanitize::stripString($_POST['team_name']);
-        Sanitize::fullStringSearch($message, $team_name, 50);
+        Sanitize::fullStringSearch($status, $team_name, 50);
 
         $home_color = Sanitize::stripString($_POST['home_color']);
-        Sanitize::fullColorSearch($message, $home_color, 25);
+        Sanitize::fullColorSearch($status, $home_color, 25);
 
         $away_color = Sanitize::stripString($_POST['away_color']);
-        Sanitize::fullColorSearch($message, $away_color, 25);
+        Sanitize::fullColorSearch($status, $away_color, 25);
 
-        $data = [
-            'message' => $message,
-            'team_id' => $team_id,
+        $return = [
+            'status' => $status,
+            'team_id' => $teamID,
             'team_name' => $team_name,
             'home_color' => $home_color,
             'away_color' => $away_color,
         ];
 
-        if ($message === 'success') {
-            $db->update_schedule_team_data($data);
+        if ($status === 'success') {
+            $db->updateScheduleTeamData($return);
         }
-    } else if ($itemType === 'UPDATE_GAME') {
-        $schedule_id = (int) $_POST['schedule_id'];
-
-        $home_team_id = (int) $_POST['home_team_id'];
-        if ($home_team_id === '') {
-            $message = 'fail';
-        } else if ($home_team_id <= 0) {
-            $message = '';
-            $home_team_id = '';
+    } else if ($itemType === 'schedule') {
+        $homeTeamID = (int) $_POST['home_team_id'];
+        if ($homeTeamID === '') {
+            $status = 'fail';
+        } else if ($homeTeamID <= 0) {
+            $status = '';
+            $homeTeamID = '';
         }
 
-        $home_score = (int) $_POST['home_score'];
-        if ($home_score === '') {
-            $message = 'fail';
-        } else if ($home_score < 0) {
-            $message = 'fail';
-            $home_score = '';
+        $homeScore = (int) $_POST['home_score'];
+        if ($homeScore === '') {
+            $status = 'fail';
+        } else if ($homeScore < 0) {
+            $status = 'fail';
+            $homeScore = '';
         }
 
-        $away_team_id = (int) $_POST['away_team_id'];
-        if ($away_team_id === '') {
-            $message = 'fail';
-        } else if ($away_team_id <= 0) {
-            $message = '';
-            $away_team_id = '';
+        $awayTeamID = (int) $_POST['away_team_id'];
+        if ($awayTeamID === '') {
+            $status = 'fail';
+        } else if ($awayTeamID <= 0) {
+            $status = '';
+            $awayTeamID = '';
         }
 
-        $away_score = (int) $_POST['away_score'];
-        if ($away_score === '') {
-            $message = 'fail';
-        } else if ($away_score < 0) {
-            $message = 'fail';
-            $away_score = '';
+        $awayScore = (int) $_POST['away_score'];
+        if ($awayScore === '') {
+            $status = 'fail';
+        } else if ($awayScore < 0) {
+            $status = 'fail';
+            $awayScore = '';
         }
 
-        $season_id = (int) $_POST['season_id'];
-        if ($season_id === '') {
-            $message = '';
-        } else if ($season_id <= 0) {
-            $message = 'fail';
-            $season_id = '';
+        $seasonID = (int) $_POST['season_id'];
+        if ($seasonID === '') {
+            $status = '';
+        } else if ($seasonID <= 0) {
+            $status = 'fail';
+            $seasonID = '';
         }
 
         $scheduled = $_POST['scheduled'];
         if ($scheduled === '') {
-            $message = 'fail';
+            $status = 'fail';
         }
 
         $status = (int) $_POST['status'];
         if ($status === '') {
-            $message = 'fail';
+            $status = 'fail';
         } else if ($status === 0) {
-            $message = 'fail';
+            $status = 'fail';
             $status = '';
         }
 
-        $data = [
-            'message' => $message,
-            'schedule_id' => $schedule_id,
-            'edit_home_team_id' => $home_team_id,
-            'edit_home_score' => $home_score,
-            'edit_away_team_id' => $away_team_id,
-            'edit_away_score' => $away_score,
-            'edit_season_id' => $season_id,
+        $return = [
+            'status' => $status,
+            'schedule_id' => $itemID,
+            'edit_home_team_id' => $homeTeamID,
+            'edit_home_score' => $homeScore,
+            'edit_away_team_id' => $awayTeamID,
+            'edit_away_score' => $awayScore,
+            'edit_season_id' => $seasonID,
             'edit_scheduled' => $scheduled,
             'edit_status' => $status
         ];
 
-        if ($message === 'success') {
-            $db->update_schedule_game($data);
+        if ($status === 'success') {
+            $db->updateScheduleGame($return);
         }
     }
 
-    // DELETE TEAM & GAME
-    if ($itemType === 'DELETE_TEAM') {
-        $db->delete_team_by_id($_POST['team_id']);
-    } else if ($itemType === 'DELETE_GAME') {
-        $db->delete_schedule_game_by_id($_POST['schedule_id']);
-    }
+    echo Encoder::toJSON($return);
+} else if ($request === 'DELETE') {
+    $table = $itemType !== 'schedule' ? "{$itemType}s" : $itemType;
+    $db->deleteRowById($table, $itemType, $itemID);
 }
