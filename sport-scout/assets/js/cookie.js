@@ -1,7 +1,5 @@
-"use strict";
-
 // ***** FUNCTIONS ***** //
-const getCookie = function (name) {
+export const getCookie = function (name) {
     const cookies = document.cookie.split(";");
 
     for (const cookie of cookies) {
@@ -14,6 +12,6 @@ const getCookie = function (name) {
     return false;
 };
 
-const setCookie = function (name, value) {
+export const setCookie = function (name, value) {
     document.cookie = `${name}=${value};`;
 };

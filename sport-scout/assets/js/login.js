@@ -1,4 +1,4 @@
-"use strict";
+import { setCookie } from "./cookie.js";
 
 // ***** DOM ELEMENTS ***** //
 const warningPopup = $(".popup-warning");

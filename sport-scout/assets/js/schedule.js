@@ -1,4 +1,4 @@
-"use strict";
+import { getCookie, setCookie } from "./cookie.js";
 
 // ***** DOM ELEMENTS ***** //
 const popupOverlay = $(".popup-overlay");
