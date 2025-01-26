@@ -26,14 +26,7 @@ const toggleEditGamePopup = function () {
     $("#edit_schedule_id").val($(`#schedule_id_${scheduleID}`).val());
 
     // Show the popup.
-    general.toggleElement(editPopup);
-};
-
-const attachEditBtnEvent = function (btns) {
-    btns?.each((_, btn) => {
-        general.killEventListeners(btn);
-        $(btn).click(toggleEditGamePopup);
-    });
+    general.toggleElement(editPopup, popupOverlay);
 };
 
 const setTeamColors = function (colors = []) {
@@ -113,17 +106,17 @@ const getVisuals = function (status) {
 // POPUP CLOSE & CANCEL BUTTONS
 [...popupCloseBtns, cancelBtn].forEach((btn) => {
     $(btn)?.click(function () {
-        general.toggleElement($(this.closest(".popup")));
+        general.toggleElement($(this.closest(".popup")), popupOverlay);
     });
 });
 
 // SHOW ADD POPUP BUTTON
 showAddPopupBtn.click(function () {
-    general.toggleElement(addPopup);
+    general.toggleElement(addPopup, popupOverlay);
 });
 
 // SHOW EDIT POPUP BUTTONS
-attachEditBtnEvent(showEditPopupBtns);
+general.attachEvent(showEditPopupBtns, toggleEditGamePopup);
 
 // ADD NEW GAME BUTTON
 addNewGameBtn?.click(function (clickEvent) {
@@ -242,10 +235,10 @@ addNewGameBtn?.click(function (clickEvent) {
             `);
 
             // Reattach button events.
-            attachEditBtnEvent($(".btn-edit"));
+            general.attachEvent($(".btn-edit"), toggleEditGamePopup);
 
             // Close popup.
-            general.toggleElement(addPopup);
+            general.toggleElement(addPopup, popupOverlay);
         },
     });
 });
@@ -322,7 +315,7 @@ formUpdateBtns?.each((_, btn) => {
                     statusSpan.data("completion-index", data["edit_schedule_completion_status"]);
                     $(`.game-${scheduleID} .status-icon`).attr("name", `${icon}-outline`);
 
-                    general.toggleElement(editPopup);
+                    general.toggleElement(editPopup, popupOverlay);
                 }
             },
         });
@@ -383,7 +376,7 @@ formDeleteBtns?.each((_, btn) => {
                         `);
                     }
 
-                    general.toggleElement(editPopup);
+                    general.toggleElement(editPopup, popupOverlay);
                 }
             },
         });

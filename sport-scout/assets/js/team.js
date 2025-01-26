@@ -54,7 +54,7 @@ const togglePopup = function () {
 
     const relPopup = [...showPopups]?.find((popup) => popupIndex === +$(popup).data("popup-index"));
 
-    general.toggleElement(relPopup);
+    general.toggleElement(relPopup, popupOverlay);
 };
 
 const resetInput = function (data) {
@@ -294,13 +294,15 @@ const ajaxAdd = function (clickEvent) {
                 `);
             }
 
-            // Refresh events.
-            attachDropdownEvent($(".row-header-list"));
-            attachAjaxEvent($(".btn-update"), ajaxUpdate);
-            attachAjaxEvent($(".btn-delete"), ajaxDelete);
+            // Set NEW dropdown events.
+            general.attachEvent($(".row-header-list"), toggleDropdown);
+
+            // Set NEW AJAX events.
+            general.attachEvent($(".btn-update"), ajaxUpdate);
+            general.attachEvent($(".btn-delete"), ajaxDelete);
 
             // Close popup.
-            general.toggleElement(relPopup);
+            general.toggleElement(relPopup, popupOverlay);
         },
     });
 };
@@ -411,9 +413,9 @@ const ajaxDelete = function (clickEvent) {
 });
 
 // DROPDOWN EVENTS
-attachDropdownEvent(rowDivs);
+general.attachEvent(rowDivs, toggleDropdown);
 
 // AJAX EVENTS
-attachAjaxEvent(addNewBtns, ajaxAdd);
-attachAjaxEvent(updateBtns, ajaxUpdate);
-attachAjaxEvent(deleteBtns, ajaxDelete);
+general.attachEvent(addNewBtns, ajaxAdd);
+general.attachEvent(updateBtns, ajaxUpdate);
+general.attachEvent(deleteBtns, ajaxDelete);

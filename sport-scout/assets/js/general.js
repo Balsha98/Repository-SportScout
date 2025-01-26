@@ -1,7 +1,7 @@
 export const killEventListeners = (element) => $(element).off();
 
-export const toggleElement = function (popup) {
-    [popup, popupOverlay].forEach((element) => {
+export const toggleElement = function (...elements) {
+    elements.forEach((element) => {
         $(element).toggleClass("hide-element");
     });
 };

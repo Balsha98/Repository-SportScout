@@ -50,7 +50,7 @@ const togglePopup = function () {
     }
 
     const relPopup = [...showPopups].find((popup) => popupIndex === +$(popup).data("popup-index"));
-    general.toggleElement(relPopup);
+    general.toggleElement(relPopup, popupOverlay);
 };
 
 const toggleDropdown = function (clickEvent) {
@@ -583,7 +583,7 @@ const ajaxAdd = function (clickEvent) {
             general.attachEvent($(".btn-delete"), ajaxDelete);
 
             // Hide popup.
-            general.toggleElement(relPopup);
+            general.toggleElement(relPopup, popupOverlay);
         },
     });
 };
