@@ -1,6 +1,6 @@
-import * as general from "./general.js";
-import { getCookie, setCookie } from "./helper/cookie.js";
-import { teamInputs } from "./data/inputs.js";
+import * as general from "../helper/general.js";
+import { getCookie, setCookie } from "../helper/cookie.js";
+import { teamInputs } from "../data/inputs.js";
 
 // ***** DOM ELEMENTS ***** //
 const popupOverlay = $(".popup-overlay");
@@ -23,20 +23,6 @@ const selectOptions = {
 };
 
 // ***** FUNCTIONS ***** //
-const togglePopup = function () {
-    let popupIndex = 0;
-
-    if (this.classList[0].includes("close") || this.classList[2]?.includes("cancel")) {
-        popupIndex = +$(this.closest(".popup-show")).data("popup-index");
-    } else {
-        popupIndex = +$(this).data("popup-index");
-    }
-
-    const relPopup = [...showPopups]?.find((popup) => popupIndex === +$(popup).data("popup-index"));
-
-    general.toggleElement(relPopup, popupOverlay);
-};
-
 const getDataRowsOnly = function (scrollContainer) {
     let games = [];
     scrollContainer.children().each((_, div) => {
@@ -369,7 +355,9 @@ const ajaxDelete = function (clickEvent) {
 
 // ***** EVENT LISTENERS ***** //
 [...showPopupBtns, ...cancelBtns, ...closePopupBtns].forEach((btn) => {
-    $(btn)?.click(togglePopup);
+    $(btn)?.click(function () {
+        general.togglePopup(this, showPopups, popupOverlay);
+    });
 });
 
 // DROPDOWN EVENTS

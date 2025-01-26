@@ -1,6 +1,6 @@
-import * as general from "./general.js";
-import { getCookie, setCookie } from "./helper/cookie.js";
-import { adminInputs } from "./data/inputs.js";
+import * as general from "../helper/general.js";
+import { getCookie, setCookie } from "../helper/cookie.js";
+import { adminInputs } from "../data/inputs.js";
 
 // ***** DOM ELEMENTS ***** //
 const popupOverlay = $(".popup-overlay");
@@ -39,18 +39,6 @@ const attachViewBtnEvent = function (btns) {
             setCookie("view_team_by_id", +$(this).attr("href").split("/")[2]);
         });
     });
-};
-
-const togglePopup = function () {
-    let popupIndex = 0;
-    if (this.classList[0].includes("close") || this.classList[2]?.includes("cancel")) {
-        popupIndex = +$(this.closest(".popup-show")).data("popup-index");
-    } else {
-        popupIndex = +$(this).data("popup-index");
-    }
-
-    const relPopup = [...showPopups].find((popup) => popupIndex === +$(popup).data("popup-index"));
-    general.toggleElement(relPopup, popupOverlay);
 };
 
 const getDataRowsOnly = function (scrollContainer) {
@@ -709,7 +697,9 @@ const ajaxDelete = function (clickEvent) {
 
 // ***** EVENT LISTENERS ***** //
 [...showPopupBtns, ...cancelBtns, ...popupCloseBtns].forEach((btn) => {
-    $(btn).click(togglePopup);
+    $(btn).click(function () {
+        general.togglePopup(this, showPopups, popupOverlay);
+    });
 });
 
 sidebarBtns.each((_, btn) => {

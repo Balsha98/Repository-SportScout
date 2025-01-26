@@ -13,6 +13,18 @@ export const attachEvent = function (btns, callback) {
     });
 };
 
+export const togglePopup = function (btn, popups, overlay) {
+    let popupIndex = 0;
+    if (btn.classList[0].includes("close") || btn.classList[2]?.includes("cancel")) {
+        popupIndex = +$(btn.closest(".popup-show")).data("popup-index");
+    } else {
+        popupIndex = +$(btn).data("popup-index");
+    }
+
+    const relPopup = [...popups]?.find((popup) => popupIndex === +$(popup).data("popup-index"));
+    toggleElement(relPopup, overlay);
+};
+
 export const toggleDropdown = function (clickEvent) {
     const { target } = clickEvent;
     const rowContainer = $(target.closest(".div-row-container"));

@@ -1,4 +1,4 @@
-import { setCookie } from "./helper/cookie.js";
+import { setCookie } from "../helper/cookie.js";
 
 // ***** DOM ELEMENTS ***** //
 const warningPopup = $(".popup-warning");

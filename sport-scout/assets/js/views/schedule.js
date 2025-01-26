@@ -1,6 +1,6 @@
-import * as general from "./general.js";
-import { getCookie, setCookie } from "./helper/cookie.js";
-import { scheduleInputs } from "./data/inputs.js";
+import * as general from "../helper/general.js";
+import { getCookie, setCookie } from "../helper/cookie.js";
+import { scheduleInputs } from "../data/inputs.js";
 
 // ***** DOM ELEMENTS ***** //
 const popupOverlay = $(".popup-overlay");
