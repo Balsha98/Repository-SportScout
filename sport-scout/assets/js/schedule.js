@@ -16,36 +16,6 @@ const showEditPopupBtns = $(".btn-edit");
 const formUpdateBtns = $(".btn-update");
 const formDeleteBtns = $(".btn-delete");
 
-// ***** VARIABLES ***** //
-const newItemInputs = {
-    schedule: [
-        "new_schedule_team_id",
-        "new_schedule_sport_id",
-        "new_schedule_league_id",
-        "new_schedule_season_id",
-        "new_schedule_home_team_id",
-        "new_schedule_home_score",
-        "new_schedule_away_team_id",
-        "new_schedule_away_score",
-        "new_schedule_date",
-        "new_schedule_completion_status",
-    ],
-};
-
-const existingItemInputs = {
-    schedule: [
-        "schedule_team_id",
-        "schedule_season_id",
-        "schedule_home_team_id",
-        "schedule_home_score",
-        "schedule_away_team_id",
-        "schedule_away_score",
-        "schedule_date",
-        "schedule_completion_status",
-    ],
-    team: ["team_id", "team_name", "team_home_color", "team_away_color"],
-};
-
 // ***** FUNCTIONS ***** //
 const killAllEventListeners = function (element) {
     $(element).off();
@@ -60,7 +30,7 @@ const toggleElement = function (popup) {
 const toggleEditGamePopup = function () {
     // Get the the schedule id and set the data.
     const scheduleID = $(this.closest(".div-schedule-game")).data("schedule-id");
-    existingItemInputs["schedule"].forEach((id) => $(`#edit_${id}`).val($(`#${id}_${scheduleID}`).val()));
+    existingScheduleInputs["schedule"].forEach((id) => $(`#edit_${id}`).val($(`#${id}_${scheduleID}`).val()));
     $("#edit_schedule_id").val($(`#schedule_id_${scheduleID}`).val());
 
     // Show the popup.
@@ -176,7 +146,7 @@ addNewGameBtn?.click(function (clickEvent) {
 
     const data = {};
     data["item_type"] = itemType;
-    newItemInputs[itemType].forEach((id) => {
+    newScheduleInputs[itemType].forEach((id) => {
         data[id] = $(`#${id}`).val();
     });
 
@@ -310,7 +280,7 @@ formUpdateBtns?.each((_, btn) => {
             data["item_id"] = scheduleID;
         }
 
-        existingItemInputs[itemType].forEach((id) => {
+        existingScheduleInputs[itemType].forEach((id) => {
             if (itemType === "schedule") data[`edit_${id}`] = $(`#edit_${id}`).val();
             else data[`${id}`] = $(`#${id}`).val();
         });
@@ -346,7 +316,7 @@ formUpdateBtns?.each((_, btn) => {
                         }
                     });
                 } else if (itemType === "schedule") {
-                    existingItemInputs[itemType].forEach((id) => $(`#${id}_${scheduleID}`).val(data[`edit_${id}`]));
+                    existingScheduleInputs[itemType].forEach((id) => $(`#${id}_${scheduleID}`).val(data[`edit_${id}`]));
 
                     // Update each visual individually.
                     $(`.game-${scheduleID} .home-score`).text(data["edit_schedule_home_score"]);

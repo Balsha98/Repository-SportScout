@@ -14,39 +14,6 @@ const updateBtns = $(".btn-update");
 const deleteBtns = $(".btn-delete");
 
 // ***** VARIABLES ***** //
-const newTeamInputs = {
-    player: [
-        "new_player_sport_id",
-        "new_player_league_name",
-        "new_player_team_id",
-        "new_player_first",
-        "new_player_last",
-        "new_player_dob",
-        "new_player_position_id",
-        "new_player_jersey_number",
-    ],
-    user: [
-        "new_user_league_id",
-        "new_user_team_id",
-        "new_username",
-        "new_user_password",
-        "new_user_role_name",
-        "new_user_league_name",
-    ],
-};
-
-const existingTeamInputs = {
-    player: [
-        "player_sport_id",
-        "player_first",
-        "player_last",
-        "player_dob",
-        "player_position_id",
-        "player_jersey_number",
-    ],
-    user: ["staff_username", "staff_role_name"],
-};
-
 const selectOptions = {
     "Team Manager": "3|Team Manager",
     "Team Coach": "4|Team Coach",

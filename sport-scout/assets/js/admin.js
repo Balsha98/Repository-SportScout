@@ -22,58 +22,6 @@ const updateBtns = $(".btn-update");
 const deleteBtns = $(".btn-delete");
 
 // ***** VARIABLES ***** //
-const newAdminInputs = {
-    user: ["new_username", "new_user_password", "new_user_role_name", "new_user_league_id", "new_user_team_id"],
-    sport: ["new_sport_name"],
-    league: ["new_league_name", "new_league_sport_id"],
-    season: ["new_season_year", "new_season_sport_id", "new_season_league_id", "new_season_desc"],
-    team: [
-        "new_team_name",
-        "new_team_sport_id",
-        "new_team_league_id",
-        "new_team_season_id",
-        "new_team_max_players",
-        "new_team_home_color",
-        "new_team_away_color",
-    ],
-    position: ["new_position_name", "new_position_sport_id"],
-};
-
-const existingAdminInputs = {
-    user: [
-        "user_id",
-        "username",
-        "user_role_name",
-        "user_league_name",
-        "user_league_id",
-        "user_team_name",
-        "user_team_id",
-    ],
-    sport: ["sport_name", "sport_id"],
-    league: ["league_id", "league_name", "league_sport_name", "league_sport_id"],
-    season: [
-        "season_id",
-        "season_year",
-        "season_desc",
-        "season_sport_name",
-        "season_sport_id",
-        "season_league_name",
-        "season_league_id",
-    ],
-    team: [
-        "team_sport_id",
-        "team_name",
-        "team_id",
-        "team_sport_name",
-        "team_league_id",
-        "team_season_id",
-        "team_max_players",
-        "team_home_color",
-        "team_away_color",
-    ],
-    position: ["position_id", "position_name", "position_sport_name", "position_sport_id"],
-};
-
 const selectOptions = {
     Administrator: "1|Administrator",
     "League Manager": "2|League Manager",
