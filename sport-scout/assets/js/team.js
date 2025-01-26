@@ -23,26 +23,6 @@ const selectOptions = {
 };
 
 // ***** FUNCTIONS ***** //
-const toggleDropdown = function (clickEvent) {
-    const { target } = clickEvent;
-
-    // Get row container.
-    let parent = $(target.closest(".div-row-container"));
-    const rowID = +parent.data("row-id");
-
-    // Get scroll container.
-    parent = $(parent.closest(".div-scroll-container"));
-    const scrollClass = parent.attr("class").split(" ")[1];
-
-    // Get child form.
-    const form = $(`.${scrollClass} .form-${rowID}`);
-    form.toggleClass("hide-element");
-
-    // Get child icon.
-    const icon = $(`.${scrollClass} .icon-${rowID}`);
-    icon.toggleClass("rotate");
-};
-
 const togglePopup = function () {
     let popupIndex = 0;
 
@@ -55,27 +35,6 @@ const togglePopup = function () {
     const relPopup = [...showPopups]?.find((popup) => popupIndex === +$(popup).data("popup-index"));
 
     general.toggleElement(relPopup, popupOverlay);
-};
-
-const resetInput = function (data) {
-    for (const key of Object.keys(data)) {
-        const input = $(`#${key}`);
-        if (input.attr("readonly") === "readonly") continue;
-        input.val("");
-    }
-};
-
-const warnInputs = function (data, status) {
-    for (const [key, value] of Object.entries(data)) {
-        if (status === "fail") {
-            if (value === "") {
-                $(`#${key}`)?.closest(".div-input-container").addClass("red-container");
-                continue;
-            }
-        }
-
-        $(`#${key}`)?.closest(".div-input-container").removeClass("red-container");
-    }
 };
 
 const getDataRowsOnly = function (scrollContainer) {
@@ -113,12 +72,13 @@ const ajaxAdd = function (clickEvent) {
             const status = data["status"];
 
             if (status === "fail") {
-                warnInputs(data, status);
+                general.warnInputs(data, status);
                 return;
             }
 
             // Back to white.
-            warnInputs(data, status);
+            general.warnInputs(data, status);
+            general.resetInput(data);
 
             let previousRowID;
 
@@ -295,7 +255,7 @@ const ajaxAdd = function (clickEvent) {
             }
 
             // Set NEW dropdown events.
-            general.attachEvent($(".row-header-list"), toggleDropdown);
+            general.attachEvent($(".row-header-list"), general.toggleDropdown);
 
             // Set NEW AJAX events.
             general.attachEvent($(".btn-update"), ajaxUpdate);
@@ -335,12 +295,12 @@ const ajaxUpdate = function (clickEvent) {
             const status = data["status"];
 
             if (status === "fail") {
-                warnInputs(data, status);
+                general.warnInputs(data, status);
                 return;
             }
 
             // Back to white.
-            warnInputs(data, status);
+            general.warnInputs(data, status);
 
             if (itemType === "player") {
                 $(`.${relContainerClass} .full-name`).text(
@@ -413,7 +373,7 @@ const ajaxDelete = function (clickEvent) {
 });
 
 // DROPDOWN EVENTS
-general.attachEvent(rowDivs, toggleDropdown);
+general.attachEvent(rowDivs, general.toggleDropdown);
 
 // AJAX EVENTS
 general.attachEvent(addNewBtns, ajaxAdd);

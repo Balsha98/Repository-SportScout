@@ -49,29 +49,6 @@ const setTeamColors = function (colors = []) {
 
 setTeamColors();
 
-const resetInput = function (data) {
-    for (const key of Object.keys(data)) {
-        const input = $(`#${key}`);
-        if (input.attr("readonly")) continue;
-
-        input.val("");
-    }
-};
-
-const warnInputs = function (data, status) {
-    for (const [key, value] of Object.entries(data)) {
-        if (status === "fail") {
-            if (value === "") {
-                $(`#${key}`).closest(".div-input-container").addClass("red-container");
-
-                continue;
-            }
-        }
-
-        $(`#${key}`).closest(".div-input-container").removeClass("red-container");
-    }
-};
-
 const getOnlyGames = function () {
     let games = [];
     scrollContainer.children().each((_, div) => {
@@ -144,13 +121,13 @@ addNewGameBtn?.click(function (clickEvent) {
 
             // An error occurs.
             if (status === "fail") {
-                warnInputs(data, status);
+                general.warnInputs(data, status);
                 return;
             }
 
             // Back to white.
-            warnInputs(data, status);
-            resetInput(data);
+            general.warnInputs(data, status);
+            general.resetInput(data);
 
             // Last known id, or starting from scratch.
             let prevScheduleID = +data["last_schedule_id"] || 0;
@@ -278,12 +255,12 @@ formUpdateBtns?.each((_, btn) => {
                 const status = data["status"];
 
                 if (status === "fail") {
-                    warnInputs(data, status);
+                    general.warnInputs(data, status);
                     return;
                 }
 
                 // Back to white.
-                warnInputs(data, status);
+                general.warnInputs(data, status);
 
                 if (itemType === "team") {
                     setTeamColors([data["team_home_color"], data["team_away_color"]]);

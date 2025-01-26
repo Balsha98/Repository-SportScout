@@ -53,43 +53,6 @@ const togglePopup = function () {
     general.toggleElement(relPopup, popupOverlay);
 };
 
-const toggleDropdown = function (clickEvent) {
-    const { target } = clickEvent;
-    const rowContainer = $(target.closest(".div-row-container"));
-    const rowID = +rowContainer.data("row-id");
-
-    // Get appropriate parent.
-    const scrollContainer = $(rowContainer.closest(".div-scroll-container"));
-    const scrollClass = scrollContainer.attr("class").split(" ")[1];
-
-    const form = $(`.${scrollClass} .form-${rowID}`);
-    form.toggleClass("hide-element");
-
-    const icon = $(`.${scrollClass} .icon-${rowID}`);
-    icon.toggleClass("rotate");
-};
-
-const resetInput = function (data) {
-    for (const key of Object.keys(data)) {
-        const input = $(`#${key}`);
-        if (input.attr("readonly") === "readonly") continue;
-        input.val("");
-    }
-};
-
-const warnInputs = function (data, status) {
-    for (const [key, value] of Object.entries(data)) {
-        if (status === "fail") {
-            if (value === "") {
-                $(`#${key}`)?.closest(".div-input-container").addClass("red-container");
-                continue;
-            }
-        }
-
-        $(`#${key}`)?.closest(".div-input-container").removeClass("red-container");
-    }
-};
-
 const getDataRowsOnly = function (scrollContainer) {
     let games = [];
     scrollContainer.children().each((_, div) => {
@@ -131,13 +94,13 @@ const ajaxAdd = function (clickEvent) {
             const status = data["status"];
 
             if (status === "fail") {
-                warnInputs(data, status);
+                general.warnInputs(data, status);
                 return;
             }
 
             // Back to white.
-            warnInputs(data, status);
-            resetInput(data);
+            general.warnInputs(data, status);
+            general.resetInput(data);
 
             let previousRowID = 0;
 
@@ -576,7 +539,7 @@ const ajaxAdd = function (clickEvent) {
                 `);
             }
 
-            general.attachEvent($(".row-header-list"), toggleDropdown);
+            general.attachEvent($(".row-header-list"), general.toggleDropdown);
 
             // Reattach ajax events.
             general.attachEvent($(".btn-update"), ajaxUpdate);
@@ -617,12 +580,12 @@ const ajaxUpdate = function (clickEvent) {
 
             // Guard clause.
             if (status === "fail") {
-                warnInputs(data, status);
+                general.warnInputs(data, status);
                 return;
             }
 
             // Back to white.
-            warnInputs(data, status);
+            general.warnInputs(data, status);
 
             if (itemType === "user") {
                 const username = data[`username_${rowID}`];
@@ -776,7 +739,7 @@ sidebarBtns.each((_, btn) => {
 });
 
 // Dropdown event.
-general.attachEvent(rowDivs, toggleDropdown);
+general.attachEvent(rowDivs, general.toggleDropdown);
 
 // Ajax events.
 general.attachEvent(addNewBtns, ajaxAdd);

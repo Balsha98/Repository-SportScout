@@ -12,3 +12,41 @@ export const attachEvent = function (btns, callback) {
         $(btn).click(callback);
     });
 };
+
+export const toggleDropdown = function (clickEvent) {
+    const { target } = clickEvent;
+    const rowContainer = $(target.closest(".div-row-container"));
+    const rowID = +rowContainer.data("row-id");
+
+    // Get appropriate parent.
+    const scrollContainer = $(rowContainer.closest(".div-scroll-container"));
+    const scrollClass = scrollContainer.attr("class").split(" ")[1];
+
+    const form = $(`.${scrollClass} .form-${rowID}`);
+    form.toggleClass("hide-element");
+
+    const icon = $(`.${scrollClass} .icon-${rowID}`);
+    icon.toggleClass("rotate");
+};
+
+export const warnInputs = function (data, status) {
+    for (const [key, value] of Object.entries(data)) {
+        if (status === "fail") {
+            if (value === "") {
+                $(`#${key}`).closest(".div-input-container").addClass("red-container");
+
+                continue;
+            }
+        }
+
+        $(`#${key}`)?.closest(".div-input-container").removeClass("red-container");
+    }
+};
+
+export const resetInput = function (data) {
+    for (const key of Object.keys(data)) {
+        const input = $(`#${key}`);
+        if (input.attr("readonly") === "readonly") continue;
+        input.val("");
+    }
+};
