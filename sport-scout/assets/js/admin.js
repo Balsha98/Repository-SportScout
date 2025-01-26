@@ -576,7 +576,7 @@ const ajaxAdd = function (clickEvent) {
                 `);
             }
 
-            general.attachDropdownEvent($(".row-header-list"), toggleDropdown);
+            general.attachEvent($(".row-header-list"), toggleDropdown);
 
             // Reattach ajax events.
             general.attachEvent($(".btn-update"), ajaxUpdate);
@@ -776,7 +776,7 @@ sidebarBtns.each((_, btn) => {
 });
 
 // Dropdown event.
-general.attachDropdownEvent(rowDivs, toggleDropdown);
+general.attachEvent(rowDivs, toggleDropdown);
 
 // Ajax events.
 general.attachEvent(addNewBtns, ajaxAdd);

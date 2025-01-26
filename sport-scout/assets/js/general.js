@@ -8,7 +8,7 @@ export const toggleElement = function (...elements) {
 
 export const attachEvent = function (btns, callback) {
     btns?.each((_, btn) => {
-        general.killEventListeners(btn);
+        killEventListeners(btn);
         $(btn).click(callback);
     });
 };
