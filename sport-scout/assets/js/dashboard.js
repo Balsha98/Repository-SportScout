@@ -1,4 +1,4 @@
-import { getCookie, setCookie } from "./cookie.js";
+import { getCookie, setCookie } from "./helper/cookie.js";
 
 // ***** DOM ELEMENTS ***** //
 const dashboardGrid = $(".grid-dashboard");

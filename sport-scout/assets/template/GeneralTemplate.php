@@ -19,7 +19,7 @@ class GeneralTemplate
                     <link rel='icon' href='" . SERVER . "/assets/media/site-icon.ico'>
                     <link rel='stylesheet' href='" . SERVER . "/assets/css/general.css?ts={$timestamp}'>
                     <link rel='stylesheet' href='" . SERVER . "/assets/css/{$data['active']}.css?ts={$timestamp}'>
-                    <script src='" . SERVER . "/assets/js/jQuery.js' defer></script>
+                    <script src='" . SERVER . "/assets/js/lib/jQuery.js' defer></script>
                     <script type='module' src='" . SERVER . "/assets/js/{$data['active']}.js' defer></script>
                     <title>SportScout | {$data['title']}</title>
                 </head>
