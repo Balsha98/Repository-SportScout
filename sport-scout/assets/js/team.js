@@ -1,3 +1,4 @@
+import * as general from "./general.js";
 import { getCookie, setCookie } from "./helper/cookie.js";
 import { teamInputs } from "./data/inputs.js";
 
@@ -22,28 +23,6 @@ const selectOptions = {
 };
 
 // ***** FUNCTIONS ***** //
-const killEventListeners = (element) => $(element).off();
-
-const toggleElement = function (popup) {
-    [popup, popupOverlay].forEach((element) => {
-        $(element)?.toggleClass("hide-element");
-    });
-};
-
-const attachDropdownEvent = function (btns) {
-    btns?.each((_, btn) => {
-        killEventListeners(btn);
-        $(btn).click(toggleDropdown);
-    });
-};
-
-const attachAjaxEvent = function (btns, callback) {
-    btns?.each((_, btn) => {
-        killEventListeners(btn);
-        $(btn).click(callback);
-    });
-};
-
 const toggleDropdown = function (clickEvent) {
     const { target } = clickEvent;
 
@@ -75,7 +54,7 @@ const togglePopup = function () {
 
     const relPopup = [...showPopups]?.find((popup) => popupIndex === +$(popup).data("popup-index"));
 
-    toggleElement(relPopup);
+    general.toggleElement(relPopup);
 };
 
 const resetInput = function (data) {
@@ -321,7 +300,7 @@ const ajaxAdd = function (clickEvent) {
             attachAjaxEvent($(".btn-delete"), ajaxDelete);
 
             // Close popup.
-            toggleElement(relPopup);
+            general.toggleElement(relPopup);
         },
     });
 };

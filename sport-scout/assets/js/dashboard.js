@@ -4,10 +4,6 @@ import { getCookie, setCookie } from "./helper/cookie.js";
 const dashboardGrid = $(".grid-dashboard");
 const startBtn = $(".btn-start");
 const logoutBtn = $(".btn-logout");
-const welcomeContainer = $(".div-welcome-info-container");
-const pagesContainer = $(".div-pages-container");
-const pagesHeroContainer = $(".div-pages-hero-container");
-const pagesListContainer = $(".div-pages-list-container");
 const pagesListItems = $(".pages-list-item");
 const dateText = $(".date-text");
 

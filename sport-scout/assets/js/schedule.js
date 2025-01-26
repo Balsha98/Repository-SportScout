@@ -1,3 +1,4 @@
+import * as general from "./general.js";
 import { getCookie, setCookie } from "./helper/cookie.js";
 import { scheduleInputs } from "./data/inputs.js";
 
@@ -18,14 +19,6 @@ const formUpdateBtns = $(".btn-update");
 const formDeleteBtns = $(".btn-delete");
 
 // ***** FUNCTIONS ***** //
-const killEventListeners = (element) => $(element).off();
-
-const toggleElement = function (popup) {
-    [popup, popupOverlay]?.forEach((element) => {
-        $(element)?.toggleClass("hide-element");
-    });
-};
-
 const toggleEditGamePopup = function () {
     // Get the the schedule id and set the data.
     const scheduleID = $(this.closest(".div-schedule-game")).data("schedule-id");
@@ -33,12 +26,12 @@ const toggleEditGamePopup = function () {
     $("#edit_schedule_id").val($(`#schedule_id_${scheduleID}`).val());
 
     // Show the popup.
-    toggleElement(editPopup);
+    general.toggleElement(editPopup);
 };
 
 const attachEditBtnEvent = function (btns) {
     btns?.each((_, btn) => {
-        killEventListeners(btn);
+        general.killEventListeners(btn);
         $(btn).click(toggleEditGamePopup);
     });
 };
@@ -120,13 +113,13 @@ const getVisuals = function (status) {
 // POPUP CLOSE & CANCEL BUTTONS
 [...popupCloseBtns, cancelBtn].forEach((btn) => {
     $(btn)?.click(function () {
-        toggleElement($(this.closest(".popup")));
+        general.toggleElement($(this.closest(".popup")));
     });
 });
 
 // SHOW ADD POPUP BUTTON
 showAddPopupBtn.click(function () {
-    toggleElement(addPopup);
+    general.toggleElement(addPopup);
 });
 
 // SHOW EDIT POPUP BUTTONS
@@ -252,7 +245,7 @@ addNewGameBtn?.click(function (clickEvent) {
             attachEditBtnEvent($(".btn-edit"));
 
             // Close popup.
-            toggleElement(addPopup);
+            general.toggleElement(addPopup);
         },
     });
 });
@@ -329,7 +322,7 @@ formUpdateBtns?.each((_, btn) => {
                     statusSpan.data("completion-index", data["edit_schedule_completion_status"]);
                     $(`.game-${scheduleID} .status-icon`).attr("name", `${icon}-outline`);
 
-                    toggleElement(editPopup);
+                    general.toggleElement(editPopup);
                 }
             },
         });
@@ -390,7 +383,7 @@ formDeleteBtns?.each((_, btn) => {
                         `);
                     }
 
-                    toggleElement(editPopup);
+                    general.toggleElement(editPopup);
                 }
             },
         });

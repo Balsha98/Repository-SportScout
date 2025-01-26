@@ -33,20 +33,6 @@ const selectOptions = {
 };
 
 // ***** FUNCTIONS ***** //
-const attachDropdownEvent = function (btns) {
-    btns?.each((_, btn) => {
-        general.killEventListeners(btn);
-        $(btn).click(toggleDropdown);
-    });
-};
-
-const attachAjaxEvent = function (btns, callback) {
-    btns?.each((_, btn) => {
-        general.killEventListeners(btn);
-        $(btn).click(callback);
-    });
-};
-
 const attachViewBtnEvent = function (btns) {
     btns.each((_, btn) => {
         $(btn).click(function () {
@@ -590,11 +576,11 @@ const ajaxAdd = function (clickEvent) {
                 `);
             }
 
-            attachDropdownEvent($(".row-header-list"));
+            general.attachDropdownEvent($(".row-header-list"), toggleDropdown);
 
             // Reattach ajax events.
-            attachAjaxEvent($(".btn-update"), ajaxUpdate);
-            attachAjaxEvent($(".btn-delete"), ajaxDelete);
+            general.attachEvent($(".btn-update"), ajaxUpdate);
+            general.attachEvent($(".btn-delete"), ajaxDelete);
 
             // Hide popup.
             general.toggleElement(relPopup);
@@ -790,12 +776,12 @@ sidebarBtns.each((_, btn) => {
 });
 
 // Dropdown event.
-attachDropdownEvent(rowDivs);
+general.attachDropdownEvent(rowDivs, toggleDropdown);
 
 // Ajax events.
-attachAjaxEvent(addNewBtns, ajaxAdd);
-attachAjaxEvent(updateBtns, ajaxUpdate);
-attachAjaxEvent(deleteBtns, ajaxDelete);
+general.attachEvent(addNewBtns, ajaxAdd);
+general.attachEvent(updateBtns, ajaxUpdate);
+general.attachEvent(deleteBtns, ajaxDelete);
 
 // Set team cookie event.
 attachViewBtnEvent(viewBtns);

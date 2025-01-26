@@ -5,3 +5,10 @@ export const toggleElement = function (popup) {
         $(element).toggleClass("hide-element");
     });
 };
+
+export const attachEvent = function (btns, callback) {
+    btns?.each((_, btn) => {
+        general.killEventListeners(btn);
+        $(btn).click(callback);
+    });
+};
