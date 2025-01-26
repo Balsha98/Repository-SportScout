@@ -1,4 +1,6 @@
+import * as general from "./general.js";
 import { getCookie, setCookie } from "./helper/cookie.js";
+import { adminInputs } from "./data/inputs.js";
 
 // ***** DOM ELEMENTS ***** //
 const popupOverlay = $(".popup-overlay");
@@ -31,20 +33,16 @@ const selectOptions = {
 };
 
 // ***** FUNCTIONS ***** //
-const killAllEventListeners = function (el) {
-    $(el).off();
-};
-
 const attachDropdownEvent = function (btns) {
     btns?.each((_, btn) => {
-        killAllEventListeners(btn);
+        general.killEventListeners(btn);
         $(btn).click(toggleDropdown);
     });
 };
 
 const attachAjaxEvent = function (btns, callback) {
     btns?.each((_, btn) => {
-        killAllEventListeners(btn);
+        general.killEventListeners(btn);
         $(btn).click(callback);
     });
 };
@@ -57,12 +55,6 @@ const attachViewBtnEvent = function (btns) {
     });
 };
 
-const showHideEl = function (popup) {
-    [popup, popupOverlay].forEach((el) => {
-        $(el).toggleClass("hide-element");
-    });
-};
-
 const togglePopup = function () {
     let popupIndex = 0;
     if (this.classList[0].includes("close") || this.classList[2]?.includes("cancel")) {
@@ -72,8 +64,7 @@ const togglePopup = function () {
     }
 
     const relPopup = [...showPopups].find((popup) => popupIndex === +$(popup).data("popup-index"));
-
-    showHideEl(relPopup);
+    general.toggleElement(relPopup);
 };
 
 const toggleDropdown = function (clickEvent) {
@@ -140,7 +131,7 @@ const ajaxAdd = function (clickEvent) {
 
     const data = {};
     data["item_type"] = itemType;
-    newAdminInputs[itemType].forEach((id) => {
+    adminInputs["add"][itemType].forEach((id) => {
         data[id] = $(`#${id}`).val();
     });
 
@@ -606,7 +597,7 @@ const ajaxAdd = function (clickEvent) {
             attachAjaxEvent($(".btn-delete"), ajaxDelete);
 
             // Hide popup.
-            showHideEl(relPopup);
+            general.toggleElement(relPopup);
         },
     });
 };
@@ -625,7 +616,7 @@ const ajaxUpdate = function (clickEvent) {
     const data = {};
     data["item_type"] = itemType;
     data["item_id"] = rowID;
-    existingAdminInputs[itemType].forEach((id) => {
+    adminInputs["alter"][itemType].forEach((id) => {
         data[`${id}_${rowID}`] = $(`#${id}_${rowID}`).val();
     });
 

@@ -1,4 +1,5 @@
 import { getCookie, setCookie } from "./helper/cookie.js";
+import { scheduleInputs } from "./data/inputs.js";
 
 // ***** DOM ELEMENTS ***** //
 const popupOverlay = $(".popup-overlay");
@@ -17,9 +18,7 @@ const formUpdateBtns = $(".btn-update");
 const formDeleteBtns = $(".btn-delete");
 
 // ***** FUNCTIONS ***** //
-const killAllEventListeners = function (element) {
-    $(element).off();
-};
+const killEventListeners = (element) => $(element).off();
 
 const toggleElement = function (popup) {
     [popup, popupOverlay]?.forEach((element) => {
@@ -30,7 +29,7 @@ const toggleElement = function (popup) {
 const toggleEditGamePopup = function () {
     // Get the the schedule id and set the data.
     const scheduleID = $(this.closest(".div-schedule-game")).data("schedule-id");
-    existingScheduleInputs["schedule"].forEach((id) => $(`#edit_${id}`).val($(`#${id}_${scheduleID}`).val()));
+    scheduleInputs["alter"]["schedule"].forEach((id) => $(`#edit_${id}`).val($(`#${id}_${scheduleID}`).val()));
     $("#edit_schedule_id").val($(`#schedule_id_${scheduleID}`).val());
 
     // Show the popup.
@@ -39,7 +38,7 @@ const toggleEditGamePopup = function () {
 
 const attachEditBtnEvent = function (btns) {
     btns?.each((_, btn) => {
-        killAllEventListeners(btn);
+        killEventListeners(btn);
         $(btn).click(toggleEditGamePopup);
     });
 };
@@ -51,9 +50,7 @@ const setTeamColors = function (colors = []) {
         const currColors = $(div)
             .data("colors")
             .split("/")
-            .map((color) => {
-                return color.toLowerCase();
-            });
+            .map((color) => color.toLowerCase());
 
         div.style = `
             background-image: conic-gradient(
@@ -146,7 +143,7 @@ addNewGameBtn?.click(function (clickEvent) {
 
     const data = {};
     data["item_type"] = itemType;
-    newScheduleInputs[itemType].forEach((id) => {
+    scheduleInputs["add"][itemType].forEach((id) => {
         data[id] = $(`#${id}`).val();
     });
 
@@ -280,7 +277,7 @@ formUpdateBtns?.each((_, btn) => {
             data["item_id"] = scheduleID;
         }
 
-        existingScheduleInputs[itemType].forEach((id) => {
+        scheduleInputs["alter"][itemType].forEach((id) => {
             if (itemType === "schedule") data[`edit_${id}`] = $(`#edit_${id}`).val();
             else data[`${id}`] = $(`#${id}`).val();
         });
@@ -316,7 +313,9 @@ formUpdateBtns?.each((_, btn) => {
                         }
                     });
                 } else if (itemType === "schedule") {
-                    existingScheduleInputs[itemType].forEach((id) => $(`#${id}_${scheduleID}`).val(data[`edit_${id}`]));
+                    scheduleInputs["alter"][itemType].forEach((id) =>
+                        $(`#${id}_${scheduleID}`).val(data[`edit_${id}`])
+                    );
 
                     // Update each visual individually.
                     $(`.game-${scheduleID} .home-score`).text(data["edit_schedule_home_score"]);

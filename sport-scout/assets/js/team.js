@@ -1,4 +1,5 @@
 import { getCookie, setCookie } from "./helper/cookie.js";
+import { teamInputs } from "./data/inputs.js";
 
 // ***** DOM ELEMENTS ***** //
 const popupOverlay = $(".popup-overlay");
@@ -21,27 +22,25 @@ const selectOptions = {
 };
 
 // ***** FUNCTIONS ***** //
-const killAllEventListeners = function (el) {
-    $(el).off();
+const killEventListeners = (element) => $(element).off();
+
+const toggleElement = function (popup) {
+    [popup, popupOverlay].forEach((element) => {
+        $(element)?.toggleClass("hide-element");
+    });
 };
 
 const attachDropdownEvent = function (btns) {
     btns?.each((_, btn) => {
-        killAllEventListeners(btn);
+        killEventListeners(btn);
         $(btn).click(toggleDropdown);
     });
 };
 
 const attachAjaxEvent = function (btns, callback) {
     btns?.each((_, btn) => {
-        killAllEventListeners(btn);
+        killEventListeners(btn);
         $(btn).click(callback);
-    });
-};
-
-const showHideEl = function (popup) {
-    [popup, popupOverlay].forEach((el) => {
-        $(el).toggleClass("hide-element");
     });
 };
 
@@ -76,7 +75,7 @@ const togglePopup = function () {
 
     const relPopup = [...showPopups]?.find((popup) => popupIndex === +$(popup).data("popup-index"));
 
-    showHideEl(relPopup);
+    toggleElement(relPopup);
 };
 
 const resetInput = function (data) {
@@ -121,7 +120,7 @@ const ajaxAdd = function (clickEvent) {
 
     const data = {};
     data["item_type"] = itemType;
-    newTeamInputs[itemType].forEach((id) => {
+    teamInputs["add"][itemType].forEach((id) => {
         data[id] = $(`#${id}`).val();
     });
 
@@ -322,7 +321,7 @@ const ajaxAdd = function (clickEvent) {
             attachAjaxEvent($(".btn-delete"), ajaxDelete);
 
             // Close popup.
-            showHideEl(relPopup);
+            toggleElement(relPopup);
         },
     });
 };
@@ -341,7 +340,7 @@ const ajaxUpdate = function (clickEvent) {
     const data = {};
     data["item_id"] = rowID;
     data["item_type"] = itemType;
-    existingTeamInputs[itemType].forEach((id) => {
+    teamInputs["alter"][itemType].forEach((id) => {
         data[`${id}_${rowID}`] = $(`#${id}_${rowID}`).val();
     });
 
