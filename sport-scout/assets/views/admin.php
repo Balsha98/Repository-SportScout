@@ -35,9 +35,7 @@ echo Template::generatePageHead($pageData);
 ?>
     <!-- GRID CONTAINER -->
     <div class="grid-container">
-        <?php
-        echo Template::generateAdminPopups($roleID);
-        ?>
+        <?php echo Template::generateAdminPopups($roleID); ?>
 
         <!-- POPUP OVERLAY -->
         <div class="popup-overlay hide-element">&nbsp;</div>
@@ -47,9 +45,7 @@ echo Template::generatePageHead($pageData);
             <h2>Hello, <span class="span-username"><?php echo $username; ?></span>.</h2>
             <nav class="sidebar-nav">
                 <ul class="sidebar-nav-list">
-                    <?php
-                    echo Template::generateAdminLinks($roleID);
-                    ?>
+                    <?php echo Template::generateAdminLinks($roleID); ?>
                 </ul>
             </nav>
             <div class="div-back-to-dashboard">

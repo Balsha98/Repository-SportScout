@@ -820,6 +820,18 @@ class Database
         return null;
     }
 
+    public function getDistinctRows($table, $column)
+    {
+        $query = "SELECT DISTINCT {$column} FROM {$table};";
+        $result = $this->db->query($query);
+
+        if ($result->execute()) {
+            return $result->fetchAll(PDO::FETCH_ASSOC);
+        }
+
+        return null;
+    }
+
     public function deleteRowById($table, $column, $id)
     {
         $query = "DELETE FROM {$table} WHERE {$column}_id = :{$column}_id";
