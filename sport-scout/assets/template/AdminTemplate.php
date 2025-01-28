@@ -23,7 +23,7 @@ class AdminTemplate
         ];
     }
 
-    private static function generateOptions($array, $column)
+    private static function generatePopupOptions($array, $column)
     {
         $return = '';
         foreach ($array as $option) {
@@ -61,7 +61,7 @@ class AdminTemplate
                 case 1:
                     $return .= sprintf(
                         $popup,
-                        self::generateOptions(
+                        self::generatePopupOptions(
                             $db->getDistinctRows($columns[0]),
                             $columns[0]
                         )
@@ -70,11 +70,11 @@ class AdminTemplate
                 case 2:
                     $return .= sprintf(
                         $popup,
-                        self::generateOptions(
+                        self::generatePopupOptions(
                             $db->getDistinctRows($columns[0]),
                             $columns[0]
                         ),
-                        self::generateOptions(
+                        self::generatePopupOptions(
                             $db->getDistinctRows($columns[1]),
                             $columns[1]
                         )
