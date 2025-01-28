@@ -101,10 +101,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     grid-template-columns: 50fr repeat(2, 25fr) !important;
 }
 
-.custom-3-column-grid {
-    grid-template-columns: 50fr repeat(2, 25fr) !important;
-}
-
 .custom-3-column-grid-reverse {
     grid-template-columns: 20fr repeat(2, 40fr) !important;
 }

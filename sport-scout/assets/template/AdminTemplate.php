@@ -28,7 +28,8 @@ class AdminTemplate
         $return = '';
         foreach ($array as $option) {
             $optionID = $option["{$column}_id"];
-            $optionName = $option["{$column}_name"];
+            $columnName = $column === 'season' ? 'year' : 'name';
+            $optionName = $option["{$column}_{$columnName}"];
 
             $return .= "
                 <option value='{$optionID}|{$optionName}'>
@@ -81,7 +82,21 @@ class AdminTemplate
                     );
                     break;
                 default:
-                    // TODO: Implement case for seasons.
+                    $return .= sprintf(
+                        $popup,
+                        self::generatePopupOptions(
+                            $db->getDistinctRows($columns[0]),
+                            $columns[0]
+                        ),
+                        self::generatePopupOptions(
+                            $db->getDistinctRows($columns[1]),
+                            $columns[1]
+                        ),
+                        self::generatePopupOptions(
+                            $db->getDistinctRows($columns[2]),
+                            $columns[2]
+                        )
+                    );
             }
         }
 

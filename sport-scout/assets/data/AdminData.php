@@ -52,7 +52,7 @@ class AdminData
         ['sports' => null],
         ['leagues' => 'sport'],
         ['seasons' => 'sport|league'],
-        ['teams' => 'sport|league'],  // TODO: Add season as final.
+        ['teams' => 'sport|league|season'],  // TODO: Add season as final.
         ['positions' => 'sport']
     ];
 
@@ -257,23 +257,26 @@ class AdminData
                             </select>
                         </div>
                     </div>
-                    <div class="div-multi-input-containers grid-2-columns">
-                        <div class="div-input-container required-container">
-                            <label for="new_team_league_id">League:</label>
-                            <select id="new_team_league_id" name="league_id" autocomplete="off" required>
-                                <option value="">Select League</option>
-                                %s
-                            </select>
-                        </div>
+                    <div class="div-multi-input-containers custom-2-column-grid">
                         <div class="div-multi-input-containers grid-2-columns">
                             <div class="div-input-container required-container">
-                                <label for="new_team_season_id">Season ID:</label>
-                                <input id="new_team_season_id" type="number" name="season_id" min="1" autocomplete="off" required>
+                                <label for="new_team_league_id">League:</label>
+                                <select id="new_team_league_id" name="league_id" autocomplete="off" required>
+                                    <option value="">Select League</option>
+                                    %s
+                                </select>
                             </div>
                             <div class="div-input-container required-container">
-                                <label for="new_team_max_players">Max Players:</label>
-                                <input id="new_team_max_players" type="number" name="team_max_players" min="1" autocomplete="off" required>
+                                <label for="new_team_season_id">Season:</label>
+                                <select id="new_team_season_id" name="season_id" autocomplete="off" required>
+                                    <option value="">Select Season</option>
+                                    %s
+                                </select>
                             </div>
+                        </div>
+                        <div class="div-input-container required-container">
+                            <label for="new_team_max_players">Max Players:</label>
+                            <input id="new_team_max_players" type="number" name="team_max_players" min="1" autocomplete="off" required>
                         </div>
                     </div>
                     <div class="div-multi-input-containers grid-2-columns">
