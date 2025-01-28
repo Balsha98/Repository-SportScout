@@ -53,7 +53,7 @@ echo Template::generatePageHead($pageData);
 
 if ($roleID !== 5) {
     if ($teamID !== 0) {
-        echo Template::generateTeamPopups($teamData);
+        echo Template::generateTeamPopups($db, $teamData);
         echo Template::generatePopupOverlay();
     }
 }

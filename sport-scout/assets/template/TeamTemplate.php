@@ -5,7 +5,7 @@ require_once 'assets/data/TeamData.php';
 
 class TeamTemplate
 {
-    public static function generatePopups($teamData)
+    public static function generatePopups($db, $teamData)
     {
         [['sport_id' => $sportID]] = $teamData;
         [['league_id' => $leagueID]] = $teamData;
@@ -15,11 +15,21 @@ class TeamTemplate
         $return = '';
         foreach (TeamData::POPUPS as $index => $popup) {
             if ($index === 0) {
+                $options = '';
+                foreach ($db->getDistinctRows('position') as $value) {
+                    $optionValue = "{$value['position_id']}|{$value['position_name']}";
+
+                    if ($value['sport_id'] === $sportID) {
+                        $options .= "<option value='{$optionValue}'>{$value['position_name']}</option>";
+                    }
+                }
+
                 $return .= sprintf(
                     $popup,
                     $sportID,
                     $leagueName,
-                    $teamID
+                    $teamID,
+                    $options
                 );
 
                 continue;

@@ -818,8 +818,7 @@ class Database
 
     public function getDistinctRows($table)
     {
-        $columnName = $table === 'season' ? 'year' : 'name';
-        $query = "SELECT DISTINCT {$table}_id, {$table}_{$columnName} FROM {$table}s;";
+        $query = "SELECT DISTINCT * FROM {$table}s;";
         $result = $this->db->query($query);
 
         if ($result->execute()) {

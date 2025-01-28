@@ -37,20 +37,21 @@ class TeamData
                             <input id="new_player_last" type="tel" name="last_name" required>
                         </div>
                     </div>
+                    <div class="div-input-container required-container">
+                        <label for="new_player_dob">Date of Birth:</label>
+                        <input id="new_player_dob" type="date" name="dob" required>
+                    </div>
                     <div class="div-multi-input-containers grid-2-columns">
                         <div class="div-input-container required-container">
-                            <label for="new_player_dob">Date of Birth:</label>
-                            <input id="new_player_dob" type="date" name="dob" required>
+                            <label for="new_player_position_id">Position ID:</label>
+                            <select id="new_player_position_id" name="position_id" autocomplete="off" required>
+                                <option value="">Select Position</option>
+                                %s
+                            </select>
                         </div>
-                        <div class="div-multi-input-containers grid-2-columns">
-                            <div class="div-input-container required-container">
-                                <label for="new_player_position_id">Position ID:</label>
-                                <input id="new_player_position_id" type="number" name="position_id" min="1" required>
-                            </div>
-                            <div class="div-input-container required-container">
-                                <label for="new_player_jersey_number">Jersey:</label>
-                                <input id="new_player_jersey_number" type="number" name="jersey_number" min="0" required>
-                            </div>
+                        <div class="div-input-container required-container">
+                            <label for="new_player_jersey_number">Jersey:</label>
+                            <input id="new_player_jersey_number" type="number" name="jersey_number" min="0" required>
                         </div>
                     </div>
                     <div class="div-btn-container grid-btn-container">
