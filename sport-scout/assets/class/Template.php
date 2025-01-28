@@ -43,9 +43,9 @@ class Template
         return AdminTemplate::generatePopups($db, $startIndex);
     }
 
-    public static function generateAdminUsersDataContainer($data)
+    public static function generateAdminUsersDataContainer($db, $data)
     {
-        return AdminTemplate::generateUsersDataContainer($data);
+        return AdminTemplate::generateUsersDataContainer($db, $data);
     }
 
     public static function generateAdminSportsDataContainer($data)
@@ -53,24 +53,24 @@ class Template
         return AdminTemplate::generateSportsDataContainer($data);
     }
 
-    public static function generateAdminLeaguesDataContainer($data, $roleID)
+    public static function generateAdminLeaguesDataContainer($db, $data, $roleID)
     {
-        return AdminTemplate::generateLeaguesDataContainer($data, $roleID);
+        return AdminTemplate::generateLeaguesDataContainer($db, $data, $roleID);
     }
 
-    public static function generateAdminSeasonsDataContainer($data, $roleID)
+    public static function generateAdminSeasonsDataContainer($db, $data, $roleID)
     {
-        return AdminTemplate::generateSeasonsDataContainer($data, $roleID);
+        return AdminTemplate::generateSeasonsDataContainer($db, $data, $roleID);
     }
 
-    public static function generateAdminPositionsDataContainer($data, $roleID)
+    public static function generateAdminTeamsDataContainer($db, $data, $roleID)
     {
-        return AdminTemplate::generatePositionsDataContainer($data, $roleID);
+        return AdminTemplate::generateTeamsDataContainer($db, $data, $roleID);
     }
 
-    public static function generateAdminTeamsDataContainer($data, $roleID)
+    public static function generateAdminPositionsDataContainer($db, $data, $roleID)
     {
-        return AdminTemplate::generateTeamsDataContainer($data, $roleID);
+        return AdminTemplate::generatePositionsDataContainer($db, $data, $roleID);
     }
 
     public static function generateTeamPopups($teamData)

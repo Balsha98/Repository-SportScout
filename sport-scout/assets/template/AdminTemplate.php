@@ -134,7 +134,7 @@ class AdminTemplate
         return $neededIndex;
     }
 
-    public static function generateUsersDataContainer($data)
+    public static function generateUsersDataContainer($db, $data)
     {
         [
             'is_empty' => $isEmpty,
@@ -160,16 +160,38 @@ class AdminTemplate
                 $username = $user['username'];
                 $roleID = $user['role_id'];
                 $roleName = $user['role_name'];
-                $roleOption = "{$roleID}|{$roleName}";
                 $leagueID = $user['league_id'];
                 $leagueName = $user['league_name'];
                 $teamID = $user['team_id'];
                 $teamName = $user['team_name'];
 
-                $options = '';
-                foreach (AdminData::USER_SELECT_OPTIONS as $key => $value) {
-                    $selected = $roleOption === $value ? 'selected' : '';
-                    $options .= "<option value='{$value}' {$selected}>{$key}</option>";
+                $optionsData = [];
+                $tableNames = ['role', 'league', 'team'];
+                $userOptions = ["{$roleID}|{$roleName}", "{$leagueID}|{$leagueName}", "{$teamID}|{$teamName}"];
+                foreach ($tableNames as $i => $tableName) {
+                    $options = '';
+                    $relatedData = [];
+                    if ($tableName === 'league') {
+                        $relatedData[] = ['league_id' => 0, 'league_name' => 'All'];
+                    } else if ($tableName === 'team') {
+                        $relatedData[] = ['team_id' => 0, 'team_name' => 'All'];
+                        $relatedData[] = ['team_id' => 0, 'team_name' => 'All Within The League'];
+                    }
+
+                    foreach ($db->getDistinctRows($tableName) as $value) {
+                        $relatedData[] = $value;
+                    }
+
+                    foreach ($relatedData as $value) {
+                        $currID = $value["{$tableName}_id"];
+                        $currName = $value["{$tableName}_name"];
+                        $currValue = "{$currID}|{$currName}";
+
+                        $selected = "{$userOptions[$i]}" === $currValue ? 'selected' : '';
+                        $options .= "<option value='{$currValue}' {$selected}>{$currName}</option>";
+                    }
+
+                    $optionsData[] = $options;
                 }
 
                 $submitBtns = ReusableTemplate::generateFormSubmitBtns('user');
@@ -206,26 +228,24 @@ class AdminTemplate
                                     <label for='user_role_name_{$userID}'>Role Type:</label>
                                     <select id='user_role_name_{$userID}' name='role_name' autocomplete='off' required>
                                         <option value=''>Select Role</option>
-                                        {$options}
+                                        {$optionsData[0]}
                                     </select>
                                 </div>
                             </div>
-                            <div class='div-multi-input-containers grid-4-columns'>
-                                <div class='div-input-container'>
-                                    <label for='user_league_name_{$userID}'>League:</label>
-                                    <input id='user_league_name_{$userID}' type='text' name='league_name' value='{$leagueName}' autocomplete='off' readonly>
+                            <div class='div-multi-input-containers grid-2-columns'>
+                                <div class='div-input-container required-container'>
+                                    <label for='user_league_id_{$userID}'>League:</label>
+                                    <select id='user_league_id_{$userID}' name='league_id' autocomplete='off' required>
+                                        <option value=''>Select League</option>
+                                        {$optionsData[1]}
+                                    </select>
                                 </div>
                                 <div class='div-input-container required-container'>
-                                    <label for='user_league_id_{$userID}'>League ID:</label>
-                                    <input id='user_league_id_{$userID}' type='number' name='league_id' value='{$leagueID}' min='0' autocomplete='off' required>
-                                </div>
-                                <div class='div-input-container'>
-                                    <label for='user_team_name_{$userID}'>Team:</label>
-                                    <input id='user_team_name_{$userID}' type='text' name='team_name' value='{$teamName}' autocomplete='off' readonly>
-                                </div>
-                                <div class='div-input-container required-container'>
-                                    <label for='user_team_id_{$userID}'>Team ID:</label>
-                                    <input id='user_team_id_{$userID}' type='number' name='team_id' value='{$teamID}' min='0' autocomplete='off' required>
+                                    <label for='user_team_id_{$userID}'>Team:</label>
+                                    <select id='user_team_id_{$userID}' name='team_id' autocomplete='off' required>
+                                        <option value=''>Select Team</option>
+                                        {$optionsData[2]}
+                                    </select>
                                 </div>
                             </div>
                             {$submitBtns}
@@ -319,7 +339,7 @@ class AdminTemplate
         return $dataContainer;
     }
 
-    public static function generateLeaguesDataContainer($data, $roleID)
+    public static function generateLeaguesDataContainer($db, $data, $roleID)
     {
         [
             'is_empty' => $isEmpty,
@@ -345,6 +365,16 @@ class AdminTemplate
                 $sportID = $league['sport_id'];
                 $sportName = $league['sport_name'];
 
+                $options = '';
+                foreach ($db->getDistinctRows('sport') as $value) {
+                    $currID = $value['sport_id'];
+                    $currName = $value['sport_name'];
+                    $currValue = "{$currID}|{$currName}";
+
+                    $selected = "{$sportID}|{$sportName}" === $currValue ? 'selected' : '';
+                    $options .= "<option value='{$currValue}' {$selected}>{$currName}</option>";
+                }
+
                 $submitBtns = ReusableTemplate::generateFormSubmitBtns('league');
 
                 $dataContainer .= "
@@ -367,18 +397,17 @@ class AdminTemplate
                             action='" . SERVER . "/api/admin.php'
                         >
                             <input id='league_id_{$leagueID}' type='hidden' name='league_id' value='{$leagueID}'>
-                            <div class='div-multi-input-containers grid-3-columns'>
+                            <div class='div-multi-input-containers grid-2-columns'>
                                 <div class='div-input-container required-container'>
                                     <label for='league_name_{$leagueID}'>League Name:</label>
                                     <input id='league_name_{$leagueID}' type='text' name='league_name' value='{$leagueName}' autocomplete='off' required>
                                 </div>
-                                <div class='div-input-container'>
-                                    <label for='league_sport_name_{$leagueID}'>Sport:</label>
-                                    <input id='league_sport_name_{$leagueID}' type='text' name='sport_name' value='{$sportName}' autocomplete='off' readonly>
-                                </div>
                                 <div class='div-input-container required-container'>
-                                    <label for='league_sport_id_{$leagueID}'>Sport ID:</label>
-                                    <input id='league_sport_id_{$leagueID}' type='number' name='sport_id' value='{$sportID}' min='1' autocomplete='off' required>
+                                    <label for='league_sport_id_{$leagueID}'>Sport:</label>
+                                    <select id='user_sport_id_{$leagueID}' name='sport_id' autocomplete='off' required>
+                                        <option value=''>Select Sport</option>
+                                        {$options}
+                                    </select>
                                 </div>
                             </div>
                             {$submitBtns}
@@ -402,7 +431,7 @@ class AdminTemplate
         return $dataContainer;
     }
 
-    public static function generateSeasonsDataContainer($data, $roleID)
+    public static function generateSeasonsDataContainer($db, $data, $roleID)
     {
         [
             'is_empty' => $isEmpty,
@@ -431,6 +460,28 @@ class AdminTemplate
                 $sportName = $season['sport_name'];
                 $leagueID = $season['league_id'];
                 $leagueName = $season['league_name'];
+
+                $optionsData = [];
+                $tableNames = ['sport', 'league'];
+                $userOptions = ["{$sportID}|{$sportName}", "{$leagueID}|{$leagueName}"];
+                foreach ($tableNames as $i => $tableName) {
+                    $options = '';
+                    $relatedData = [];
+                    foreach ($db->getDistinctRows($tableName) as $value) {
+                        $relatedData[] = $value;
+                    }
+
+                    foreach ($relatedData as $value) {
+                        $currID = $value["{$tableName}_id"];
+                        $currName = $value["{$tableName}_name"];
+                        $currValue = "{$currID}|{$currName}";
+
+                        $selected = "{$userOptions[$i]}" === $currValue ? 'selected' : '';
+                        $options .= "<option value='{$currValue}' {$selected}>{$currName}</option>";
+                    }
+
+                    $optionsData[] = $options;
+                }
 
                 $submitBtns = ReusableTemplate::generateFormSubmitBtns('season');
 
@@ -467,22 +518,20 @@ class AdminTemplate
                                     <input id='season_desc_{$seasonID}' type='text' name='season_desc' value='{$seasonDesc}' autocomplete='off' required>
                                 </div>
                             </div>
-                            <div class='div-multi-input-containers grid-4-columns'>
-                                <div class='div-input-container'>
-                                    <label for='season_sport_name_{$seasonID}'>Sport:</label>
-                                    <input id='season_sport_name_{$seasonID}' type='text' name='sport_name' value='{$sportName}' readonly>
+                            <div class='div-multi-input-containers grid-2-columns'>
+                                <div class='div-input-container required-container'>
+                                    <label for='season_sport_id_{$seasonID}'>Sport:</label>
+                                    <select id='season_sport_id_{$seasonID}' name='sport_id' autocomplete='off' required>
+                                        <option value=''>Select Sport</option>
+                                        {$optionsData[0]}
+                                    </select>
                                 </div>
                                 <div class='div-input-container required-container'>
-                                    <label for='season_sport_id_{$seasonID}'>Sport ID:</label>
-                                    <input id='season_sport_id_{$seasonID}' type='number' name='sport_id' value='{$sportID}' min='1' required>
-                                </div>
-                                <div class='div-input-container'>
-                                    <label for='season_league_name_{$seasonID}'>League:</label>
-                                    <input id='season_league_name_{$seasonID}' type='text' name='league_name' value='{$leagueName}' autocomplete='off' readonly>
-                                </div>
-                                <div class='div-input-container required-container'>
-                                    <label for='season_league_id_{$seasonID}'>League ID:</label>
-                                    <input id='season_league_id_{$seasonID}' type='number' name='league_id' value='{$leagueID}' min='1' autocomplete='off' required>
+                                    <label for='season_league_id_{$seasonID}'>League:</label>
+                                    <select id='season_league_id_{$seasonID}' name='league_id' autocomplete='off' required>
+                                        <option value=''>Select League</option>
+                                        {$optionsData[1]}
+                                    </select>
                                 </div>
                             </div>
                             {$submitBtns}
@@ -506,7 +555,7 @@ class AdminTemplate
         return $dataContainer;
     }
 
-    public static function generateTeamsDataContainer($data, $roleID)
+    public static function generateTeamsDataContainer($db, $data, $roleID)
     {
         [
             'is_empty' => $isEmpty,
@@ -540,6 +589,29 @@ class AdminTemplate
                 $maxPlayers = $team['max_players'];
                 $homeColor = $team['home_color'];
                 $awayColor = $team['away_color'];
+
+                $optionsData = [];
+                $tableNames = ['league', 'season'];
+                $userOptions = ["{$leagueID}|{$leagueName}", "{$seasonID}|{$seasonYear}"];
+                foreach ($tableNames as $i => $tableName) {
+                    $options = '';
+                    $relatedData = [];
+                    foreach ($db->getDistinctRows($tableName) as $value) {
+                        $relatedData[] = $value;
+                    }
+
+                    foreach ($relatedData as $value) {
+                        $currID = $value["{$tableName}_id"];
+                        $columnName = $tableName === 'season' ? 'year' : 'name';
+                        $currName = $value["{$tableName}_{$columnName}"];
+                        $currValue = "{$currID}|{$currName}";
+
+                        $selected = "{$userOptions[$i]}" === $currValue ? 'selected' : '';
+                        $options .= "<option value='{$currValue}' {$selected}>{$currName}</option>";
+                    }
+
+                    $optionsData[] = $options;
+                }
 
                 $submitBtns = '';
                 if ($roleID <= 2) {
@@ -576,29 +648,32 @@ class AdminTemplate
                             class='form form-info form-{$teamID} hide-element' 
                             action='" . SERVER . "/api/admin.php'
                         >
+                            <input id='team_id_{$teamID}' type='hidden' name='team_id' value='{$teamID}'>
                             <input id='team_sport_id_{$teamID}' type='hidden' name='sport_id' value='{$sportID}'>
-                            <div class='div-multi-input-containers custom-2-column-grid'>
+                            <div class='div-multi-input-containers grid-2-columns'>
                                 <div class='div-input-container {$requiredContainer}'>
                                     <label for='team_name_{$teamID}'>Team Name:</label>
                                     <input id='team_name_{$teamID}' type='text' name='team_name' value='{$teamName}' autocomplete='off' {$required}>
                                 </div>
                                 <div class='div-input-container'>
-                                    <label for='team_id_{$teamID}'>Team ID:</label>
-                                    <input id='team_id_{$teamID}' type='number' name='team_id' value='{$teamID}' readonly>
-                                </div>
-                            </div>
-                            <div class='div-multi-input-containers grid-4-columns'>
-                                <div class='div-input-container'>
                                     <label for='team_sport_name_{$teamID}'>Sport:</label>
                                     <input id='team_sport_name_{$teamID}' type='text' name='sport_name' value='{$sportName}' readonly>
                                 </div>
+                            </div>
+                            <div class='div-multi-input-containers grid-3-columns'>
                                 <div class='div-input-container {$requiredContainer}'>
-                                    <label for='team_league_id_{$teamID}'>League ID:</label>
-                                    <input id='team_league_id_{$teamID}' type='number' name='league_id' min='1' value='{$leagueID}' autocomplete='off' {$required}>
+                                    <label for='team_league_id_{$teamID}'>League:</label>
+                                    <select id='team_league_id_{$seasonID}' name='league_id' autocomplete='off' required>
+                                        <option value=''>Select League</option>
+                                        {$optionsData[0]}
+                                    </select>
                                 </div>
                                 <div class='div-input-container {$requiredContainer}'>
-                                    <label for='team_season_id_{$teamID}'>Season ID:</label>
-                                    <input id='team_season_id_{$teamID}' type='number' name='season_id' min='1' value='{$seasonID}' autocomplete='off' {$required}>
+                                    <label for='team_season_id_{$teamID}'>Season:</label>
+                                    <select id='team_season_id_{$seasonID}' name='season_id' autocomplete='off' required>
+                                        <option value=''>Select Season</option>
+                                        {$optionsData[1]}
+                                    </select>
                                 </div>
                                 <div class='div-input-container {$requiredContainer}'>
                                     <label for='team_max_players_{$teamID}'>Max Players:</label>
@@ -642,7 +717,7 @@ class AdminTemplate
         return $dataContainer;
     }
 
-    public static function generatePositionsDataContainer($data, $roleID)
+    public static function generatePositionsDataContainer($db, $data, $roleID)
     {
         [
             'is_empty' => $isEmpty,
@@ -667,6 +742,16 @@ class AdminTemplate
                 $positionName = $position['position_name'];
                 $sportID = $position['sport_id'];
                 $sportName = $position['sport_name'];
+
+                $options = '';
+                foreach ($db->getDistinctRows('sport') as $value) {
+                    $currID = $value['sport_id'];
+                    $currName = $value['sport_name'];
+                    $currValue = "{$currID}|{$currName}";
+
+                    $selected = "{$sportID}|{$sportName}" === $currValue ? 'selected' : '';
+                    $options .= "<option value='{$currValue}' {$selected}>{$currName}</option>";
+                }
 
                 $submitBtns = '';
                 if ($roleID <= 2) {
@@ -697,18 +782,17 @@ class AdminTemplate
                             action='" . SERVER . "/api/admin.php'
                         >
                             <input id='position_id_{$positionID}' type='hidden' name='position_id' value='{$positionID}'>
-                            <div class='div-multi-input-containers grid-3-columns'>
+                            <div class='div-multi-input-containers grid-2-columns'>
                                 <div class='div-input-container {$requiredContainer}'>
                                     <label for='position_name_{$positionID}'>Position Name:</label>
                                     <input id='position_name_{$positionID}' type='text' name='position_name' value='{$positionName}' autocomplete='off' {$required}>
                                 </div>
-                                <div class='div-input-container'>
-                                    <label for='position_sport_name_{$positionID}'>Sport:</label>
-                                    <input id='position_sport_name_{$positionID}' type='text' name='sport_name' value='{$sportName}' readonly>
-                                </div>
                                 <div class='div-input-container {$requiredContainer}'>
-                                    <label for='position_sport_id_{$positionID}'>Sport ID:</label>
-                                    <input id='position_sport_id_{$positionID}' type='number' name='sport_id' value='{$sportID}' min='1' {$required}>
+                                    <label for='position_sport_id_{$positionID}'>Sport:</label>
+                                    <select id='position_sport_id_{$positionID}' name='sport_id' autocomplete='off' required>
+                                        <option value=''>Select Sport</option>
+                                        {$options}
+                                    </select>
                                 </div>
                             </div>
                             {$submitBtns}

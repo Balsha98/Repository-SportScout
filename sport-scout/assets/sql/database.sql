@@ -114,7 +114,7 @@ INSERT INTO teams VALUES
 (5, "Real Madrid", 2, 3, 3, "White/Purple", "Purple/White", 25),
 (6, "FC Barcelona", 2, 3, 3, "Blue/Red", "Red/Blue", 25);
 
--- SELECT * FROM teams;
+SELECT * FROM teams;
 
 -- TABLE SCHEDULE
 DROP TABLE IF EXISTS schedule;

@@ -13,14 +13,6 @@ class AdminData
         'positions'
     ];
 
-    public const USER_SELECT_OPTIONS = [
-        'Administrator' => '1|Administrator',
-        'League Manager' => '2|League Manager',
-        'Team Manager' => '3|Team Manager',
-        'Team Coach' => '4|Team Coach',
-        'Fan' => '5|Fan',
-    ];
-
     // ***** ADMIN PAGE SIDEBAR LINKS ***** //
     public const SIDEBAR_LINKS = [
         [
@@ -103,6 +95,7 @@ class AdminData
                             <label for="new_user_league_id">League:</label>
                             <select id="new_user_league_id" name="league_id" autocomplete="off" required>
                                 <option value="">Select League</option>
+                                <option value="0|All">All</option>
                                 %s
                             </select>
                         </div>
@@ -110,6 +103,8 @@ class AdminData
                             <label for="new_user_team_id">Team:</label>
                             <select id="new_user_team_id" name="team_id" autocomplete="off" required>
                                 <option value="">Select Team</option>
+                                <option value="0|All">All</option>
+                                <option value="0|All Withing The League">All Within The League</option>
                                 %s
                             </select>
                         </div>

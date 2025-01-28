@@ -55,15 +55,11 @@ class Database
                 $data['team_name'] = 'All';
             } else if ($leagueID !== 0 && $teamID === 0) {
                 $leagueData = $this->getLeagueDataByLeagueId($leagueID);
-
                 if (count($leagueData) > 0) {
                     [['league_name' => $leagueName]] = $leagueData;
 
                     $data['league_name'] = $leagueName;
-                    $data['team_name'] = "All Within The {$leagueName}";
-                } else {
-                    $data['league_name'] = '';
-                    $data['team_name'] = '';
+                    $data['team_name'] = 'All Within The League';
                 }
             } else {
                 $leagueData = $this->getLeagueDataByLeagueId($leagueID);
@@ -822,7 +818,8 @@ class Database
 
     public function getDistinctRows($table)
     {
-        $query = "SELECT DISTINCT {$table}_id, {$table}_name FROM {$table}s;";
+        $columnName = $table === 'season' ? 'year' : 'name';
+        $query = "SELECT DISTINCT {$table}_id, {$table}_{$columnName} FROM {$table}s;";
         $result = $this->db->query($query);
 
         if ($result->execute()) {
