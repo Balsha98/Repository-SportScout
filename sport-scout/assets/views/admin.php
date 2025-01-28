@@ -106,8 +106,7 @@ echo Template::generatePageHead($pageData);
                                 echo Template::generateAdminPositionsDataContainer($db, $positionsData, $roleID);
                             }
                             break;
-                        case 3:
-                        case 4:
+                        default:
                             $teamData = $db->getTeamDataByTeamId('*', $teamID);
                             echo Template::generateAdminTeamsDataContainer($db, $teamData, $roleID);
 
