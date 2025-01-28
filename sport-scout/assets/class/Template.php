@@ -88,9 +88,9 @@ class Template
         return TeamTemplate::generateStaffData($data, $roleID, $leagueName);
     }
 
-    public static function generateSchedulePopups($teamData)
+    public static function generateSchedulePopups($db, $teamData)
     {
-        return ScheduleTemplate::generatePopups($teamData);
+        return ScheduleTemplate::generatePopups($db, $teamData);
     }
 
     public static function generateScheduleTeamData($data, $roleID)
@@ -98,9 +98,9 @@ class Template
         return ScheduleTemplate::generateTeamData($data, $roleID);
     }
 
-    public static function generateScheduleGame($data, $roleID)
+    public static function generateScheduleGame($db, $data, $roleID)
     {
-        return ScheduleTemplate::generateGame($data, $roleID);
+        return ScheduleTemplate::generateGame($db, $data, $roleID);
     }
 
     public static function generateNoneSelectedDiv($data)

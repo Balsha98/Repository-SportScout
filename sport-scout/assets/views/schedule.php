@@ -51,7 +51,7 @@ echo Template::generatePageHead($pageData);
 
 if ($roleID !== 5) {
     if ($teamID !== 0) {
-        echo Template::generateSchedulePopups($teamID);
+        echo Template::generateSchedulePopups($db, $teamID);
         echo Template::generatePopupOverlay();
     }
 }
@@ -87,8 +87,8 @@ echo Template::generatePageHeader($pageData['active'], $roleID);
                 if ($teamID === 0) {
                     echo Template::generateNoneSelectedDiv($noneSelected);
                 } else {
-                    $schedule_data = $db->getScheduleByTeamId($teamID);
-                    echo Template::generateScheduleGame($schedule_data, $roleID);
+                    $scheduleData = $db->getScheduleByTeamId($teamID);
+                    echo Template::generateScheduleGame($db, $scheduleData, $roleID);
                 }
                 ?>
             </div>

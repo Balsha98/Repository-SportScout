@@ -5,24 +5,6 @@ require_once 'assets/data/AdminData.php';
 
 class AdminTemplate
 {
-    private static function isDataAvailable($data)
-    {
-        $emptyCounter = 0;
-        foreach ($data as $array) {
-            if (count($array) === 0) {
-                $emptyCounter++;
-            }
-        }
-
-        $isEmpty = (bool) (count($data) === $emptyCounter);
-        $ruleFlexCenter = $isEmpty ? 'flex-center' : '';
-
-        return [
-            'is_empty' => $isEmpty,
-            'css_rule' => $ruleFlexCenter
-        ];
-    }
-
     private static function generatePopupOptions($array, $column)
     {
         $return = '';
@@ -147,6 +129,24 @@ class AdminTemplate
         }
 
         return $neededIndex;
+    }
+
+    private static function isDataAvailable($data)
+    {
+        $emptyCounter = 0;
+        foreach ($data as $array) {
+            if (count($array) === 0) {
+                $emptyCounter++;
+            }
+        }
+
+        $isEmpty = (bool) (count($data) === $emptyCounter);
+        $ruleFlexCenter = $isEmpty ? 'flex-center' : '';
+
+        return [
+            'is_empty' => $isEmpty,
+            'css_rule' => $ruleFlexCenter
+        ];
     }
 
     public static function generateUsersDataContainer($db, $data)

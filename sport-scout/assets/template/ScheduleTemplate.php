@@ -5,36 +5,9 @@ require_once 'assets/data/ScheduleData.php';
 
 class ScheduleTemplate
 {
-    private static Database $db;
-
-    public static function setDatabase($db)
+    public static function generatePopups($db, $teamID)
     {
-        if (!isset(self::$db)) {
-            self::$db = $db;
-        }
-    }
-
-    private static function isDataAvailable($data)
-    {
-        $emptyCounter = 0;
-        foreach ($data as $array) {
-            if (count($array) === 0) {
-                $emptyCounter++;
-            }
-        }
-
-        $isEmpty = count($data) === $emptyCounter;
-        $ruleFlexCenter = $isEmpty ? 'flex-center' : '';
-
-        return [
-            'is_empty' => $isEmpty,
-            'css_rule' => $ruleFlexCenter
-        ];
-    }
-
-    public static function generatePopups($teamID)
-    {
-        $teamData = self::$db->getTeamDataByTeamId('*', $teamID);
+        $teamData = $db->getTeamDataByTeamId('*', $teamID);
 
         [['sport_name' => $sportName]] = $teamData;
         [['sport_id' => $sportID]] = $teamData;
@@ -54,6 +27,24 @@ class ScheduleTemplate
         }
 
         return $return;
+    }
+
+    private static function isDataAvailable($data)
+    {
+        $emptyCounter = 0;
+        foreach ($data as $array) {
+            if (count($array) === 0) {
+                $emptyCounter++;
+            }
+        }
+
+        $isEmpty = count($data) === $emptyCounter;
+        $ruleFlexCenter = $isEmpty ? 'flex-center' : '';
+
+        return [
+            'is_empty' => $isEmpty,
+            'css_rule' => $ruleFlexCenter
+        ];
     }
 
     public static function generateTeamData($data, $roleID)
@@ -152,7 +143,7 @@ class ScheduleTemplate
         }
     }
 
-    public static function generateGame($data, $roleID)
+    public static function generateGame($db, $data, $roleID)
     {
         [
             'is_empty' => $isEmpty,
@@ -186,8 +177,8 @@ class ScheduleTemplate
                         $date = $innerArray['scheduled'];
 
                         // Get home and away team names.
-                        [['team_name' => $homeTeamName]] = self::$db->getTeamDataByTeamId('team_name', $homeTeamID);
-                        [['team_name' => $awayTeamName]] = self::$db->getTeamDataByTeamId('team_name', $awayTeamID);
+                        [['team_name' => $homeTeamName]] = $db->getTeamDataByTeamId('team_name', $homeTeamID);
+                        [['team_name' => $awayTeamName]] = $db->getTeamDataByTeamId('team_name', $awayTeamID);
 
                         // Get appropriate visuals.
                         $status = $innerArray['status'];
@@ -279,5 +270,3 @@ class ScheduleTemplate
         return $scrollContainer;
     }
 }
-
-ScheduleTemplate::setDatabase($db);

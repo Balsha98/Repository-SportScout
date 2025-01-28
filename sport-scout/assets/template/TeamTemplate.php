@@ -5,24 +5,6 @@ require_once 'assets/data/TeamData.php';
 
 class TeamTemplate
 {
-    private static function isDataAvailable($data)
-    {
-        $emptyCounter = 0;
-        foreach ($data as $array) {
-            if (count($array) === 0) {
-                $emptyCounter++;
-            }
-        }
-
-        $isEmpty = count($data) === $emptyCounter;
-        $ruleFlexCenter = $isEmpty ? 'flex-center' : '';
-
-        return [
-            'is_empty' => $isEmpty,
-            'css_rule' => $ruleFlexCenter
-        ];
-    }
-
     public static function generatePopups($teamData)
     {
         [['sport_id' => $sportID]] = $teamData;
@@ -52,6 +34,24 @@ class TeamTemplate
         }
 
         return $return;
+    }
+
+    private static function isDataAvailable($data)
+    {
+        $emptyCounter = 0;
+        foreach ($data as $array) {
+            if (count($array) === 0) {
+                $emptyCounter++;
+            }
+        }
+
+        $isEmpty = count($data) === $emptyCounter;
+        $ruleFlexCenter = $isEmpty ? 'flex-center' : '';
+
+        return [
+            'is_empty' => $isEmpty,
+            'css_rule' => $ruleFlexCenter
+        ];
     }
 
     public static function generatePlayersData($data, $roleID, $leagueName)
