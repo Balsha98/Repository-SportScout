@@ -22,7 +22,9 @@ const formDeleteBtns = $(".btn-delete");
 const toggleEditGamePopup = function () {
     // Get the the schedule id and set the data.
     const scheduleID = $(this.closest(".div-schedule-game")).data("schedule-id");
-    scheduleInputs["alter"]["schedule"].forEach((id) => $(`#edit_${id}`).val($(`#${id}_${scheduleID}`).val()));
+    scheduleInputs["alter"]["schedule"].forEach((id) => {
+        $(`#edit_${id}`).val($(`#${id}_${scheduleID}`).val());
+    });
     $("#edit_schedule_id").val($(`#schedule_id_${scheduleID}`).val());
 
     // Show the popup.
