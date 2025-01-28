@@ -24,22 +24,33 @@ class ScheduleData
                             <input id="new_schedule_league_name" type="text" name="league_name" value="%s" readonly>
                         </div>
                         <div class="div-input-container required-container">
-                            <label for="new_schedule_season_id">Season ID:</label>
-                            <input id="new_schedule_season_id" type="number" name="season_id" required>
+                            <label for="new_schedule_season_id">Season:</label>
+                            <select id="new_schedule_season_id" name="season_id" autocomplete="off" required>
+                                <option value="">Select Season</option>
+                                %s
+                            </select>
                         </div>
                     </div>
-                    <div class="div-multi-input-containers grid-4-columns">
+                    <div class="div-multi-input-containers custom-2-column-grid">
                         <div class="div-input-container required-container">
-                            <label for="new_schedule_home_team_id">Home ID:</label>
-                            <input id="new_schedule_home_team_id" type="number" name="home_team_id" min="1" required>
+                            <label for="new_schedule_home_team_id">Home Team:</label>
+                            <select id="new_schedule_home_team_id" name="home_team_id" autocomplete="off" required>
+                                <option value="">Select Home Team</option>
+                                %s
+                            </select>
                         </div>
                         <div class="div-input-container required-container">
                             <label for="new_schedule_home_score">Home Score:</label>
                             <input id="new_schedule_home_score" type="number" name="home_score" min="0" value="0" required>
                         </div>
+                    </div>
+                    <div class="div-multi-input-containers custom-2-column-grid">
                         <div class="div-input-container required-container">
-                            <label for="new_schedule_away_team_id">Away ID:</label>
-                            <input id="new_schedule_away_team_id" type="number" name="away_team_id" min="1" required>
+                            <label for="new_schedule_away_team_id">Away Team:</label>
+                            <select id="new_schedule_away_team_id" name="away_team_id" autocomplete="off" required>
+                                <option value="">Select Away Team</option>
+                                %s
+                            </select>
                         </div>
                         <div class="div-input-container required-container">
                             <label for="new_schedule_away_score">Away Score:</label>
@@ -87,29 +98,40 @@ class ScheduleData
                     <p>Fill in the following <span>fields</span> appropriately.</p>
                 </header>
                 <form class="form form-edit" action="/api/schedule.php">
-                    <div class="div-multi-input-containers grid-4-columns">
+                    <div class="div-input-container required-container">
+                        <label for="edit_schedule_season_id">Season:</label>
+                        <select id="edit_schedule_season_id" name="Season_id" autocomplete="off" required>
+                            <option value="">Select Season</option>
+                            %s
+                        </select>
+                    </div>
+                    <div class="div-multi-input-containers custom-2-column-grid">
                         <div class="div-input-container">
-                            <label for="edit_schedule_home_team_id">Home ID:</label>
-                            <input id="edit_schedule_home_team_id" type="number" name="home_team_id" min="1" readonly>
+                            <label for="edit_schedule_home_team_id">Home Team:</label>
+                            <select id="edit_schedule_home_team_id" name="home_team_id" autocomplete="off" disabled>
+                                <option value="">Select Home Team</option>
+                                %s
+                            </select>
                         </div>
                         <div class="div-input-container required-container">
                             <label for="edit_schedule_home_score">Home Score:</label>
                             <input id="edit_schedule_home_score" type="number" name="home_score" min="0" value="0" required>
                         </div>
+                    </div>
+                    <div class="div-multi-input-containers custom-2-column-grid">
                         <div class="div-input-container">
-                            <label for="edit_schedule_away_team_id">Away ID:</label>
-                            <input id="edit_schedule_away_team_id" type="number" name="away_team_id" min="1" readonly>
+                            <label for="edit_schedule_away_team_id">Away Team:</label>
+                            <select id="edit_schedule_away_team_id" name="away_team_id" autocomplete="off" disabled>
+                                <option value="">Select Away Team</option>
+                                %s
+                            </select>
                         </div>
                         <div class="div-input-container required-container">
                             <label for="edit_schedule_away_score">Away Score:</label>
                             <input id="edit_schedule_away_score" type="number" name="away_score" min="0" value="0" required>
                         </div>
                     </div>
-                    <div class="div-multi-input-containers custom-3-column-grid-reverse">
-                        <div class="div-input-container required-container">
-                            <label for="edit_schedule_season_id">Season ID:</label>
-                            <input id="edit_schedule_season_id" type="number" name="season_id" min="0" required>
-                        </div>
+                    <div class="div-multi-input-containers grid-2-columns">
                         <div class="div-input-container required-container">
                             <label for="edit_schedule_date">Game Date:</label>
                             <input id="edit_schedule_date" type="date" name="date" required>

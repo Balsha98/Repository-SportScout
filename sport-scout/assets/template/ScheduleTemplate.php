@@ -5,6 +5,24 @@ require_once 'assets/data/ScheduleData.php';
 
 class ScheduleTemplate
 {
+    private static function generatePopupOptions($array, $column)
+    {
+        $return = '';
+        foreach ($array as $option) {
+            $optionID = $option["{$column}_id"];
+            $columnName = $column === 'season' ? 'year' : 'name';
+            $optionName = $option["{$column}_{$columnName}"];
+
+            $return .= "
+                <option value='{$optionID}|{$optionName}'>
+                    {$optionName}
+                </option>
+            ";
+        }
+
+        return $return;
+    }
+
     public static function generatePopups($db, $teamID)
     {
         $teamData = $db->getTeamDataByTeamId('*', $teamID);
@@ -15,14 +33,46 @@ class ScheduleTemplate
         [['league_id' => $leagueID]] = $teamData;
 
         $return = '';
-        foreach (ScheduleData::POPUPS as $popup) {
+        foreach (ScheduleData::POPUPS as $i => $popup) {
+            if ($i === 0) {
+                $return .= sprintf(
+                    $popup,
+                    $sportName,
+                    $leagueName,
+                    self::generatePopupOptions(
+                        $db->getDistinctRows('season'),
+                        'season'
+                    ),
+                    self::generatePopupOptions(
+                        $db->getDistinctRows('team'),
+                        'team'
+                    ),
+                    self::generatePopupOptions(
+                        $db->getDistinctRows('team'),
+                        'team'
+                    ),
+                    $teamID,
+                    $sportID,
+                    $leagueID
+                );
+                continue;
+            }
+
             $return .= sprintf(
                 $popup,
-                $sportName,
-                $leagueName,
-                $teamID,
-                $sportID,
-                $leagueID
+                self::generatePopupOptions(
+                    $db->getDistinctRows('season'),
+                    'season'
+                ),
+                self::generatePopupOptions(
+                    $db->getDistinctRows('team'),
+                    'team'
+                ),
+                self::generatePopupOptions(
+                    $db->getDistinctRows('team'),
+                    'team'
+                ),
+                $teamID
             );
         }
 
