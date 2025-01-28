@@ -23,14 +23,66 @@ class AdminTemplate
         ];
     }
 
-    public static function generatePopups($roleID)
+    private static function generateOptions($array, $column)
+    {
+        $return = '';
+        foreach ($array as $option) {
+            $optionID = $option["{$column}_id"];
+            $optionName = $option["{$column}_name"];
+
+            $return .= "
+                <option value='{$optionID}|{$optionName}'>
+                    {$optionName}
+                </option>
+            ";
+        }
+
+        return $return;
+    }
+
+    public static function generatePopups($db, $roleID)
     {
         $neededIndex = self::getArrayIndexByRoleId($roleID);
         $relatedPopups = array_slice(AdminData::POPUPS, $neededIndex);
+        $distinctData = array_slice(AdminData::DISTINCT_DATA, $neededIndex);
+        $currSections = array_slice(AdminData::SIDEBAR_SECTIONS, $neededIndex);
 
         $return = '';
-        foreach ($relatedPopups as $popup) {
-            $return .= sprintf($popup);
+        foreach ($relatedPopups as $i => $popup) {
+            $distinctValue = $distinctData[$i][$currSections[$i]];
+
+            if ($distinctValue === null) {
+                $return .= sprintf($popup);
+                continue;
+            }
+
+            $columns = explode('|', $distinctValue);
+            switch (count($columns)) {
+                case 1:
+                    $return .= sprintf(
+                        $popup,
+                        self::generateOptions(
+                            $db->getDistinctRows($columns[0]),
+                            $columns[0]
+                        )
+                    );
+                    break;
+                case 2:
+                    $return .= sprintf(
+                        $popup,
+                        self::generateOptions(
+                            $db->getDistinctRows($columns[0]),
+                            $columns[0]
+                        ),
+                        self::generateOptions(
+                            $db->getDistinctRows($columns[1]),
+                            $columns[1]
+                        )
+                    );
+                    break;
+                default:
+                    // TODO: Implement case for seasons.
+            }
         }
 
         return $return;

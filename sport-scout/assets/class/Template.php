@@ -38,9 +38,9 @@ class Template
         return AdminTemplate::generateLinks($startIndex);
     }
 
-    public static function generateAdminPopups($startIndex)
+    public static function generateAdminPopups($db, $startIndex)
     {
-        return AdminTemplate::generatePopups($startIndex);
+        return AdminTemplate::generatePopups($db, $startIndex);
     }
 
     public static function generateAdminUsersDataContainer($data)

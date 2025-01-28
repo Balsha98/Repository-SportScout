@@ -35,7 +35,7 @@ echo Template::generatePageHead($pageData);
 ?>
     <!-- GRID CONTAINER -->
     <div class="grid-container">
-        <?php echo Template::generateAdminPopups($roleID); ?>
+        <?php echo Template::generateAdminPopups($db, $roleID); ?>
 
         <!-- POPUP OVERLAY -->
         <div class="popup-overlay hide-element">&nbsp;</div>

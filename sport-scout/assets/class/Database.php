@@ -820,9 +820,9 @@ class Database
         return null;
     }
 
-    public function getDistinctRows($table, $column)
+    public function getDistinctRows($table)
     {
-        $query = "SELECT DISTINCT {$column} FROM {$table};";
+        $query = "SELECT DISTINCT {$table}_id, {$table}_name FROM {$table}s;";
         $result = $this->db->query($query);
 
         if ($result->execute()) {

@@ -4,6 +4,15 @@ class AdminData
 {
     // ***** ADMIN PAGE USER SELECT OPTIONS ***** //
 
+    public const SIDEBAR_SECTIONS = [
+        'users',
+        'sports',
+        'leagues',
+        'seasons',
+        'teams',
+        'positions'
+    ];
+
     public const USER_SELECT_OPTIONS = [
         'Administrator' => '1|Administrator',
         'League Manager' => '2|League Manager',
@@ -46,6 +55,15 @@ class AdminData
         ]
     ];
 
+    public const DISTINCT_DATA = [
+        ['users' => 'league|team'],
+        ['sports' => null],
+        ['leagues' => 'sport'],
+        ['seasons' => 'sport|league'],
+        ['teams' => 'sport|league'],  // TODO: Add season as final.
+        ['positions' => 'sport']
+    ];
+
     // ***** ADMIN PAGE POPUPS ***** //
     public const POPUPS = [
         '
@@ -69,27 +87,31 @@ class AdminData
                             <input id="new_user_password" type="password" name="password" autocomplete="off" required>
                         </div>
                     </div>
+                    <div class="div-input-container required-container">
+                        <label for="new_user_role_name">Type of Role:</label>
+                        <select id="new_user_role_name" name="role_name" autocomplete="off" required>
+                            <option value="">Select Role</option>
+                            <option value="1|Administrator">Administrator</option>
+                            <option value="2|League Manager">League Manager</option>
+                            <option value="3|Team Manager">Team Manager</option>
+                            <option value="4|Team Coach">Team Coach</option>
+                            <option value="5|Fan">Fan</option>
+                        </select>
+                    </div>
                     <div class="div-multi-input-containers grid-2-columns">
                         <div class="div-input-container required-container">
-                            <label for="new_user_role_name">Type of Role:</label>
-                            <select id="new_user_role_name" name="role_name" autocomplete="off" required>
-                                <option value="">Select Role</option>
-                                <option value="1|Administrator">Administrator</option>
-                                <option value="2|League Manager">League Manager</option>
-                                <option value="3|Team Manager">Team Manager</option>
-                                <option value="4|Team Coach">Team Coach</option>
-                                <option value="5|Fan">Fan</option>
+                            <label for="new_user_league_id">League:</label>
+                            <select id="new_user_league_id" name="league_id" autocomplete="off" required>
+                                <option value="">Select League</option>
+                                %s
                             </select>
                         </div>
-                        <div class="div-multi-input-containers grid-2-columns">
-                            <div class="div-input-container required-container">
-                                <label for="new_user_league_id">League ID:</label>
-                                <input id="new_user_league_id" type="number" name="league_id" min="0" value="0" autocomplete="off" required>
-                            </div>
-                            <div class="div-input-container required-container">
-                                <label for="new_user_team_id">Team ID:</label>
-                                <input id="new_user_team_id" type="number" name="team_id" min="0" value="0" autocomplete="off" required>
-                            </div>
+                        <div class="div-input-container required-container">
+                            <label for="new_user_team_id">Team:</label>
+                            <select id="new_user_team_id" name="team_id" autocomplete="off" required>
+                                <option value="">Select Team</option>
+                                %s
+                            </select>
                         </div>
                     </div>
                     <div class="div-btn-container grid-btn-container">
@@ -142,14 +164,17 @@ class AdminData
                     <p>Fill in the following <span>fields</span> appropriately.</p>
                 </header>
                 <form class="form form-add" action="api/admin.php" method="POST">
-                    <div class="div-multi-input-containers custom-2-column-grid">
+                    <div class="div-multi-input-containers grid-2-columns">
                         <div class="div-input-container required-container">
                             <label for="new_league_name">League Name:</label>
                             <input id="new_league_name" type="text" name="league_name" autocomplete="off" required>
                         </div>
                         <div class="div-input-container required-container">
-                            <label for="new_league_sport_id">Sport ID:</label>
-                            <input id="new_league_sport_id" type="number" name="sport_id" min="1" autocomplete="off" required>
+                            <label for="new_league_sport_id">Sport:</label>
+                            <select id="new_league_sport_id" name="sport_id" autocomplete="off" required>
+                                <option value="">Select Sport</option>
+                                %s
+                            </select>
                         </div>
                     </div>
                     <div class="div-btn-container grid-btn-container">
@@ -180,20 +205,26 @@ class AdminData
                             <label for="new_season_year">Season Year:</label>
                             <input id="new_season_year" type="text" name="season_year" placeholder="YYYY/YY" autocomplete="off" required>
                         </div>
-                        <div class="div-multi-input-containers grid-2-columns">
-                            <div class="div-input-container required-container">
-                                <label for="new_season_sport_id">Sport ID:</label>
-                                <input id="new_season_sport_id" type="number" name="sport_id" min="1" autocomplete="off" required>
-                            </div>
-                            <div class="div-input-container required-container">
-                                <label for="new_season_league_id">League ID:</label>
-                                <input id="new_season_league_id" type="number" name="league_id" min="1" autocomplete="off" required>
-                            </div>
+                        <div class="div-input-container required-container">
+                            <label for="new_season_desc">Season Description:</label>
+                            <input id="new_season_desc" type="text" name="season_desc" autocomplete="off" required>
                         </div>
                     </div>
-                    <div class="div-input-container required-container">
-                        <label for="new_season_desc">Season Description:</label>
-                        <input id="new_season_desc" type="text" name="season_desc" autocomplete="off" required>
+                    <div class="div-multi-input-containers grid-2-columns">
+                        <div class="div-input-container required-container">
+                            <label for="new_season_sport_id">Sport:</label>
+                            <select id="new_season_sport_id" name="sport_id" autocomplete="off" required>
+                                <option value="">Select Sport</option>
+                                %s
+                            </select>
+                        </div>
+                        <div class="div-input-container required-container">
+                            <label for="new_season_league_id">League:</label>
+                            <select id="new_season_league_id" name="league_id" autocomplete="off" required>
+                                <option value="">Select League</option>
+                                %s
+                            </select>
+                        </div>
                     </div>
                     <div class="div-btn-container grid-btn-container">
                         <button class="btn btn-hollow btn-cancel" type="button">
@@ -218,28 +249,36 @@ class AdminData
                     <p>Fill in the following <span>fields</span> appropriately.</p>
                 </header>
                 <form class="form form-add" action="api/admin.php" method="POST">
-                    <div class="div-multi-input-containers">
+                    <div class="div-multi-input-containers grid-2-columns">
                         <div class="div-input-container required-container">
                             <label for="new_team_name">Team Name:</label>
                             <input id="new_team_name" type="text" name="team_name" autocomplete="off" required>
                         </div>
+                        <div class="div-input-container required-container">
+                            <label for="new_team_sport_id">Sport:</label>
+                            <select id="new_team_sport_id" name="sport_id" autocomplete="off" required>
+                                <option value="">Select Sport</option>
+                                %s
+                            </select>
+                        </div>
                     </div>
-                    <div class="div-multi-input-containers grid-4-columns">
+                    <div class="div-multi-input-containers grid-2-columns">
                         <div class="div-input-container required-container">
-                            <label for="new_team_sport_id">Sport ID:</label>
-                            <input id="new_team_sport_id" type="number" name="sport_id" min="1" autocomplete="off" required>
+                            <label for="new_team_league_id">League:</label>
+                            <select id="new_team_league_id" name="league_id" autocomplete="off" required>
+                                <option value="">Select League</option>
+                                %s
+                            </select>
                         </div>
-                        <div class="div-input-container required-container">
-                            <label for="new_team_league_id">League ID:</label>
-                            <input id="new_team_league_id" type="number" name="league_id" min="1" autocomplete="off" required>
-                        </div>
-                        <div class="div-input-container required-container">
-                            <label for="new_team_season_id">Season ID:</label>
-                            <input id="new_team_season_id" type="number" name="season_id" min="1" autocomplete="off" required>
-                        </div>
-                        <div class="div-input-container required-container">
-                            <label for="new_team_max_players">Max Players:</label>
-                            <input id="new_team_max_players" type="number" name="team_max_players" min="1" autocomplete="off" required>
+                        <div class="div-multi-input-containers grid-2-columns">
+                            <div class="div-input-container required-container">
+                                <label for="new_team_season_id">Season ID:</label>
+                                <input id="new_team_season_id" type="number" name="season_id" min="1" autocomplete="off" required>
+                            </div>
+                            <div class="div-input-container required-container">
+                                <label for="new_team_max_players">Max Players:</label>
+                                <input id="new_team_max_players" type="number" name="team_max_players" min="1" autocomplete="off" required>
+                            </div>
                         </div>
                     </div>
                     <div class="div-multi-input-containers grid-2-columns">
@@ -275,14 +314,17 @@ class AdminData
                     <p>Fill in the following <span>fields</span> appropriately.</p>
                 </header>
                 <form class="form form-add" action="api/admin.php" method="POST">
-                    <div class="div-multi-input-containers custom-2-column-grid">
+                    <div class="div-multi-input-containers grid-2-columns">
                         <div class="div-input-container required-container">
                             <label for="new_position_name">Position Name:</label>
                             <input id="new_position_name" type="text" name="position_name" autocomplete="off" required>
                         </div>
                         <div class="div-input-container required-container">
-                            <label for="new_position_sport_id">Sport ID:</label>
-                            <input id="new_position_sport_id" type="number" name="sport_id" min="1" autocomplete="off" required>
+                            <label for="new_position_sport_id">Sport:</label>
+                            <select id="new_position_sport_id" name="sport_id" autocomplete="off" required>
+                                <option value="">Select Sport</option>
+                                %s
+                            </select>
                         </div>
                     </div>
                     <div class="div-btn-container grid-btn-container">
