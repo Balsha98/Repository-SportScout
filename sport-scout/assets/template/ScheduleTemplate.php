@@ -218,6 +218,7 @@ class ScheduleTemplate
                     foreach ($array as $innerArray) {
                         $scheduleID = $innerArray['schedule_id'];
                         $seasonID = $innerArray['season_id'];
+                        $seasonYear = '';
 
                         // Temp team values.
                         $homeScore = $innerArray['home_score'];

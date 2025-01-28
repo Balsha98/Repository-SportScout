@@ -22,9 +22,21 @@ const formDeleteBtns = $(".btn-delete");
 const toggleEditGamePopup = function () {
     // Get the the schedule id and set the data.
     const scheduleID = $(this.closest(".div-schedule-game")).data("schedule-id");
+
+    const seasonID = $(`#schedule_season_id_${scheduleID}`).val();
+    const seasonYear = $(`#schedule_season_yser_${scheduleID}`).val();
+    $("#edit_schedule_season_id").val(`${seasonID}|${seasonYear}`);
+
+    ["home", "away"].forEach((side) => {
+        const teamID = $(`#schedule_${side}_team_id_${scheduleID}`).val();
+        const teamName = $(`#schedule_${side}_team_name_${scheduleID}`).val();
+        $(`#edit_schedule_${side}_team_id`).val(`${teamID}|${teamName}`);
+    });
+
     scheduleInputs["alter"]["schedule"].forEach((id) => {
         $(`#edit_${id}`).val($(`#${id}_${scheduleID}`).val());
     });
+
     $("#edit_schedule_id").val($(`#schedule_id_${scheduleID}`).val());
 
     // Show the popup.

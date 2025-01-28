@@ -103,11 +103,7 @@ export const scheduleInputs = {
         schedule: [
             "schedule_team_id",
             "schedule_season_id",
-            "schedule_home_team_id",
-            "schedule_home_team_name",
             "schedule_home_score",
-            "schedule_away_team_id",
-            "schedule_away_team_name",
             "schedule_away_score",
             "schedule_date",
             "schedule_completion_status",
