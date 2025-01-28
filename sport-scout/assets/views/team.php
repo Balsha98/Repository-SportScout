@@ -83,7 +83,7 @@ echo Template::generatePageHeader($pageData['active'], $roleID);
                     echo Template::generateNoneSelectedDiv($noneSelected);
                 } else {
                     $players = $db->getPlayersByTeamId($teamID);
-                    echo Template::generateTeamPlayersData($players, $roleID, $leagueName);
+                    echo Template::generateTeamPlayersData($db, $players, $roleID, $leagueName);
                 }
                 ?>
             </div>

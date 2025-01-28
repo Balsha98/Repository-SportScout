@@ -64,7 +64,7 @@ class TeamTemplate
         ];
     }
 
-    public static function generatePlayersData($data, $roleID, $leagueName)
+    public static function generatePlayersData($db, $data, $roleID, $leagueName)
     {
         [
             'is_empty' => $isEmpty,
@@ -89,6 +89,18 @@ class TeamTemplate
                 $playerJersey = $player['player_jersey'];
                 $sportID = $player['sport_id'];
                 $teamID = $player['team_id'];
+
+                $options = '';
+                foreach ($db->getDistinctRows('position') as $value) {
+                    $currID = $value['position_id'];
+                    $currName = $value['position_name'];
+                    $currValue = "{$currID}|{$currName}";
+
+                    if ($value['sport_id'] === $sportID) {
+                        $selected = "{$positionID}|{$positionName}" === $currValue ? 'selected' : '';
+                        $options .= "<option value='{$currValue}' {$selected}>{$currName}</option>";
+                    }
+                }
 
                 $submitBtns = '';
                 if ($roleID !== 5) {
@@ -143,8 +155,11 @@ class TeamTemplate
                             </div>
                             <div class='div-multi-input-containers grid-2-columns'>
                                 <div class='div-input-container {$requiredContainer}'>
-                                    <label for='player_position_id_{$playerID}'>Position ID:</label>
-                                    <input id='player_position_id_{$playerID}' type='number' name='position_id' min='0' value='{$positionID}' autocomplete='off' {$required}>
+                                    <label for='player_position_id_{$playerID}'>Position:</label>
+                                    <select id='player_position_id_{$playerID}' name='position_id' autocomplete='off' required>
+                                        <option value=''>Select Position</option>
+                                        {$options}
+                                    </select>
                                 </div>
                                 <div class='div-input-container {$requiredContainer}'>
                                     <label for='player_jersey_number_{$playerID}'>Jersey:</label>

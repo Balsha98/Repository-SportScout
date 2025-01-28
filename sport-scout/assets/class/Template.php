@@ -78,9 +78,9 @@ class Template
         return TeamTemplate::generatePopups($db, $teamData);
     }
 
-    public static function generateTeamPlayersData($data, $roleID, $leagueName)
+    public static function generateTeamPlayersData($db, $data, $roleID, $leagueName)
     {
-        return TeamTemplate::generatePlayersData($data, $roleID, $leagueName);
+        return TeamTemplate::generatePlayersData($db, $data, $roleID, $leagueName);
     }
 
     public static function generateTeamStaffData($data, $roleID, $leagueName)
