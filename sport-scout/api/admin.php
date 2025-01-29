@@ -298,14 +298,13 @@ if ($request === 'POST') {
 
         $sportID = '';
         $sportName = '';
-        Helper::setSportName(
-            $db,
-            $input,
-            $status,
-            $sportID,
-            $sportName,
-            "league_sport_id_{$itemID}"
-        );
+        $sportOption = $input["league_sport_id_{$itemID}"];
+        if ($sportOption === '') {
+            $status = 'fail';
+        } else {
+            $sportID = explode('|', $sportOption)[0];
+            $sportName = explode('|', $sportOption)[1];
+        }
 
         $return = [
             'status' => $status,
@@ -338,38 +337,30 @@ if ($request === 'POST') {
             $seasonDesc = '';
         }
 
-        $sportID = '';
-        $sportName = '';
-        Helper::setSportName(
-            $db,
-            $input,
-            $status,
-            $sportID,
-            $sportName,
-            "season_sport_id_{$itemID}"
-        );
-
-        $leagueID = '';
-        $leagueName = '';
-        Helper::setLeagueName(
-            $db,
-            $input,
-            $status,
-            $sportID,
-            $leagueID,
-            $leagueName,
-            "season_league_id_{$itemID}"
-        );
+        $options = [];
+        $inputKeys = ["season_sport_id_{$itemID}", "season_league_id_{$itemID}"];
+        foreach ($inputKeys as $key) {
+            $option = $input[$key];
+            if ($option === '') {
+                $status = 'fail';
+                foreach (['', ''] as $value) {
+                    $options[] = $value;
+                }
+            } else {
+                $options[] = explode('|', $option)[0];
+                $options[] = explode('|', $option)[1];
+            }
+        }
 
         $return = [
             'status' => $status,
             'season_id' => $itemID,
             "season_year_{$itemID}" => $seasonYear,
             "season_desc_{$itemID}" => $seasonDesc,
-            "season_sport_id_{$itemID}" => $sportID,
-            "season_sport_name_{$itemID}" => $sportName,
-            "season_league_id_{$itemID}" => $leagueID,
-            "season_league_name_{$itemID}" => $leagueName
+            "season_sport_id_{$itemID}" => $options[0],
+            "season_sport_name_{$itemID}" => $options[1],
+            "season_league_id_{$itemID}" => $options[2],
+            "season_league_name_{$itemID}" => $options[3]
         ];
 
         if ($status === 'success') {
@@ -382,29 +373,20 @@ if ($request === 'POST') {
         // Get sport for validation.
         $sportID = (int) $input["team_sport_id_{$itemID}"];
 
-        $leagueID = '';
-        $leagueName = '';
-        Helper::setLeagueName(
-            $db,
-            $input,
-            $status,
-            $sportID,
-            $leagueID,
-            $leagueName,
-            "team_league_id_{$itemID}"
-        );
-
-        $seasonID = '';
-        $seasonYear = '';
-        Helper::setSeasonYear(
-            $db,
-            $input,
-            $status,
-            $leagueID,
-            $seasonID,
-            $seasonYear,
-            "team_season_id_{$itemID}"
-        );
+        $options = [];
+        $inputKeys = ["team_league_id_{$itemID}", "team_season_id_{$itemID}"];
+        foreach ($inputKeys as $key) {
+            $option = $input[$key];
+            if ($option === '') {
+                $status = 'fail';
+                foreach (['', ''] as $value) {
+                    $options[] = $value;
+                }
+            } else {
+                $options[] = explode('|', $option)[0];
+                $options[] = explode('|', $option)[1];
+            }
+        }
 
         $maxPlayers = (int) $input["team_max_players_{$itemID}"];
         if ($maxPlayers === '') {
@@ -424,10 +406,10 @@ if ($request === 'POST') {
             'status' => $status,
             'team_id' => $itemID,
             "team_name_{$itemID}" => $teamName,
-            "team_league_id_{$itemID}" => $leagueID,
-            "team_league_name_{$itemID}" => $leagueName,
-            "team_season_id_{$itemID}" => $seasonID,
-            "team_season_year_{$itemID}" => $seasonYear,
+            "team_league_id_{$itemID}" => $options[0],
+            "team_league_name_{$itemID}" => $options[1],
+            "team_season_id_{$itemID}" => $options[2],
+            "team_season_year_{$itemID}" => $options[3],
             "team_max_players_{$itemID}" => $maxPlayers,
             "team_home_color_{$itemID}" => $homeColor,
             "team_away_color_{$itemID}" => $awayColor,
@@ -442,14 +424,13 @@ if ($request === 'POST') {
 
         $sportID = '';
         $sportName = '';
-        Helper::setSportName(
-            $db,
-            $input,
-            $status,
-            $sportID,
-            $sportName,
-            "position_sport_id_{$itemID}"
-        );
+        $sportOption = $input["position_sport_id_{$itemID}"];
+        if ($sportOption === '') {
+            $status = 'fail';
+        } else {
+            $sportID = explode('|', $sportOption)[0];
+            $sportName = explode('|', $sportOption)[1];
+        }
 
         $return = [
             'status' => $status,

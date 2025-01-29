@@ -707,25 +707,18 @@ const ajaxUpdate = function (clickEvent) {
                 reloadWindow(1);
             } else if (itemType === "league") {
                 $(`.${relContainerClass} .league-name`).text(data[`league_name_${rowID}`]);
-                $(`#league_sport_name_${rowID}`).val(data[`league_sport_name_${rowID}`]);
-
                 reloadWindow(1);
             } else if (itemType === "season") {
                 $(`.${relContainerClass} .season-year`).text(data[`season_year_${rowID}`]);
                 $(`.${relContainerClass} .season-desc`).text(data[`season_desc_${rowID}`]);
-                $(`#season_sport_name_${rowID}`).val(data[`season_sport_name_${rowID}`]);
-                $(`#season_league_name_${rowID}`).val(data[`season_league_name_${rowID}`]);
-
                 reloadWindow(1);
             } else if (itemType === "team") {
                 $(`.${relContainerClass} .team-name`).text(data[`team_name_${rowID}`]);
                 $(`.${relContainerClass} .league-name`).text(data[`team_league_name_${rowID}`]);
                 $(`.${relContainerClass} .season-year`).text(data[`team_season_year_${rowID}`]);
-
                 reloadWindow(1);
             } else if (itemType === "position") {
                 $(`.${relContainerClass} .position-name`).text(data[`position_name_${rowID}`]);
-                $(`#position_sport_name_${rowID}`).val(data[`position_sport_name_${rowID}`]);
             }
         },
     });
