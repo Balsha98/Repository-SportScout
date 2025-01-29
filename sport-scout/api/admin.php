@@ -64,8 +64,8 @@ if ($request === 'POST') {
         ];
 
         if ($status === 'success') {
-            // $db->alterAutoIncrement($table, $lastRowID);
-            // $db->insertNewUser($return);
+            $db->alterAutoIncrement($table, $lastRowID);
+            $db->insertNewUser($return);
         }
     } else if ($itemType === 'sport') {
         $sportName = Sanitize::stripString($input['new_sport_name']);
@@ -100,7 +100,8 @@ if ($request === 'POST') {
             'last_league_id' => $lastRowID,
             'new_league_name' => $leagueName,
             'new_league_sport_id' => $sportID,
-            'league_sport_name' => $sportName
+            'league_sport_name' => $sportName,
+            'distinct_sports' => $db->getDistinctRows('sport')
         ];
 
         if ($status === 'success') {
@@ -148,8 +149,10 @@ if ($request === 'POST') {
             'new_season_year' => $seasonYear,
             'new_season_sport_id' => $options[0],
             'season_sport_name' => $options[1],
+            'distinct_sports' => $db->getDistinctRows('sport'),
             'new_season_league_id' => $options[2],
             'season_league_name' => $options[3],
+            'distinct_leagues' => $db->getDistinctRows('league'),
             'new_season_desc' => $seasonDesc,
         ];
 
@@ -196,10 +199,13 @@ if ($request === 'POST') {
             'new_team_name' => $teamName,
             'new_team_sport_id' => $options[0],
             'team_sport_name' => $options[1],
+            'distinct_sports' => $db->getDistinctRows('sport'),
             'new_team_league_id' => $options[2],
             'team_league_name' => $options[3],
+            'distinct_leagues' => $db->getDistinctRows('league'),
             'new_team_season_id' => $options[4],
             'team_season_year' => $options[5],
+            'distinct_seasons' => $db->getDistinctRows('season'),
             'new_team_max_players' => $maxPlayers,
             'new_team_home_color' => $homeColor,
             'new_team_away_color' => $awayColor
