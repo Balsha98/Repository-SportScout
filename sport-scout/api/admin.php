@@ -158,40 +158,20 @@ if ($request === 'POST') {
         $teamName = Sanitize::stripString($input['new_team_name']);
         Sanitize::fullStringSearch($status, $teamName, 50);
 
-        $sportID = '';
-        $sportName = '';
-        Helper::setSportName(
-            $db,
-            $input,
-            $status,
-            $sportID,
-            $sportName,
-            'new_team_sport_id'
-        );
-
-        $leagueID = '';
-        $leagueName = '';
-        Helper::setLeagueName(
-            $db,
-            $input,
-            $status,
-            $sportID,
-            $leagueID,
-            $leagueName,
-            'new_team_league_id'
-        );
-
-        $seasonID = '';
-        $seasonYear = '';
-        Helper::setSeasonYear(
-            $db,
-            $input,
-            $status,
-            $leagueID,
-            $seasonID,
-            $seasonYear,
-            'new_team_season_id'
-        );
+        $options = [];
+        $inputKeys = ['new_team_sport_id', 'new_team_league_id', 'new_team_season_id'];
+        foreach ($inputKeys as $key) {
+            $option = $input[$key];
+            if ($option === '') {
+                $status = 'fail';
+                foreach (['', ''] as $value) {
+                    $options[] = $value;
+                }
+            } else {
+                $options[] = explode('|', $option)[0];
+                $options[] = explode('|', $option)[1];
+            }
+        }
 
         $maxPlayers = (int) $input['new_team_max_players'];
         if ($maxPlayers === '') {
@@ -211,12 +191,12 @@ if ($request === 'POST') {
             'status' => $status,
             'last_team_id' => $lastRowID,
             'new_team_name' => $teamName,
-            'new_team_sport_id' => $sportID,
-            'team_sport_name' => $sportName,
-            'new_team_league_id' => $leagueID,
-            'team_league_name' => $leagueName,
-            'new_team_season_id' => $seasonID,
-            'team_season_year' => $seasonYear,
+            'new_team_sport_id' => $options[0],
+            'team_sport_name' => $options[1],
+            'new_team_league_id' => $options[2],
+            'team_league_name' => $options[3],
+            'new_team_season_id' => $options[4],
+            'team_season_year' => $options[5],
             'new_team_max_players' => $maxPlayers,
             'new_team_home_color' => $homeColor,
             'new_team_away_color' => $awayColor
@@ -232,14 +212,13 @@ if ($request === 'POST') {
 
         $sportID = '';
         $sportName = '';
-        Helper::setSportName(
-            $db,
-            $input,
-            $status,
-            $sportID,
-            $sportName,
-            'new_position_sport_id'
-        );
+        $sportOption = $input['new_position_sport_id'];
+        if ($sportOption === '') {
+            $status = 'fail';
+        } else {
+            $sportID = explode('|', $sportOption)[0];
+            $sportName = explode('|', $sportOption)[1];
+        }
 
         $return = [
             'status' => $status,
