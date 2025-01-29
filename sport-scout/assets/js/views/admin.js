@@ -702,11 +702,8 @@ const ajaxUpdate = function (clickEvent) {
                 }
 
                 $(`.${relContainerClass} .role-name`).text(data[`user_role_name_${rowID}`]);
-                $(`#user_league_name_${rowID}`).val(data[`user_league_name_${rowID}`]);
-                $(`#user_team_name_${rowID}`).val(data[`user_team_name_${rowID}`]);
             } else if (itemType === "sport") {
                 $(`.${relContainerClass} .sport-name`).text(data[`sport_name_${rowID}`]);
-
                 reloadWindow(1);
             } else if (itemType === "league") {
                 $(`.${relContainerClass} .league-name`).text(data[`league_name_${rowID}`]);

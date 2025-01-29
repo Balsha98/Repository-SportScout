@@ -238,8 +238,8 @@ if ($request === 'POST') {
         ];
 
         if ($status === 'success') {
-            // $db->alterAutoIncrement($table, $lastRowID);
-            // $db->insertNewPosition($return);
+            $db->alterAutoIncrement($table, $lastRowID);
+            $db->insertNewPosition($return);
         }
     }
 
@@ -249,42 +249,31 @@ if ($request === 'POST') {
         $username = Sanitize::stripString($input["username_{$itemID}"]);
         Sanitize::fullStringSearch($status, $username, 25);
 
-        $roleID = '';
-        $roleName = '';
-        Helper::setRoleIdAndName(
-            $input,
-            $status,
-            $roleID,
-            $roleName,
-            "user_role_name_{$itemID}"
-        );
-
-        $leagueID = '';
-        $leagueName = '';
-        $teamID = '';
-        $teamName = '';
-        Helper::setLeagueAndTeamNames(
-            $db,
-            $input,
-            $status,
-            $leagueID,
-            $leagueName,
-            $teamID,
-            $teamName,
-            "user_league_id_{$itemID}",
-            "user_team_id_{$itemID}"
-        );
+        $options = [];
+        $inputKeys = ["user_role_name_{$itemID}", "user_league_id_{$itemID}", "user_team_id_{$itemID}"];
+        foreach ($inputKeys as $key) {
+            $option = $input[$key];
+            if ($option === '') {
+                $status = 'fail';
+                foreach (['', ''] as $value) {
+                    $options[] = $value;
+                }
+            } else {
+                $options[] = explode('|', $option)[0];
+                $options[] = explode('|', $option)[1];
+            }
+        }
 
         $return = [
             'status' => $status,
             'user_id' => $itemID,
             "username_{$itemID}" => $username,
-            'role_id' => $roleID,
-            "user_role_name_{$itemID}" => $roleName,
-            "user_league_id_{$itemID}" => $leagueID,
-            "user_league_name_{$itemID}" => $leagueName,
-            "user_team_id_{$itemID}" => $teamID,
-            "user_team_name_{$itemID}" => $teamName,
+            'role_id' => $options[0],
+            "user_role_name_{$itemID}" => $options[1],
+            "user_league_id_{$itemID}" => $options[2],
+            "user_league_name_{$itemID}" => $options[3],
+            "user_team_id_{$itemID}" => $options[4],
+            "user_team_name_{$itemID}" => $options[5],
         ];
 
         if ($status === 'success') {
