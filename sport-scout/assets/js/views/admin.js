@@ -23,15 +23,6 @@ const viewBtns = $(".btn-view");
 const updateBtns = $(".btn-update");
 const deleteBtns = $(".btn-delete");
 
-// ***** VARIABLES ***** //
-const selectOptions = {
-    Administrator: "1|Administrator",
-    "League Manager": "2|League Manager",
-    "Team Manager": "3|Team Manager",
-    "Team Coach": "4|Team Coach",
-    Fan: "5|Fan",
-};
-
 // ***** FUNCTIONS ***** //
 const attachViewBtnEvent = function (btns) {
     btns.each((_, btn) => {
@@ -77,7 +68,6 @@ const ajaxAdd = function (clickEvent) {
         type: method,
         data: JSON.stringify(data),
         success: function (response) {
-            console.log(response);
             const data = JSON.parse(response);
             const status = data["status"];
 
@@ -111,15 +101,56 @@ const ajaxAdd = function (clickEvent) {
                 const roleID = data["new_user_role_id"];
                 const roleName = data["new_user_role_name"];
                 const roleOption = `${roleID}|${roleName}`;
+
+                let distinctRoles = "";
+                for (const obj of data["distinct_roles"]) {
+                    const currOption = `${obj["role_id"]}|${obj["role_name"]}`;
+                    const selected = roleOption === currOption ? "selected" : "";
+
+                    distinctRoles += `
+                        <option value="${currOption}" ${selected}>
+                            ${obj["role_name"]}
+                        </option>
+                    `;
+                }
+
                 const leagueID = data["new_user_league_id"];
                 const leagueName = data["new_user_league_name"];
+                const leagueOption = `${leagueID}|${leagueName}`;
+
+                let distinctLeagues = "";
+                const leaguesArray = [];
+                leaguesArray.push({ league_id: 0, league_name: "All" });
+                data["distinct_leagues"].forEach((obj) => leaguesArray.push(obj));
+                for (const obj of leaguesArray) {
+                    const currOption = `${obj["league_id"]}|${obj["league_name"]}`;
+                    const selected = leagueOption === currOption ? "selected" : "";
+
+                    distinctLeagues += `
+                        <option value="${currOption}" ${selected}>
+                            ${obj["league_name"]}
+                        </option>
+                    `;
+                }
+
                 const teamID = data["new_user_team_id"];
                 const teamName = data["new_user_team_name"];
+                const teamOption = `${teamID}|${teamName}`;
 
-                let options = "";
-                for (const [key, value] of Object.entries(selectOptions)) {
-                    const selected = roleOption === value ? "selected" : "";
-                    options += `<option value="${value}" ${selected}>${key}</option>`;
+                let distinctTeams = "";
+                const teamsArray = [];
+                teamsArray.push({ team_id: 0, team_name: "All" });
+                teamsArray.push({ team_id: 0, team_name: "All Within The League" });
+                data["distinct_teams"].forEach((obj) => teamsArray.push(obj));
+                for (const obj of teamsArray) {
+                    const currOption = `${obj["team_id"]}|${obj["team_name"]}`;
+                    const selected = teamOption === currOption ? "selected" : "";
+
+                    distinctTeams += `
+                        <option value="${currOption}" ${selected}>
+                            ${obj["team_name"]}
+                        </option>
+                    `;
                 }
 
                 scrollUsers.append(`
@@ -151,26 +182,24 @@ const ajaxAdd = function (clickEvent) {
                                     <label for='user_role_name_${previousRowID}'>Role Type:</label>
                                     <select id='user_role_name_${previousRowID}' name='role_name' value='${roleOption}' autocomplete='off' required>
                                         <option value=''>Select Role</option>
-                                        ${options}
+                                        ${distinctRoles}
                                     </select>
                                 </div>
                             </div>
-                            <div class='div-multi-input-containers grid-4-columns'>
-                                <div class='div-input-container'>
-                                    <label for='user_league_name_${previousRowID}'>League:</label>
-                                    <input id='user_league_name_${previousRowID}' type='text' name='league_name' value='${leagueName}' autocomplete='off' readonly>
+                            <div class='div-multi-input-containers grid-2-columns'>
+                                <div class='div-input-container required-container'>
+                                    <label for='user_league_id_${previousRowID}'>League:</label>
+                                    <select id='user_league_id_${previousRowID}' name='league_id' value='${leagueOption}' autocomplete='off' required>
+                                        <option value=''>Select League</option>
+                                        {${distinctLeagues}}
+                                    </select>
                                 </div>
                                 <div class='div-input-container required-container'>
-                                    <label for='user_league_id_${previousRowID}'>League ID:</label>
-                                    <input id='user_league_id_${previousRowID}' type='number' name='league_id' value='${leagueID}' min='0' autocomplete='off' required>
-                                </div>
-                                <div class='div-input-container'>
-                                    <label for='user_team_name_${previousRowID}'>Team:</label>
-                                    <input id='user_team_name_${previousRowID}' type='text' name='team_name' value='${teamName}' autocomplete='off' readonly>
-                                </div>
-                                <div class='div-input-container required-container'>
-                                    <label for='user_team_id_${previousRowID}'>Team ID:</label>
-                                    <input id='user_team_id_${previousRowID}' type='number' name='team_id' value='${teamID}' min='0' autocomplete='off' required>
+                                    <label for='user_team_id_${previousRowID}'>Team:</label>
+                                    <select id='user_team_id_${previousRowID}' name='team_id' value='${teamOption}' autocomplete='off' required>
+                                        <option value=''>Select Team</option>
+                                        {${distinctTeams}}
+                                    </select>
                                 </div>
                             </div>
                             <div class='grid-btn-container'>

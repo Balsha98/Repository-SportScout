@@ -54,15 +54,18 @@ if ($request === 'POST') {
             'new_user_password' => $password,
             'new_user_role_id' => $options[0],
             'new_user_role_name' => $options[1],
+            'distinct_roles' => $db->getDistinctRows('role'),
             'new_user_league_id' => $options[2],
             'new_user_league_name' => $options[3],
+            'distinct_leagues' => $db->getDistinctRows('league'),
             'new_user_team_id' => $options[4],
-            'new_user_team_name' => $options[5]
+            'new_user_team_name' => $options[5],
+            'distinct_teams' => $db->getDistinctRows('team'),
         ];
 
         if ($status === 'success') {
-            $db->alterAutoIncrement($table, $lastRowID);
-            $db->insertNewUser($return);
+            // $db->alterAutoIncrement($table, $lastRowID);
+            // $db->insertNewUser($return);
         }
     } else if ($itemType === 'sport') {
         $sportName = Sanitize::stripString($input['new_sport_name']);
