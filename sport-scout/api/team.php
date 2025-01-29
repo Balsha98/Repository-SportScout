@@ -21,9 +21,9 @@ if ($request === 'POST') {
     ['id' => $lastRowID] = $db->getLastRowId($table, $itemType);
 
     if ($itemType === 'player') {
-        $sportID = $input['new_player_sport_id'];
+        $sportID = (int) $input['new_player_sport_id'];
         $leagueName = $input['new_player_league_name'];
-        $teamID = $input['new_player_team_id'];
+        $teamID = (int) $input['new_player_team_id'];
 
         $playerFirst = Sanitize::stripString($input['new_player_first']);
         Sanitize::fullStringSearch($status, $playerFirst, 50);
@@ -38,15 +38,20 @@ if ($request === 'POST') {
 
         $positionID = '';
         $positionName = '';
-        Helper::setPositionName(
-            $db,
-            $input,
-            $status,
-            $sportID,
-            $positionID,
-            $positionName,
-            'new_player_position_id'
-        );
+        $positionOption = $input['new_player_position_id'];
+        if ($positionOption === '') {
+            $status = 'fail';
+        } else {
+            $positionID = explode('|', $positionOption)[0];
+            $positionName = explode('|', $positionOption)[1];
+        }
+
+        $positions = [];
+        foreach ($db->getDistinctRows('position') as $position) {
+            if ($position['sport_id'] === $sportID) {
+                $positions[] = $position;
+            }
+        }
 
         $jerseyNumber = (int) $input['new_player_jersey_number'];
         if ($jerseyNumber === '') {
@@ -59,6 +64,7 @@ if ($request === 'POST') {
         $return = [
             'status' => $status,
             'last_player_id' => $lastRowID,
+            'sport_id' => $sportID,
             'team_id' => $teamID,
             'league_name' => $leagueName,
             'new_player_first' => $playerFirst,
@@ -66,6 +72,7 @@ if ($request === 'POST') {
             'new_player_dob' => $playerDOB,
             'new_player_position_id' => $positionID,
             'new_player_position_name' => $positionName,
+            'distinct_positions' => $positions,
             'new_player_jersey_number' => $jerseyNumber
         ];
 
@@ -87,13 +94,13 @@ if ($request === 'POST') {
 
         $roleID = '';
         $roleName = '';
-        Helper::setRoleIdAndName(
-            $input,
-            $status,
-            $roleID,
-            $roleName,
-            'new_user_role_name',
-        );
+        $roleOption = $input['new_user_role_name'];
+        if ($roleOption === '') {
+            $status = 'fail';
+        } else {
+            $roleID = explode('|', $roleOption)[0];
+            $roleName = explode('|', $roleOption)[1];
+        }
 
         $leagueID = (int) $input['new_user_league_id'];
         $leagueName = $input['new_user_league_name'];
@@ -112,8 +119,8 @@ if ($request === 'POST') {
         ];
 
         if ($status === 'success') {
-            $db->alterAutoIncrement($table, $lastRowID);
-            $db->insertNewUser($return);
+            // $db->alterAutoIncrement($table, $lastRowID);
+            // $db->insertNewUser($return);
         }
     }
 

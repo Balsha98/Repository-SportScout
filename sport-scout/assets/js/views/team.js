@@ -56,6 +56,7 @@ const ajaxAdd = function (clickEvent) {
             console.log(response);
             const data = JSON.parse(response);
             const status = data["status"];
+            console.log(data);
 
             if (status === "fail") {
                 general.warnInputs(data, status);
@@ -83,13 +84,29 @@ const ajaxAdd = function (clickEvent) {
                     }
                 }
 
+                const sportID = data["sport_id"];
                 const teamID = data["team_id"];
                 const leagueName = data["league_name"];
                 const playerFirst = data["new_player_first"];
                 const playerLast = data["new_player_last"];
                 const fullName = `${playerFirst} ${playerLast}`;
                 const playerDOB = data["new_player_dob"];
+                const positionID = data["new_player_position_id"];
                 const positionName = data["new_player_position_name"];
+                const positionOption = `${positionID}|${positionName}`;
+
+                let distinctPositions = "";
+                for (const obj of data["distinct_positions"]) {
+                    const currOption = `${obj["position_id"]}|${obj["position_name"]}`;
+                    const selected = positionOption === currOption ? "selected" : "";
+
+                    distinctPositions += `
+                        <option value="${currOption}" ${selected}>
+                            ${obj["position_name"]}
+                        </option>
+                    `;
+                }
+
                 const jerseyNumber = data["new_player_jersey_number"];
 
                 scrollPlayers.append(`
@@ -108,6 +125,8 @@ const ajaxAdd = function (clickEvent) {
                             </li>
                         </ul>
                         <form class='form form-info form-${previousRowID} hide-element' action='/api/team.php'>
+                            <input id='player_sport_id_${previousRowID}' type='hidden' name='sport_id' value='${sportID}'>
+                            <input id='player_team_id_${previousRowID}' type='hidden' name='team_id' value='${teamID}'>
                             <input id='player_id_${previousRowID}' type='hidden' name='player_id' value='${previousRowID}'>
                             <div class='div-multi-input-containers grid-2-columns'>
                                 <div class='div-input-container'>
@@ -119,17 +138,25 @@ const ajaxAdd = function (clickEvent) {
                                     <input id='player_last_${previousRowID}' type='text' name='player_last' value='${playerLast}' autocomplete='off' required>
                                 </div>
                             </div>
-                            <div class='div-multi-input-containers grid-3-columns'>
+                            <div class='div-multi-input-containers grid-2-columns'>
                                 <div class='div-input-container'>
                                     <label for='league_name_${previousRowID}'>League:</label>
                                     <input id='league_name_${previousRowID}' type='text' name='league_name' value='${leagueName}' readonly>
-                                    <input type='hidden' name='team_id' value='${teamID}'>
                                 </div>
-                                <div class='div-input-container'>
+                                <div class='div-input-container required-container'>
                                     <label for='player_dob_${previousRowID}'>Date of Birth:</label>
                                     <input id='player_dob_${previousRowID}' type='date' name='player_dob' value='${playerDOB}' autocomplete='off' required>
                                 </div>
-                                <div class='div-input-container'>
+                            </div>
+                            <div class='div-multi-input-containers grid-2-columns'>
+                                <div class='div-input-container required-container'>
+                                    <label for='player_position_id_${previousRowID}'>Position:</label>
+                                    <select id='player_position_id_${previousRowID}' name='position_id' autocomplete='off' required>
+                                        <option value=''>Select Position</option>
+                                        ${distinctPositions}
+                                    </select>
+                                </div>
+                                <div class='div-input-container required-container'>
                                     <label for='player_jersey_${previousRowID}'>Jersey:</label>
                                     <input id='player_jersey_${previousRowID}' type='number' name='player_jersey' min='0' value='${jerseyNumber}' required>
                                 </div>
@@ -166,7 +193,7 @@ const ajaxAdd = function (clickEvent) {
                     }
                 }
 
-                const username = data["new__username"];
+                const username = data["new_username"];
                 const roleID = data["new_user_role_id"];
                 const roleName = data["new_user_role_name"];
                 const roleOption = `${roleID}|${roleName}`;
@@ -199,11 +226,11 @@ const ajaxAdd = function (clickEvent) {
                             <input id='staff_id_${previousRowID}' type='hidden' name='staff_id' value='${previousRowID}'>
                             <input id='staff_league_id_${previousRowID}' type='hidden' name='league_id' value='${leagueID}'>
                             <div class='div-multi-input-containers grid-2-columns'>
-                                <div class='div-input-container'>
+                                <div class='div-input-container required-container'>
                                     <label for='staff_username_${previousRowID}'>Username:</label>
                                     <input id='staff_username_${previousRowID}' type='text' name='username' value='${username}' autocomplete='off' required>
                                 </div>
-                                <div class='div-input-container'>
+                                <div class='div-input-container required-container'>
                                     <label for='staff_role_name_${previousRowID}'>Role:</label>
                                     <select id='staff_role_name_${previousRowID}' name='role_name' autocomplete='off' required>
                                         <option value=''>Select Role</option>

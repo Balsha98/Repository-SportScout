@@ -141,6 +141,7 @@ export const teamInputs = {
     alter: {
         player: [
             "player_sport_id",
+            "player_team_id",
             "player_first",
             "player_last",
             "player_dob",
