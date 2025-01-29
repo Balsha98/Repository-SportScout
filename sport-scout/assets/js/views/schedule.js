@@ -24,7 +24,7 @@ const toggleEditGamePopup = function () {
     const scheduleID = $(this.closest(".div-schedule-game")).data("schedule-id");
 
     const seasonID = $(`#schedule_season_id_${scheduleID}`).val();
-    const seasonYear = $(`#schedule_season_yser_${scheduleID}`).val();
+    const seasonYear = $(`#schedule_season_year_${scheduleID}`).val();
     $("#edit_schedule_season_id").val(`${seasonID}|${seasonYear}`);
 
     ["home", "away"].forEach((side) => {

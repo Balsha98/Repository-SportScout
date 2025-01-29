@@ -816,6 +816,18 @@ class Database
         return null;
     }
 
+    public function getRowDataById($table, $id)
+    {
+        $query = "SELECT * FROM {$table}s WHERE {$table}_id = {$id};";
+        $result = $this->db->query($query);
+
+        if ($result->execute()) {
+            return $result->fetchAll(PDO::FETCH_ASSOC);
+        }
+
+        return null;
+    }
+
     public function getDistinctRows($table)
     {
         $query = "SELECT DISTINCT * FROM {$table}s;";

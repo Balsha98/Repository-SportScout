@@ -102,7 +102,6 @@ export const scheduleInputs = {
     alter: {
         schedule: [
             "schedule_team_id",
-            "schedule_season_id",
             "schedule_home_score",
             "schedule_away_score",
             "schedule_date",

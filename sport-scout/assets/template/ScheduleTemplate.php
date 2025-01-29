@@ -218,7 +218,7 @@ class ScheduleTemplate
                     foreach ($array as $innerArray) {
                         $scheduleID = $innerArray['schedule_id'];
                         $seasonID = $innerArray['season_id'];
-                        $seasonYear = '';
+                        [['season_year' => $seasonYear]] = $db->getRowDataById('season', $seasonID);
 
                         // Temp team values.
                         $homeScore = $innerArray['home_score'];
@@ -287,6 +287,7 @@ class ScheduleTemplate
                                     <input id='schedule_id_{$scheduleID}' type='hidden' name='schedule_id' value='{$scheduleID}'>
                                     <input id='schedule_team_id_{$scheduleID}' type='hidden' name='team_id' value='{$scheduleID}'>
                                     <input id='schedule_season_id_{$scheduleID}' type='hidden' name='season_id' value='{$seasonID}'>
+                                    <input id='schedule_season_year_{$scheduleID}' type='hidden' name='season_year' value='{$seasonYear}'>
                                     <input id='schedule_home_team_id_{$scheduleID}' type='hidden' name='home_team_id' value='{$homeTeamID}'>
                                     <input id='schedule_home_team_name_{$scheduleID}' type='hidden' name='home_team_name' value='{$homeTeamName}'>
                                     <input id='schedule_home_score_{$scheduleID}' type='hidden' name='home_score' value='{$homeScore}'>
