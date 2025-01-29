@@ -199,7 +199,6 @@ if ($request === 'POST') {
             'new_team_name' => $teamName,
             'new_team_sport_id' => $options[0],
             'team_sport_name' => $options[1],
-            'distinct_sports' => $db->getDistinctRows('sport'),
             'new_team_league_id' => $options[2],
             'team_league_name' => $options[3],
             'distinct_leagues' => $db->getDistinctRows('league'),
@@ -234,12 +233,13 @@ if ($request === 'POST') {
             'last_position_id' => $lastRowID,
             'new_position_name' => $positionName,
             'new_position_sport_id' => $sportID,
-            'position_sport_name' => $sportName
+            'position_sport_name' => $sportName,
+            'distinct_sports' => $db->getDistinctRows('sport')
         ];
 
         if ($status === 'success') {
-            $db->alterAutoIncrement($table, $lastRowID);
-            $db->insertNewPosition($return);
+            // $db->alterAutoIncrement($table, $lastRowID);
+            // $db->insertNewPosition($return);
         }
     }
 

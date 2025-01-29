@@ -451,8 +451,36 @@ const ajaxAdd = function (clickEvent) {
                 const sportName = data["team_sport_name"];
                 const leagueID = data["new_team_league_id"];
                 const leagueName = data["team_league_name"];
+                const leagueOption = `${leagueID}|${leagueName}`;
+
+                let distinctLeagues = "";
+                for (const obj of data["distinct_leagues"]) {
+                    const currOption = `${obj["league_id"]}|${obj["league_name"]}`;
+                    const selected = leagueOption === currOption ? "selected" : "";
+
+                    distinctLeagues += `
+                        <option value="${currOption}" ${selected}>
+                            ${obj["league_name"]}
+                        </option>
+                    `;
+                }
+
                 const seasonID = data["new_team_season_id"];
                 const seasonYear = data["team_season_year"];
+                const seasonOption = `${seasonID}|${seasonYear}`;
+
+                let distinctSeasons = "";
+                for (const obj of data["distinct_seasons"]) {
+                    const currOption = `${obj["season_id"]}|${obj["season_year"]}`;
+                    const selected = seasonOption === currOption ? "selected" : "";
+
+                    distinctSeasons += `
+                        <option value="${currOption}" ${selected}>
+                            ${obj["season_year"]}
+                        </option>
+                    `;
+                }
+
                 const maxPlayers = data["new_team_max_players"];
                 const homeColors = data["new_team_home_color"];
                 const awayColors = data["new_team_away_color"];
@@ -486,22 +514,24 @@ const ajaxAdd = function (clickEvent) {
                                     <input id='team_name_${previousRowID}' type='text' name='team_name' value='${teamName}' autocomplete='off' required>
                                 </div>
                                 <div class='div-input-container'>
-                                    <label for='team_id_${previousRowID}'>Team ID:</label>
-                                    <input id='team_id_${previousRowID}' type='number' name='team_id' value='${previousRowID}' readonly>
-                                </div>
-                            </div>
-                            <div class='div-multi-input-containers grid-4-columns'>
-                                <div class='div-input-container'>
                                     <label for='team_sport_name_${previousRowID}'>Sport:</label>
                                     <input id='team_sport_name_${previousRowID}' type='text' name='team_sport_name' value='${sportName}' readonly>
                                 </div>
+                            </div>
+                            <div class='div-multi-input-containers grid-3-columns'>
                                 <div class='div-input-container required-container'>
-                                    <label for='team_league_id_${previousRowID}'>League ID:</label>
-                                    <input id='team_league_id_${previousRowID}' type='number' name='team_league_id' min='1' value='${leagueID}' autocomplete='off' required>
+                                    <label for='team_league_id_${previousRowID}'>League:</label>
+                                    <select id='team_league_id_${previousRowID}' name='league_id' autocomplete='off' required>
+                                        <option value=''>Select League</option>
+                                        ${distinctLeagues}
+                                    </select>
                                 </div>
                                 <div class='div-input-container required-container'>
-                                    <label for='team_season_id_${previousRowID}'>Season ID:</label>
-                                    <input id='team_season_id_${previousRowID}' type='number' name='team_season_id' min='1' value='${seasonID}' autocomplete='off' required>
+                                    <label for='team_season_id_${previousRowID}'>Season:</label>
+                                    <select id='team_season_id_${previousRowID}' name='season_id' autocomplete='off' required>
+                                        <option value=''>Select Season</option>
+                                        ${distinctSeasons}
+                                    </select>
                                 </div>
                                 <div class='div-input-container required-container'>
                                     <label for='team_max-players_${previousRowID}'>Max Players:</label>
@@ -548,11 +578,22 @@ const ajaxAdd = function (clickEvent) {
                     }
                 }
 
-                console.log(data);
-
                 const positionName = data["new_position_name"];
                 const sportID = data["new_position_sport_id"];
                 const sportName = data["position_sport_name"];
+                const sportOption = `${sportID}|${sportName}`;
+
+                let distinctSports = "";
+                for (const obj of data["distinct_sports"]) {
+                    const currOption = `${obj["sport_id"]}|${obj["sport_name"]}`;
+                    const selected = sportOption === currOption ? "selected" : "";
+
+                    distinctSports += `
+                        <option value="${currOption}" ${selected}>
+                            ${obj["sport_name"]}
+                        </option>
+                    `;
+                }
 
                 scrollPositions.append(`
                     <div class='div-row-container position-row-container-${++previousRowID}' data-row-id='${previousRowID}'>
@@ -571,18 +612,17 @@ const ajaxAdd = function (clickEvent) {
                         </ul>
                         <form class='form form-info form-${previousRowID} hide-element' action='/api/admin.php'>
                             <input id='position_id_${previousRowID}' type='hidden' name='position_id' value='${previousRowID}'>
-                            <div class='div-multi-input-containers grid-3-columns'>
+                            <div class='div-multi-input-containers grid-2-columns'>
                                 <div class='div-input-container required-container'>
                                     <label for='position_name_${previousRowID}'>Team Name:</label>
                                     <input id='position_name_${previousRowID}' type='text' name='position_name' value='${positionName}' autocomplete='off' required>
                                 </div>
-                                <div class='div-input-container'>
-                                    <label for='position_sport_name_${previousRowID}'>Sport:</label>
-                                    <input id='position_sport_name_${previousRowID}' type='text' name='sport_name' value='${sportName}' readonly>
-                                </div>
                                 <div class='div-input-container required-container'>
-                                    <label for='position_sport_id_${previousRowID}'>Sport ID:</label>
-                                    <input id='position_sport_id_${previousRowID}' type='number' name='sport_id' value='${sportID}' min='1' required>
+                                    <label for='position_sport_id_${previousRowID}'>Sport:</label>
+                                    <select id='position_sport_id_${previousRowID}' name='sport_id' autocomplete='off' required>
+                                        <option value=''>Select Sport</option>
+                                        ${distinctSports}
+                                    </select>
                                 </div>
                             </div>
                             <div class='grid-btn-container'>
