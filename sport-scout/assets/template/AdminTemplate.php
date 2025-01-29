@@ -419,7 +419,7 @@ class AdminTemplate
                                 </div>
                                 <div class='div-input-container required-container'>
                                     <label for='league_sport_id_{$leagueID}'>Sport:</label>
-                                    <select id='user_sport_id_{$leagueID}' name='sport_id' autocomplete='off' required>
+                                    <select id='league_sport_id_{$leagueID}' name='sport_id' autocomplete='off' required>
                                         <option value=''>Select Sport</option>
                                         {$options}
                                     </select>
@@ -678,14 +678,14 @@ class AdminTemplate
                             <div class='div-multi-input-containers grid-3-columns'>
                                 <div class='div-input-container {$requiredContainer}'>
                                     <label for='team_league_id_{$teamID}'>League:</label>
-                                    <select id='team_league_id_{$seasonID}' name='league_id' autocomplete='off' required>
+                                    <select id='team_league_id_{$teamID}' name='league_id' autocomplete='off' required>
                                         <option value=''>Select League</option>
                                         {$optionsData[0]}
                                     </select>
                                 </div>
                                 <div class='div-input-container {$requiredContainer}'>
                                     <label for='team_season_id_{$teamID}'>Season:</label>
-                                    <select id='team_season_id_{$seasonID}' name='season_id' autocomplete='off' required>
+                                    <select id='team_season_id_{$teamID}' name='season_id' autocomplete='off' required>
                                         <option value=''>Select Season</option>
                                         {$optionsData[1]}
                                     </select>
