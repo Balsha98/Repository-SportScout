@@ -32,43 +32,32 @@ if ($request === 'POST') {
             $password = '';
         }
 
-        $roleID = '';
-        $roleName = '';
-        Helper::setRoleIdAndName(
-            $input,
-            $status,
-            $roleID,
-            $roleName,
-            'new_user_role_name'
-        );
-
-        $leagueID = '';
-        $leagueName = '';
-        $teamID = '';
-        $teamName = '';
-        Helper::setLeagueAndTeamNames(
-            $db,
-            $input,
-            $status,
-            $leagueID,
-            $leagueName,
-            $teamID,
-            $teamName,
-            'new_user_league_id',
-            'new_user_team_id'
-        );
+        $options = [];
+        $inputKeys = ['new_user_role_name', 'new_user_league_id', 'new_user_team_id'];
+        foreach ($inputKeys as $key) {
+            $option = $input[$key];
+            if ($option === '') {
+                $status = 'fail';
+                foreach (['', ''] as $value) {
+                    $options[] = $value;
+                }
+            } else {
+                $options[] = explode('|', $option)[0];
+                $options[] = explode('|', $option)[1];
+            }
+        }
 
         $return = [
             'status' => $status,
             'last_user_id' => $lastRowID,
             'new_username' => $username,
             'new_user_password' => $password,
-            'new_user_role_id' => $roleID,
-            'new_user_role_name' => $roleName,
-            'new_user_league_id' => $leagueID,
-            'new_user_league_name' => $leagueName,
-            'new_user_team_id' => $teamID,
-            'new_user_team_name' => $teamName
+            'new_user_role_id' => $options[0],
+            'new_user_role_name' => $options[1],
+            'new_user_league_id' => $options[2],
+            'new_user_league_name' => $options[3],
+            'new_user_team_id' => $options[4],
+            'new_user_team_name' => $options[5]
         ];
 
         if ($status === 'success') {
@@ -95,14 +84,13 @@ if ($request === 'POST') {
 
         $sportID = '';
         $sportName = '';
-        Helper::setSportName(
-            $db,
-            $input,
-            $status,
-            $sportID,
-            $sportName,
-            'new_league_sport_id'
-        );
+        $sportOption = $input['new_league_sport_id'];
+        if ($sportOption === '') {
+            $status = 'fail';
+        } else {
+            $sportID = explode('|', $sportOption)[0];
+            $sportName = explode('|', $sportOption)[1];
+        }
 
         $return = [
             'status' => $status,
@@ -128,29 +116,6 @@ if ($request === 'POST') {
             $seasonYear = '';
         }
 
-        $sportName = '';
-        $sportID = '';
-        Helper::setSportName(
-            $db,
-            $input,
-            $status,
-            $sportID,
-            $sportName,
-            'new_season_sport_id'
-        );
-
-        $leagueName = '';
-        $leagueID = '';
-        Helper::setLeagueName(
-            $db,
-            $input,
-            $status,
-            $sportID,
-            $leagueID,
-            $leagueName,
-            'new_season_league_id'
-        );
-
         $seasonDesc = Sanitize::stripString($input['new_season_desc']);
         if ($seasonDesc === '') {
             $status = 'fail';
@@ -159,14 +124,29 @@ if ($request === 'POST') {
             $seasonDesc = '';
         }
 
+        $options = [];
+        $inputKeys = ['new_season_sport_id', 'new_season_league_id'];
+        foreach ($inputKeys as $key) {
+            $option = $input[$key];
+            if ($option === '') {
+                $status = 'fail';
+                foreach (['', ''] as $value) {
+                    $options[] = $value;
+                }
+            } else {
+                $options[] = explode('|', $option)[0];
+                $options[] = explode('|', $option)[1];
+            }
+        }
+
         $return = [
             'status' => $status,
             'last_season_id' => $lastRowID,
             'new_season_year' => $seasonYear,
-            'new_season_sport_id' => $sportID,
-            'season_sport_name' => $sportName,
-            'new_season_league_id' => $leagueID,
-            'season_league_name' => $leagueName,
+            'new_season_sport_id' => $options[0],
+            'season_sport_name' => $options[1],
+            'new_season_league_id' => $options[2],
+            'season_league_name' => $options[3],
             'new_season_desc' => $seasonDesc,
         ];
 
