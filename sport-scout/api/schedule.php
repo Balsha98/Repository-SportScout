@@ -111,8 +111,8 @@ if ($request === 'POST') {
     ];
 
     if ($status === 'success') {
-        // $db->alterAutoIncrement($itemType, $lastRowID);
-        // $db->insertNewScheduleGame($return);
+        $db->alterAutoIncrement($itemType, $lastRowID);
+        $db->insertNewScheduleGame($return);
     }
 
     echo Encoder::toJSON($return);
