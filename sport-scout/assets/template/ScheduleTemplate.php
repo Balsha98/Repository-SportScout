@@ -216,6 +216,7 @@ class ScheduleTemplate
                     $emptyInnerCounter++;
                 } else {
                     foreach ($array as $innerArray) {
+                        $currTeamID = $innerArray['team_id'];
                         $scheduleID = $innerArray['schedule_id'];
                         $seasonID = $innerArray['season_id'];
                         [['season_year' => $seasonYear]] = $db->getRowDataById('season', $seasonID);
@@ -285,7 +286,7 @@ class ScheduleTemplate
                                 </div>
                                 <div class='div-hidden-inputs-container'>
                                     <input id='schedule_id_{$scheduleID}' type='hidden' name='schedule_id' value='{$scheduleID}'>
-                                    <input id='schedule_team_id_{$scheduleID}' type='hidden' name='team_id' value='{$scheduleID}'>
+                                    <input id='schedule_team_id_{$scheduleID}' type='hidden' name='team_id' value='{$currTeamID}'>
                                     <input id='schedule_season_id_{$scheduleID}' type='hidden' name='season_id' value='{$seasonID}'>
                                     <input id='schedule_season_year_{$scheduleID}' type='hidden' name='season_year' value='{$seasonYear}'>
                                     <input id='schedule_home_team_id_{$scheduleID}' type='hidden' name='home_team_id' value='{$homeTeamID}'>

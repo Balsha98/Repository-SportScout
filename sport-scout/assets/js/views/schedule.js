@@ -214,13 +214,18 @@ addNewGameBtn?.click(function (clickEvent) {
                         </div>
                     </div>
                     <div class="div-hidden-inputs-container">
+                        <input id="schedule_id_${prevScheduleID}" type="hidden" name="schedule_id" value="${prevScheduleID}">
+                        <input id="schedule_team_id_${prevScheduleID}" type="hidden" name="team_id" value="${teamID}">
                         <input id="schedule_season_id_${prevScheduleID}" type="hidden" name="season_id" value="${seasonID}">
+                        <input id="schedule_season_year_${prevScheduleID}" type="hidden" name="season_year" value="${seasonYear}">
                         <input id="schedule_home_id_${prevScheduleID}" type="hidden" name="home_id" value="${homeID}">
+                        <input id="schedule_home_team_name_${prevScheduleID}" type="hidden" name="home_team_name" value="${homeName}">
                         <input id="schedule_home_score_${prevScheduleID}" type="hidden" name="home_score" value="${homeScore}">
                         <input id="schedule_away_id_${prevScheduleID}" type="hidden" name="away_id" value="${awayID}">
+                        <input id="schedule_away_team_name_${prevScheduleID}" type="hidden" name="away_team_name" value="${awayName}">
                         <input id="schedule_away_score_${prevScheduleID}" type="hidden" name="away_score" value="${awayScore}">
-                        <input id="schedule_completion_${prevScheduleID}" type="hidden" name="completion" value="${compStatus}">
                         <input id="schedule_date_${prevScheduleID}" type="hidden" name="date" value="${newDate}">
+                        <input id="schedule_completion_${prevScheduleID}" type="hidden" name="completion" value="${compStatus}">
                     </div>
                 </div>
             `);
