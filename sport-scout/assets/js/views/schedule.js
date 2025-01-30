@@ -153,14 +153,15 @@ addNewGameBtn?.click(function (clickEvent) {
 
             // Getting the season id.
             const seasonID = data["new_schedule_season_id"];
+            const seasonYear = data["new_schedule_season_year"];
 
             // Getting the home team.
-            const homeID = data["new_schedule_home_team_id"];
+            const homeTeamID = data["new_schedule_home_team_id"];
             const homeName = data["new_home_team_name"];
             const homeScore = data["new_schedule_home_score"];
 
             // Getting the away team.
-            const awayID = data["new_schedule_away_team_id"];
+            const awayTeamID = data["new_schedule_away_team_id"];
             const awayName = data["new_away_team_name"];
             const awayScore = data["new_schedule_away_score"];
 
@@ -218,10 +219,10 @@ addNewGameBtn?.click(function (clickEvent) {
                         <input id="schedule_team_id_${prevScheduleID}" type="hidden" name="team_id" value="${teamID}">
                         <input id="schedule_season_id_${prevScheduleID}" type="hidden" name="season_id" value="${seasonID}">
                         <input id="schedule_season_year_${prevScheduleID}" type="hidden" name="season_year" value="${seasonYear}">
-                        <input id="schedule_home_id_${prevScheduleID}" type="hidden" name="home_id" value="${homeID}">
+                        <input id="schedule_home_id_${prevScheduleID}" type="hidden" name="home_id" value="${homeTeamID}">
                         <input id="schedule_home_team_name_${prevScheduleID}" type="hidden" name="home_team_name" value="${homeName}">
                         <input id="schedule_home_score_${prevScheduleID}" type="hidden" name="home_score" value="${homeScore}">
-                        <input id="schedule_away_id_${prevScheduleID}" type="hidden" name="away_id" value="${awayID}">
+                        <input id="schedule_away_id_${prevScheduleID}" type="hidden" name="away_id" value="${awayTeamID}">
                         <input id="schedule_away_team_name_${prevScheduleID}" type="hidden" name="away_team_name" value="${awayName}">
                         <input id="schedule_away_score_${prevScheduleID}" type="hidden" name="away_score" value="${awayScore}">
                         <input id="schedule_date_${prevScheduleID}" type="hidden" name="date" value="${newDate}">

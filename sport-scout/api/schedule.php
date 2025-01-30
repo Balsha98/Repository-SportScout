@@ -24,24 +24,20 @@ if ($request === 'POST') {
     $leagueID = (int) $input['new_schedule_league_id'];
     $teamID = (int) $input['new_schedule_team_id'];
 
-    $seasonID = (int) $input['new_schedule_season_id'];
-    if ($seasonID === '') {
-        $status = 'fail';
-    } else if ($seasonID <= 0) {
-        $status = 'fail';
-        $seasonID = '';
+    $options = [];
+    $inputKeys = ['new_schedule_season_id', 'new_schedule_home_team_id', 'new_schedule_away_team_id'];
+    foreach ($inputKeys as $key) {
+        $option = $input[$key];
+        if ($option === '') {
+            $status = 'fail';
+            foreach (['', ''] as $value) {
+                $options[] = $value;
+            }
+        } else {
+            $options[] = explode('|', $option)[0];
+            $options[] = explode('|', $option)[1];
+        }
     }
-
-    $homeTeamID = '';
-    $homeTeamName = '';
-    Helper::setTeamName(
-        $db,
-        $input,
-        $status,
-        $homeTeamID,
-        $homeTeamName,
-        'new_schedule_home_team_id'
-    );
 
     $homeScore = (int) $input['new_schedule_home_score'];
     if ($homeScore === '') {
@@ -50,17 +46,6 @@ if ($request === 'POST') {
         $status = 'fail';
         $homeScore = '';
     }
-
-    $awayTeamID = '';
-    $awayTeamName = '';
-    Helper::setTeamName(
-        $db,
-        $input,
-        $status,
-        $awayTeamID,
-        $awayTeamName,
-        'new_schedule_away_team_id'
-    );
 
     $awayScore = (int) $input['new_schedule_away_score'];
     if ($awayScore === '') {
@@ -71,16 +56,16 @@ if ($request === 'POST') {
     }
 
     // Can't be the same.
-    if ($homeTeamID === $awayTeamID) {
+    if ($options[2] === $options[4]) {
         $status = 'fail';
-        $homeTeamID = '';
-        $awayTeamID = '';
+        $options[2] = '';
+        $options[4] = '';
     }
 
     // Must be selected team.
-    if ($homeTeamID !== '' && $awayTeamID !== '') {
+    if ($options[2] !== '' && $options[4] !== '') {
         $isSelected = false;
-        foreach ([$homeTeamID, $awayTeamID] as $id) {
+        foreach ([$options[2], $options[4]] as $id) {
             if ((int) $id === $teamID) {
                 $isSelected = true;
                 break;
@@ -89,8 +74,8 @@ if ($request === 'POST') {
 
         if (!$isSelected) {
             $status = 'fail';
-            $homeTeamID = '';
-            $awayTeamID = '';
+            $options[2] = '';
+            $options[4] = '';
         }
     }
 
@@ -113,20 +98,21 @@ if ($request === 'POST') {
         'new_schedule_sport_id' => $sportID,
         'new_schedule_league_id' => $leagueID,
         'new_schedule_team_id' => $teamID,
-        'new_schedule_season_id' => $seasonID,
-        'new_schedule_home_team_id' => $homeTeamID,
-        'new_home_team_name' => $homeTeamName,
+        'new_schedule_season_id' => $options[0],
+        'new_schedule_season_year' => $options[1],
+        'new_schedule_home_team_id' => $options[2],
+        'new_home_team_name' => $options[3],
         'new_schedule_home_score' => $homeScore,
-        'new_schedule_away_team_id' => $awayTeamID,
-        'new_away_team_name' => $awayTeamName,
+        'new_schedule_away_team_id' => $options[4],
+        'new_away_team_name' => $options[5],
         'new_schedule_away_score' => $awayScore,
         'new_schedule_date' => $scheduled,
         'new_schedule_completion_status' => $completionStatus
     ];
 
     if ($status === 'success') {
-        $db->alterAutoIncrement($itemType, $lastRowID);
-        $db->insertNewScheduleGame($return);
+        // $db->alterAutoIncrement($itemType, $lastRowID);
+        // $db->insertNewScheduleGame($return);
     }
 
     echo Encoder::toJSON($return);
