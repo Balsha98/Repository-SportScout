@@ -119,8 +119,8 @@ if ($request === 'POST') {
         ];
 
         if ($status === 'success') {
-            // $db->alterAutoIncrement($table, $lastRowID);
-            // $db->insertNewUser($return);
+            $db->alterAutoIncrement($table, $lastRowID);
+            $db->insertNewUser($return);
         }
     }
 
@@ -142,15 +142,13 @@ if ($request === 'POST') {
 
         $positionID = '';
         $positionName = '';
-        Helper::setPositionName(
-            $db,
-            $input,
-            $status,
-            $sportID,
-            $positionID,
-            $positionName,
-            "player_position_id_{$itemID}"
-        );
+        $positionOption = $input["player_position_id_{$itemID}"];
+        if ($positionOption === '') {
+            $status = 'fail';
+        } else {
+            $positionID = explode('|', $positionOption)[0];
+            $positionName = explode('|', $positionOption)[1];
+        }
 
         $player_jersey = (int) $input["player_jersey_number_{$itemID}"];
         if ($player_jersey === '') {
@@ -180,13 +178,13 @@ if ($request === 'POST') {
 
         $roleID = '';
         $roleName = '';
-        Helper::setRoleIdAndName(
-            $input,
-            $status,
-            $roleID,
-            $roleName,
-            "staff_role_name_{$itemID}",
-        );
+        $roleOption = $input["staff_role_name_{$itemID}"];
+        if ($roleOption === '') {
+            $status = 'fail';
+        } else {
+            $roleID = explode('|', $roleOption)[0];
+            $roleName = explode('|', $roleOption)[1];
+        }
 
         $return = [
             'status' => $status,

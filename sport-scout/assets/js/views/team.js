@@ -316,9 +316,8 @@ const ajaxUpdate = function (clickEvent) {
             general.warnInputs(data, status);
 
             if (itemType === "player") {
-                $(`.${relContainerClass} .full-name`).text(
-                    `${data[`player_first_${rowID}`]} ${data[`player_last_${rowID}`]}`
-                );
+                const fullName = `${data[`player_first_${rowID}`]} ${data[`player_last_${rowID}`]}`;
+                $(`.${relContainerClass} .full-name`).text(fullName);
 
                 $(`.${relContainerClass} .position-name`).text(data["player_position_name"]);
             } else if (itemType === "user") {
