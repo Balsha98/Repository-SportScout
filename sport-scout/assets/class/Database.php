@@ -557,8 +557,8 @@ class Database
         $result->bindParam(':player_last', $data['new_player_last'], PDO::PARAM_STR);
         $result->bindParam(':player_dob', $data['new_player_dob'], PDO::PARAM_STR);
         $result->bindParam(':team_id', $data['team_id'], PDO::PARAM_INT);
-        $result->bindParam(':position_id', $data['new_position_id'], PDO::PARAM_INT);
-        $result->bindParam(':player_jersey', $data['new_jersey_number'], PDO::PARAM_INT);
+        $result->bindParam(':position_id', $data['new_player_position_id'], PDO::PARAM_INT);
+        $result->bindParam(':player_jersey', $data['new_player_jersey_number'], PDO::PARAM_INT);
 
         // Execution.
         $result->execute();

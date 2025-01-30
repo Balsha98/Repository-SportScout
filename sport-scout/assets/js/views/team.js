@@ -129,11 +129,11 @@ const ajaxAdd = function (clickEvent) {
                             <input id='player_team_id_${previousRowID}' type='hidden' name='team_id' value='${teamID}'>
                             <input id='player_id_${previousRowID}' type='hidden' name='player_id' value='${previousRowID}'>
                             <div class='div-multi-input-containers grid-2-columns'>
-                                <div class='div-input-container'>
+                                <div class='div-input-container required-container'>
                                     <label for='player_first_${previousRowID}'>First Name:</label>
                                     <input id='player_first_${previousRowID}' type='text' name='player_first' value='${playerFirst}' autocomplete='off' required>
                                 </div>
-                                <div class='div-input-container'>
+                                <div class='div-input-container required-container'>
                                     <label for='player_last_${previousRowID}'>Last Name:</label>
                                     <input id='player_last_${previousRowID}' type='text' name='player_last' value='${playerLast}' autocomplete='off' required>
                                 </div>
