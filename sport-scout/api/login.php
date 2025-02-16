@@ -12,7 +12,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = ['status' => 'fail'];
 
     // Verify user credentials.
-    if ($db->verifyUser($username, $password)) {
+    $password_hash = hash('sha256', $password);
+    if ($db->verifyUser($username, $password_hash)) {
         Session::setSessionVar('login', true);
         Session::setSessionVar('username', $username);
         ['user_id' => $userID] = $db->getCurrentUserData($username);

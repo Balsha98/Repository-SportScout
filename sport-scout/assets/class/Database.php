@@ -92,10 +92,8 @@ class Database
             return false;
         }
 
-        // Hash pass for search.
-        $hashed_password = hash('sha256', $password);
         if ($user['username'] === $username) {
-            return hash_equals($user['password'], $hashed_password);
+            return $user['password'] === $password;
         }
 
         return false;
