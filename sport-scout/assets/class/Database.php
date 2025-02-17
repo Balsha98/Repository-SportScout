@@ -99,7 +99,26 @@ class Database
         return false;
     }
 
-    public function insertNewOTPCode($otpCode) {}
+    public function insertNewOTPCode($userID)
+    {
+        $query = '
+            INSERT INTO otp_codes (otp_code, user_id) 
+            VALUES (:otp_code, :user_id);
+        ';
+
+        $result = $this->db->prepare($query);
+
+        $otpCode = $this->generateOTPCode();
+        $result->bindParam(':otp_code', $otpCode, PDO::PARAM_INT);
+        $result->bindParam(':user_id', $userID, PDO::PARAM_INT);
+
+        $result->execute();
+    }
+
+    private function generateOTPCode()
+    {
+        return hash('sha256', random_int(100000, 999999) . '');
+    }
 
     public function getCurrentUserData($username)
     {
@@ -108,7 +127,7 @@ class Database
             INNER JOIN roles 
             ON users.role_id = roles.role_id 
             INNER JOIN otp_codes 
-            ON users.otp_id = otp_codes.otp.id 
+            ON users.user_id = otp_codes.user_id 
             WHERE users.username = :username;
         ';
 
