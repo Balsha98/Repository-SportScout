@@ -99,11 +99,16 @@ class Database
         return false;
     }
 
+    public function insertNewOTPCode($otpCode) {}
+
     public function getCurrentUserData($username)
     {
         $query = '
-            SELECT * FROM users INNER JOIN roles 
+            SELECT * FROM users 
+            INNER JOIN roles 
             ON users.role_id = roles.role_id 
+            INNER JOIN otp_codes 
+            ON users.otp_id = otp_codes.otp.id 
             WHERE users.username = :username;
         ';
 

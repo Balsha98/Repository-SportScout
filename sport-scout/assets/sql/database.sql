@@ -287,6 +287,7 @@ DROP TABLE IF EXISTS users;
 CREATE TABLE users(
     user_id INT NOT NULL AUTO_INCREMENT,
     role_id INT NOT NULL,
+    otp_id INT NULL,
     username VARCHAR(25) NOT NULL,
     password VARCHAR(64) NOT NULL,
     league_id INT NULL,
@@ -298,9 +299,20 @@ CREATE TABLE users(
         ON UPDATE CASCADE
 );
 
-INSERT INTO users VALUES
+INSERT INTO users (user_id, role_id, username, password, league_id, team_id) VALUES
 (1, 1, "Admin", "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918", 0, 0);
 
 -- SELECT * FROM users;
+
+-- TABLE OTP CODES
+DROP TABLE IF EXISTS otp_codes;
+
+CREATE TABLE otp_codes(
+    otp_id INT NOT NULL,
+    otp_code INT NULL,
+    PRIMARY KEY (otp_id)
+);
+
+-- SELECT * FROM otp_codes;
 
 -- SHOW TABLES;

@@ -20,6 +20,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         Session::setSessionVar('username', $username);
         Session::setSessionVar('user_ud', $userID);
 
+        $db->insertNewOTPCode(hash('sha256', random_int(100000, 999999) . ''));
+        ['id' => $otpID] = $db->getLastRowId('otp_codes', 'otp');
+        Session::setSessionVar('otp_id', $otpID);
+
         $data = ['status' => 'success'];
     }
 
