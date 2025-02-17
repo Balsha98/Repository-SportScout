@@ -99,40 +99,11 @@ class Database
         return false;
     }
 
-    public function insertNewOTPCode($userID)
-    {
-        $query = '
-            INSERT INTO otp_codes SET 
-                user_id = :user_id, 
-                otp_code = :otp_code 
-            ON DUPLICATE KEY UPDATE 
-                user_id = VALUE(user_id),
-                otp_code = VALUE(otp_code);
-        ';
-
-        $result = $this->db->prepare($query);
-
-        // $otpCode = $this->generateOTPCode();
-        $otpCode = random_int(100000, 999999) . '';
-        $result->bindParam(':otp_code', $otpCode, PDO::PARAM_INT);
-        $result->bindParam(':user_id', $userID, PDO::PARAM_STR);
-
-        $result->execute();
-    }
-
-    private function generateOTPCode()
-    {
-        return hash('sha256', random_int(100000, 999999) . '');
-    }
-
     public function getCurrentUserData($username)
     {
         $query = '
-            SELECT * FROM users 
-            INNER JOIN roles 
+            SELECT * FROM users INNER JOIN roles 
             ON users.role_id = roles.role_id 
-            INNER JOIN otp_codes 
-            ON users.user_id = otp_codes.user_id 
             WHERE users.username = :username;
         ';
 
@@ -192,6 +163,46 @@ class Database
 
         // Execution.
         $result->execute();
+    }
+
+    // ***** OTP RELATED METHODS ***** //
+
+    public function getUserOTPCode($userID)
+    {
+        $query = "SELECT otp_code FROM otp_codes WHERE user_id = {$userID}";
+        $result = $this->db->query($query);
+
+        if ($result->execute()) {
+            return $result->fetch(PDO::FETCH_ASSOC);
+        }
+
+        return null;
+    }
+
+    public function insertNewOTPCode($userID)
+    {
+        $query = '
+            INSERT INTO otp_codes SET 
+                user_id = :user_id, 
+                otp_code = :otp_code 
+            ON DUPLICATE KEY UPDATE 
+                user_id = VALUE(user_id),
+                otp_code = VALUE(otp_code);
+        ';
+
+        $result = $this->db->prepare($query);
+
+        // $otpCode = $this->generateOTPCode();
+        $otpCode = random_int(100000, 999999) . '';
+        $result->bindParam(':otp_code', $otpCode, PDO::PARAM_INT);
+        $result->bindParam(':user_id', $userID, PDO::PARAM_STR);
+
+        $result->execute();
+    }
+
+    private function generateOTPCode()
+    {
+        return hash('sha256', random_int(100000, 999999) . '');
     }
 
     // ***** SPORT RELATED METHODS ***** //

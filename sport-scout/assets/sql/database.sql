@@ -18,7 +18,7 @@ CREATE TABLE otp_codes(
 INSERT INTO otp_codes VALUES
 (1, 1, NULL);
 
--- SELECT * FROM otp_codes;
+SELECT * FROM otp_codes;
 
 
 -- TABLE ROLES

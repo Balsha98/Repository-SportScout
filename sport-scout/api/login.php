@@ -21,11 +21,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Save user details a session variables.
         ['user_id' => $userID] = $db->getCurrentUserData($username);
         Session::setSessionVar('username', $username);
-        Session::setSessionVar('user_ud', $userID);
+        Session::setSessionVar('user_id', $userID);
 
         // Generate new OTP code.
         $db->insertNewOTPCode($userID);
     }
 
-    echo json_encode($data);
+    echo Encoder::toJSON($data);
 }

@@ -24,7 +24,7 @@ const keyTimeout = function () {
 // ***** EVENT LISTENERS ***** //
 otpInputs.each((_, input) => {
     $(input).keypress(function () {
-        setTimeout(keyTimeout.bind(this), 100);
+        setTimeout(keyTimeout.bind(this), 50);
     });
 });
 
@@ -54,6 +54,7 @@ btnVerify.click(function (formEvent) {
             }
 
             setCookie("user_id", data["user_id"]);
+            window.open("dashboard", "_self");
         },
     });
 });
