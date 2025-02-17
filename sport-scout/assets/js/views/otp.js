@@ -12,7 +12,7 @@ const keyTimeout = function () {
         const nextFocus = +$(this).data("next");
 
         // Guard clause.
-        if (isNaN(nextFocus)) {
+        if (nextFocus === 7) {
             btnVerify.focus();
             return;
         }
