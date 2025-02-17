@@ -1,0 +1,72 @@
+/* VERIFICATION POPUP */
+.popup-otp-verification {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    padding: 4.8rem 6.4rem 6.4rem;
+    background-color: var(--dark-gray);
+    box-shadow: 0 1.6rem 3.2rem var(--dark-gray);
+    border-radius: 1.2rem;
+    transform: translate(-50%, -50%);
+}
+
+/* POPUP CONTENT CONTAINER */
+.div-popup-content-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2.4rem;
+}
+
+/* POPUP CONTENT HEADER */
+.div-popup-content-header {
+    display: inherit;
+    flex-direction: inherit;
+    gap: 0.4rem;
+    text-align: center;
+    color: var(--white-gray);
+}
+
+.div-popup-content-header h4 {
+    font-size: 2.4rem;
+}
+
+.div-popup-content-header p {
+    font-size: 1.6rem;
+}
+
+/* OTP FORM */
+.form {
+    display: inherit;
+    flex-direction: inherit;
+    gap: 1.6rem;
+}
+
+/* OTP CODE INPUTS */
+.div-inputs {
+    display: inherit;
+    align-items: center;
+    justify-content: center;
+    gap: 1.2rem;
+}
+
+.div-inputs input {
+    all: unset;
+    display: inline-block;
+    width: 4.8rem;
+    aspect-ratio: 1 / 1;
+    font-size: 2rem;
+    font-weight: 500;
+    text-align: center;
+    background-color: var(--white-gray);
+    border-radius: 0.4rem;
+}
+
+.div-inputs input::-webkit-outter-spin-button,
+.div-inputs input::-webkit-inner-spin-button {
+    display: none;
+}
+
+/* OTP VERIFY BUTTON */
+.btn-verify {
+    background-color: var(--black-gray);
+}

@@ -57,22 +57,22 @@ echo Template::generatePageHead($pageData);
                 >
                     <div class="div-inputs">
                         <div class="div-input-container">
-                            <label for="login_username">Username:</label>
+                            <label for="username">Username:</label>
                             <input 
-                                id="login_username" 
+                                id="username" 
                                 type="text" 
-                                name="login_username" 
+                                name="username" 
                                 autocomplete="off" 
                                 placeholder="John Doe" 
                                 autofocus
                             >
                         </div>
                         <div class="div-input-container">
-                            <label for="login_password">Password:</label>
+                            <label for="password">Password:</label>
                             <input 
-                                id="login_password" 
+                                id="password" 
                                 type="password" 
-                                name="login_password" 
+                                name="password" 
                                 autocomplete="off" 
                                 placeholder="●●●●●●●●"
                             >

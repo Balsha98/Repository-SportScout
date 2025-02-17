@@ -5,6 +5,7 @@ class Router
     private static $validRoutes = [
         'logout',
         'login',
+        'otp',
         'dashboard',
         'team',
         'schedule',
@@ -15,6 +16,10 @@ class Router
         'login' => [
             'active' => 'login',
             'title' => 'Login'
+        ],
+        'otp' => [
+            'active' => 'otp',
+            'title' => 'One-Time Password'
         ],
         'dashboard' => [
             'active' => 'dashboard',

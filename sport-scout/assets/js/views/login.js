@@ -1,5 +1,3 @@
-import { setCookie } from "../helper/cookie.js";
-
 // ***** DOM ELEMENTS ***** //
 const warningPopup = $(".popup-warning");
 const popupOverlay = $(".popup-overlay");
@@ -9,11 +7,11 @@ const loginBtn = $(".btn-login");
 
 // ***** FUNCTIONS ***** //
 const togglePopup = function () {
-    [warningPopup, popupOverlay].forEach((el) => {
-        $(el).toggleClass("hide-element");
+    [warningPopup, popupOverlay].forEach((element) => {
+        $(element).toggleClass("hide-element");
     });
 
-    $("#login_username").focus();
+    $("#username").focus();
 };
 
 const resetInput = function (data) {
@@ -23,8 +21,8 @@ const resetInput = function (data) {
 };
 
 // ***** EVENT LISTENERS ***** //
-[tryAgainBtn, closeBtn].forEach((el) => {
-    $(el).click(togglePopup);
+[tryAgainBtn, closeBtn].forEach((element) => {
+    $(element).click(togglePopup);
 });
 
 loginBtn.click(function (event) {
@@ -33,12 +31,15 @@ loginBtn.click(function (event) {
     const form = $(this.closest(".form"));
     const url = form.attr("action");
     const method = form.attr("method");
-    const data = form.serialize();
+
+    const data = {};
+    data["username"] = $("#username").val();
+    data["password"] = $("#password").val();
 
     $.ajax({
         url: url,
         type: method,
-        data: data,
+        data: JSON.stringify(data),
         success: function (response) {
             const data = JSON.parse(response);
             const status = data["status"];
@@ -49,8 +50,7 @@ loginBtn.click(function (event) {
                 return;
             }
 
-            setCookie("user_id", data["user_id"]);
-            window.open("dashboard", "_self");
+            window.open("otp", "_self");
         },
     });
 });
