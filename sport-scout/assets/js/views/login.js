@@ -41,6 +41,7 @@ loginBtn.click(function (event) {
         type: method,
         data: JSON.stringify(data),
         success: function (response) {
+            console.log(response);
             const data = JSON.parse(response);
             const status = data["status"];
 

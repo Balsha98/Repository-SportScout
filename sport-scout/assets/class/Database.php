@@ -102,15 +102,20 @@ class Database
     public function insertNewOTPCode($userID)
     {
         $query = '
-            INSERT INTO otp_codes (otp_code, user_id) 
-            VALUES (:otp_code, :user_id);
+            INSERT INTO otp_codes SET 
+                user_id = :user_id, 
+                otp_code = :otp_code 
+            ON DUPLICATE KEY UPDATE 
+                user_id = VALUE(user_id),
+                otp_code = VALUE(otp_code);
         ';
 
         $result = $this->db->prepare($query);
 
-        $otpCode = $this->generateOTPCode();
+        // $otpCode = $this->generateOTPCode();
+        $otpCode = random_int(100000, 999999) . '';
         $result->bindParam(':otp_code', $otpCode, PDO::PARAM_INT);
-        $result->bindParam(':user_id', $userID, PDO::PARAM_INT);
+        $result->bindParam(':user_id', $userID, PDO::PARAM_STR);
 
         $result->execute();
     }

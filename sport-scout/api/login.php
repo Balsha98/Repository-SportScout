@@ -16,14 +16,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Verify user credentials.
     $password_hash = hash('sha256', $password);
     if ($db->verifyUser($username, $password_hash)) {
+        $data = ['status' => 'success'];
+
+        // Save user details a session variables.
         ['user_id' => $userID] = $db->getCurrentUserData($username);
         Session::setSessionVar('username', $username);
         Session::setSessionVar('user_ud', $userID);
 
         // Generate new OTP code.
         $db->insertNewOTPCode($userID);
-
-        $data = ['status' => 'success'];
     }
 
     echo json_encode($data);

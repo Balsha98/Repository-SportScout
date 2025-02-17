@@ -9,14 +9,14 @@ USE sport_scout;
 DROP TABLE IF EXISTS otp_codes;
 
 CREATE TABLE otp_codes(
-    otp_id INT NOT NULL AUTO_INCREMENT UNIQUE,
+    otp_id INT NOT NULL AUTO_INCREMENT,
     user_id INT NOT NULL UNIQUE,
-    otp_code INT NULL,
+    otp_code CHAR(64) NULL,
     PRIMARY KEY (otp_id)
 );
 
 INSERT INTO otp_codes VALUES
-(1, 1, 111111);
+(1, 1, NULL);
 
 -- SELECT * FROM otp_codes;
 
@@ -305,16 +305,16 @@ CREATE TABLE users(
     user_id INT NOT NULL AUTO_INCREMENT,
     role_id INT NOT NULL,
     username VARCHAR(25) NOT NULL,
-    password VARCHAR(64) NOT NULL,
+    password CHAR(64) NOT NULL,
     league_id INT NULL,
     team_id INT NULL,
     PRIMARY KEY (user_id),
-    FOREIGN KEY (role_id) 
-        REFERENCES roles (role_id) 
+    FOREIGN KEY (user_id) 
+        REFERENCES otp_codes (user_id) 
         ON DELETE CASCADE 
         ON UPDATE CASCADE,
-    FOREIGN KEY (user_id) 
-        REFERENCES otp_codes (otp_id) 
+    FOREIGN KEY (role_id) 
+        REFERENCES roles (role_id) 
         ON DELETE CASCADE 
         ON UPDATE CASCADE
 );
