@@ -98,7 +98,6 @@ class GeneralTemplate
     public static function generateThemeSection()
     {
         return '
-            <!-- LEFT SECTION -->
             <section class="section-theme">
                 <div class="div-section-theme-text">
                     <h1 class="heading-primary">SportScout</h1>
