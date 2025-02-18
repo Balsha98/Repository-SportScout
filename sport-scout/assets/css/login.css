@@ -134,8 +134,7 @@
 
 .section-login-header h2 {
     margin-bottom: 0.4rem;
-    /* Breaking the chain. */
-    font-size: 3.6rem;
+    font-size: 3.3rem;
     font-weight: 600;
     color: var(--white-gray);
 }
@@ -163,7 +162,7 @@
     row-gap: 1.6rem;
 }
 
-/* ASIDE SIGN UP */
+/* PAGE FOOTER */
 .page-footer {
     position: absolute;
     bottom: 1.2rem;

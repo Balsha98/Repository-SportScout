@@ -23,6 +23,11 @@ class Template
         return GeneralTemplate::generatePageHeader($page, $roleID);
     }
 
+    public static function generateThemeSection()
+    {
+        return GeneralTemplate::generateThemeSection();
+    }
+
     public static function generateDashboardLinks($roleID)
     {
         return GeneralTemplate::generateDashboardLinks($roleID);
