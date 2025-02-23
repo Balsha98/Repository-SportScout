@@ -1,3 +1,5 @@
+import { setCookie } from "../helper/cookie.js";
+
 // ***** DOM ELEMENTS ***** //
 const warningPopup = $(".popup-warning");
 const popupOverlay = $(".popup-overlay");
@@ -50,7 +52,8 @@ loginBtn.click(function (event) {
                 return;
             }
 
-            window.open("otp", "_self");
+            setCookie("user_id", data["user_id"]);
+            window.open("dashboard", "_self");
         },
     });
 });

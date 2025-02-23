@@ -4,7 +4,7 @@ class Session
 {
     public static function commence()
     {
-        if (session_start() === PHP_SESSION_NONE) {
+        if (PHP_SESSION_NONE) {
             session_start();
         }
     }

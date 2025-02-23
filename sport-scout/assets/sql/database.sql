@@ -5,22 +5,6 @@ CREATE DATABASE sport_scout;
 USE sport_scout;
 
 
--- TABLE OTP CODES
-DROP TABLE IF EXISTS otp_codes;
-
-CREATE TABLE otp_codes(
-    otp_id INT NOT NULL AUTO_INCREMENT,
-    user_id INT NOT NULL UNIQUE,
-    otp_code CHAR(64) NULL,
-    PRIMARY KEY (otp_id)
-);
-
-INSERT INTO otp_codes VALUES
-(1, 1, NULL);
-
-SELECT * FROM otp_codes;
-
-
 -- TABLE ROLES
 DROP TABLE IF EXISTS roles;
 
@@ -309,10 +293,6 @@ CREATE TABLE users(
     league_id INT NULL,
     team_id INT NULL,
     PRIMARY KEY (user_id),
-    FOREIGN KEY (user_id) 
-        REFERENCES otp_codes (user_id) 
-        ON DELETE CASCADE 
-        ON UPDATE CASCADE,
     FOREIGN KEY (role_id) 
         REFERENCES roles (role_id) 
         ON DELETE CASCADE 

@@ -25,9 +25,22 @@ echo Template::generatePageHead($pageData);
         </div>
         <!-- POPUP OVERLAY -->
         <div class="popup-overlay hide-element">&nbsp;</div>
-        <!-- LEFT SECTION -->
-        <?php echo Template::generateThemeSection(); ?>
-        <!-- RIGHT SECTION -->
+        <!-- LEFT SECTION (THEME) -->
+        <section class="section-theme">
+            <div class="div-section-theme-text">
+                <h1 class="heading-primary">SportScout</h1>
+                <p>Where <span>passion</span> meets the <span>game</span>.</p>
+            </div>
+            <div class="div-socials-container">
+                <p>For more info check us out on:</p>
+                <ul class="socials-icons-list">
+                    <li><ion-icon class="socials-icon" name="logo-facebook"></ion-icon></li>
+                    <li><ion-icon class="socials-icon" name="logo-twitter"></ion-icon></li>
+                    <li><ion-icon class="socials-icon" name="logo-youtube"></ion-icon></li>
+                </ul>
+            </div>
+        </section>
+        <!-- RIGHT SECTION (FORM) -->
         <section class="section-login">
             <div class="div-centered-absolute">
                 <header class="section-login-header">
