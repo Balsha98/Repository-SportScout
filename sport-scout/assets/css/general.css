@@ -381,7 +381,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 .grid-btn-container {
-    /* grid-column: 1 / -1; */
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     column-gap: 2.4rem;
