@@ -152,7 +152,10 @@ class GeneralTemplate
     {
         return "
                 <!-- ION-ICONS SCRIPT -->
-                <script type='module' src='https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js'></script>
+                <script 
+                    type='module' 
+                    src='https://cdn.jsdelivr.net/npm/ionicons@7.4.0/dist/ionicons/ionicons.esm.js'
+                ></script>
             </body>
 
             </html>
