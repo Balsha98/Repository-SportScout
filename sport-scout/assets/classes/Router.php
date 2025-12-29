@@ -60,11 +60,11 @@ class Router
 
         ob_start();
 
-        require_once 'assets/class/Cookie.php';
-        require_once 'assets/class/Session.php';
-        require_once 'assets/class/Database.php';
-        require_once 'assets/class/Template.php';
-        require_once 'assets/class/Redirect.php';
+        require_once 'assets/classes/Cookie.php';
+        require_once 'assets/classes/Session.php';
+        require_once 'assets/classes/Database.php';
+        require_once 'assets/classes/Template.php';
+        require_once 'assets/classes/Redirect.php';
         require_once "assets/views/{$page}.php";
 
         return ob_get_clean();

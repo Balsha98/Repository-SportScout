@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-require_once '../assets/class/Encoder.php';
-require_once '../assets/class/Database.php';
-require_once '../assets/class/Sanitize.php';
-require_once '../assets/class/Helper.php';
+require_once '../assets/classes/Encoder.php';
+require_once '../assets/classes/Database.php';
+require_once '../assets/classes/Sanitize.php';
+require_once '../assets/classes/Helper.php';
 
 $request = $_SERVER['REQUEST_METHOD'];
 $input = Encoder::fromJSON(file_get_contents('php://input'));
