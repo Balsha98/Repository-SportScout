@@ -1,5 +1,5 @@
-import * as general from "../helper/general.js";
-import { getCookie, setCookie } from "../helper/cookie.js";
+import * as general from "../helpers/general.js";
+import { getCookie, setCookie } from "../helpers/cookie.js";
 import { scheduleInputs } from "../data/inputs.js";
 
 // ***** DOM ELEMENTS ***** //
@@ -20,90 +20,90 @@ const formDeleteBtns = $(".btn-delete");
 
 // ***** FUNCTIONS ***** //
 const toggleEditGamePopup = function () {
-    // Get the the schedule id and set the data.
-    const scheduleID = $(this.closest(".div-schedule-game")).data("schedule-id");
+  // Get the the schedule id and set the data.
+  const scheduleID = $(this.closest(".div-schedule-game")).data("schedule-id");
 
-    const seasonID = $(`#schedule_season_id_${scheduleID}`).val();
-    const seasonYear = $(`#schedule_season_year_${scheduleID}`).val();
-    $("#edit_schedule_season_id").val(`${seasonID}|${seasonYear}`);
+  const seasonID = $(`#schedule_season_id_${scheduleID}`).val();
+  const seasonYear = $(`#schedule_season_year_${scheduleID}`).val();
+  $("#edit_schedule_season_id").val(`${seasonID}|${seasonYear}`);
 
-    ["home", "away"].forEach((side) => {
-        const teamID = $(`#schedule_${side}_team_id_${scheduleID}`).val();
-        const teamName = $(`#schedule_${side}_team_name_${scheduleID}`).val();
-        $(`#edit_schedule_${side}_team_id`).val(`${teamID}|${teamName}`);
-    });
+  ["home", "away"].forEach((side) => {
+    const teamID = $(`#schedule_${side}_team_id_${scheduleID}`).val();
+    const teamName = $(`#schedule_${side}_team_name_${scheduleID}`).val();
+    $(`#edit_schedule_${side}_team_id`).val(`${teamID}|${teamName}`);
+  });
 
-    scheduleInputs["alter"]["schedule"].forEach((id) => {
-        $(`#edit_${id}`).val($(`#${id}_${scheduleID}`).val());
-    });
+  scheduleInputs["alter"]["schedule"].forEach((id) => {
+    $(`#edit_${id}`).val($(`#${id}_${scheduleID}`).val());
+  });
 
-    $("#edit_schedule_id").val($(`#schedule_id_${scheduleID}`).val());
+  $("#edit_schedule_id").val($(`#schedule_id_${scheduleID}`).val());
 
-    // Show the popup.
-    general.toggleElement(editPopup, popupOverlay);
+  // Show the popup.
+  general.toggleElement(editPopup, popupOverlay);
 };
 
 const setTeamColors = function (colors = []) {
-    colorDivs.each((i, div) => {
-        if (colors.length !== 0) $(div).data("colors", colors[i]);
+  colorDivs.each((i, div) => {
+    if (colors.length !== 0) $(div).data("colors", colors[i]);
 
-        const currColors = $(div)
-            .data("colors")
-            .split("/")
-            .map((color) => color.toLowerCase());
+    const currColors = $(div)
+      .data("colors")
+      .split("/")
+      .map((color) => color.toLowerCase());
 
-        div.style = `
+    div.style = `
             background-image: conic-gradient(
                 ${currColors[1]} 180deg,
                 ${currColors[0]} 180deg 
             );
         `;
-    });
+  });
 };
 
 setTeamColors();
 
 const getOnlyGames = function () {
-    let games = [];
-    scrollContainer.children().each((_, div) => {
-        const divClass = $(div).attr("class").split(" ")[0];
-        if (divClass.includes("schedule")) games.push(div);
-    });
+  let games = [];
+  scrollContainer.children().each((_, div) => {
+    const divClass = $(div).attr("class").split(" ")[0];
+    if (divClass.includes("schedule")) games.push(div);
+  });
 
-    return games;
+  return games;
 };
 
 const getVisuals = function (status) {
-    let css = "";
-    let icon = "";
-    switch (status) {
-        case 1:
-            css = "canceled";
-            icon = "close";
-            break;
-        case 2:
-            css = "pending";
-            icon = "alert";
-            break;
-        default:
-            css = "completed";
-            icon = "checkmark";
-    }
+  let css = "";
+  let icon = "";
+  switch (status) {
+    case 1:
+      css = "canceled";
+      icon = "close";
+      break;
+    case 2:
+      css = "pending";
+      icon = "alert";
+      break;
+    default:
+      css = "completed";
+      icon = "checkmark";
+  }
 
-    return [css, icon];
+  return [css, icon];
 };
 
 // ***** EVENT LISTENERS ***** //
 // POPUP CLOSE & CANCEL BUTTONS
 [...popupCloseBtns, cancelBtn].forEach((btn) => {
-    $(btn)?.click(function () {
-        general.toggleElement($(this.closest(".popup")), popupOverlay);
-    });
+  $(btn)?.click(function () {
+    general.toggleElement($(this.closest(".popup")), popupOverlay);
+  });
 });
 
 // SHOW ADD POPUP BUTTON
 showAddPopupBtn.click(function () {
-    general.toggleElement(addPopup, popupOverlay);
+  general.toggleElement(addPopup, popupOverlay);
 });
 
 // SHOW EDIT POPUP BUTTONS
@@ -111,70 +111,70 @@ general.attachEvent(showEditPopupBtns, toggleEditGamePopup);
 
 // ADD NEW GAME BUTTON
 addNewGameBtn?.click(function (clickEvent) {
-    clickEvent.preventDefault();
+  clickEvent.preventDefault();
 
-    const form = $(this.closest(".form"));
-    const url = form.attr("action");
-    const method = form.attr("method");
-    const itemType = $(this).data("item-type");
+  const form = $(this.closest(".form"));
+  const url = form.attr("action");
+  const method = form.attr("method");
+  const itemType = $(this).data("item-type");
 
-    const data = {};
-    data["item_type"] = itemType;
-    scheduleInputs["add"][itemType].forEach((id) => {
-        data[id] = $(`#${id}`).val();
-    });
+  const data = {};
+  data["item_type"] = itemType;
+  scheduleInputs["add"][itemType].forEach((id) => {
+    data[id] = $(`#${id}`).val();
+  });
 
-    $.ajax({
-        url: url,
-        type: method,
-        data: JSON.stringify(data),
-        success: function (response) {
-            console.log(response);
-            const data = JSON.parse(response);
-            const status = data["status"];
+  $.ajax({
+    url: url,
+    type: method,
+    data: JSON.stringify(data),
+    success: function (response) {
+      console.log(response);
+      const data = JSON.parse(response);
+      const status = data["status"];
 
-            // An error occurs.
-            if (status === "fail") {
-                general.warnInputs(data, status);
-                return;
-            }
+      // An error occurs.
+      if (status === "fail") {
+        general.warnInputs(data, status);
+        return;
+      }
 
-            // Back to white.
-            general.warnInputs(data, status);
-            general.resetInput(data);
+      // Back to white.
+      general.warnInputs(data, status);
+      general.resetInput(data);
 
-            // Last known id, or starting from scratch.
-            let prevScheduleID = +data["last_schedule_id"] || 0;
-            if (getCookie("last_deleted_game")) {
-                if (+getCookie("last_deleted_game") < prevScheduleID) {
-                    prevScheduleID = +getCookie("last_deleted_game");
-                }
-            }
+      // Last known id, or starting from scratch.
+      let prevScheduleID = +data["last_schedule_id"] || 0;
+      if (getCookie("last_deleted_game")) {
+        if (+getCookie("last_deleted_game") < prevScheduleID) {
+          prevScheduleID = +getCookie("last_deleted_game");
+        }
+      }
 
-            const teamID = data["new_schedule_team_id"];
-            const seasonID = data["new_schedule_season_id"];
-            const seasonYear = data["new_schedule_season_year"];
-            const homeTeamID = data["new_schedule_home_team_id"];
-            const homeName = data["new_home_team_name"];
-            const homeScore = data["new_schedule_home_score"];
-            const awayTeamID = data["new_schedule_away_team_id"];
-            const awayName = data["new_away_team_name"];
-            const awayScore = data["new_schedule_away_score"];
-            const newDate = data["new_schedule_date"];
-            const compStatus = +data["new_schedule_completion_status"];
+      const teamID = data["new_schedule_team_id"];
+      const seasonID = data["new_schedule_season_id"];
+      const seasonYear = data["new_schedule_season_year"];
+      const homeTeamID = data["new_schedule_home_team_id"];
+      const homeName = data["new_home_team_name"];
+      const homeScore = data["new_schedule_home_score"];
+      const awayTeamID = data["new_schedule_away_team_id"];
+      const awayName = data["new_away_team_name"];
+      const awayScore = data["new_schedule_away_score"];
+      const newDate = data["new_schedule_date"];
+      const compStatus = +data["new_schedule_completion_status"];
 
-            // Visuals.
-            const [css, icon] = getVisuals(compStatus);
+      // Visuals.
+      const [css, icon] = getVisuals(compStatus);
 
-            // Checking for games.
-            const noneAvailableDiv = $(".div-none-available-container");
-            if (noneAvailableDiv) {
-                scrollContainer.removeClass("flex-center");
-                noneAvailableDiv.remove();
-            }
+      // Checking for games.
+      const noneAvailableDiv = $(".div-none-available-container");
+      if (noneAvailableDiv) {
+        scrollContainer.removeClass("flex-center");
+        noneAvailableDiv.remove();
+      }
 
-            // Display new game.
-            scrollContainer.append(`
+      // Display new game.
+      scrollContainer.append(`
                 <div class="div-schedule-game game-${++prevScheduleID}" data-schedule-id="${prevScheduleID}">
                     <div class="div-btn-edit">
                         <button class="btn-edit">
@@ -225,120 +225,131 @@ addNewGameBtn?.click(function (clickEvent) {
                 </div>
             `);
 
-            // Reattach button events.
-            general.attachEvent($(".btn-edit"), toggleEditGamePopup);
+      // Reattach button events.
+      general.attachEvent($(".btn-edit"), toggleEditGamePopup);
 
-            // Close popup.
-            general.toggleElement(addPopup, popupOverlay);
-        },
-    });
+      // Close popup.
+      general.toggleElement(addPopup, popupOverlay);
+    },
+  });
 });
 
 // UPDATE BUTTONS
 formUpdateBtns?.each((_, btn) => {
-    $(btn)?.click(function (clickEvent) {
-        clickEvent.preventDefault();
+  $(btn)?.click(function (clickEvent) {
+    clickEvent.preventDefault();
 
-        const editPopup = $(this.closest(".popup-edit"));
-        const form = $(this.closest("form"));
-        const url = form.attr("action");
-        const method = $(this).data("method");
-        const itemType = $(this).data("item-type");
+    const editPopup = $(this.closest(".popup-edit"));
+    const form = $(this.closest("form"));
+    const url = form.attr("action");
+    const method = $(this).data("method");
+    const itemType = $(this).data("item-type");
 
-        const data = {};
-        data["item_type"] = itemType;
+    const data = {};
+    data["item_type"] = itemType;
 
-        let scheduleID;
-        if (itemType === "schedule") {
-            scheduleID = +$("#edit_schedule_id").val();
-            data["item_id"] = scheduleID;
+    let scheduleID;
+    if (itemType === "schedule") {
+      scheduleID = +$("#edit_schedule_id").val();
+      data["item_id"] = scheduleID;
+    }
+
+    scheduleInputs["alter"][itemType].forEach((id) => {
+      if (itemType === "schedule") data[`edit_${id}`] = $(`#edit_${id}`).val();
+      else data[`${id}`] = $(`#${id}`).val();
+    });
+
+    $.ajax({
+      url: url,
+      type: method,
+      data: JSON.stringify(data),
+      success: function (response) {
+        console.log(response);
+        const data = JSON.parse(response);
+        const status = data["status"];
+
+        if (status === "fail") {
+          general.warnInputs(data, status);
+          return;
         }
 
-        scheduleInputs["alter"][itemType].forEach((id) => {
-            if (itemType === "schedule") data[`edit_${id}`] = $(`#edit_${id}`).val();
-            else data[`${id}`] = $(`#${id}`).val();
-        });
+        // Back to white.
+        general.warnInputs(data, status);
 
-        $.ajax({
-            url: url,
-            type: method,
-            data: JSON.stringify(data),
-            success: function (response) {
-                console.log(response);
-                const data = JSON.parse(response);
-                const status = data["status"];
+        if (itemType === "team") {
+          setTeamColors([data["team_home_color"], data["team_away_color"]]);
 
-                if (status === "fail") {
-                    general.warnInputs(data, status);
-                    return;
-                }
+          const inTeamName = $("#team_name");
+          const newTeamName = inTeamName.val();
+          const oldTeamName = inTeamName.data("prev-team-name");
+          inTeamName.data("prev-team-name", newTeamName);
 
-                // Back to white.
-                general.warnInputs(data, status);
+          [...$(".home-team"), ...$(".away-team")].forEach((teamName) => {
+            if ($(teamName).text() === oldTeamName) {
+              $(teamName).text(newTeamName);
+            }
+          });
+        } else if (itemType === "schedule") {
+          scheduleInputs["alter"][itemType].forEach((id) =>
+            $(`#${id}_${scheduleID}`).val(data[`edit_${id}`])
+          );
 
-                if (itemType === "team") {
-                    setTeamColors([data["team_home_color"], data["team_away_color"]]);
+          // Update each visual individually.
+          $(`.game-${scheduleID} .home-score`).text(
+            data["edit_schedule_home_score"]
+          );
+          $(`.game-${scheduleID} .away-score`).text(
+            data["edit_schedule_away_score"]
+          );
+          $(`#schedule_date_${scheduleID}`).val(data["edit_schedule_date"]);
 
-                    const inTeamName = $("#team_name");
-                    const newTeamName = inTeamName.val();
-                    const oldTeamName = inTeamName.data("prev-team-name");
-                    inTeamName.data("prev-team-name", newTeamName);
+          const [css, icon] = getVisuals(
+            data["edit_schedule_completion_status"]
+          );
 
-                    [...$(".home-team"), ...$(".away-team")].forEach((teamName) => {
-                        if ($(teamName).text() === oldTeamName) {
-                            $(teamName).text(newTeamName);
-                        }
-                    });
-                } else if (itemType === "schedule") {
-                    scheduleInputs["alter"][itemType].forEach((id) =>
-                        $(`#${id}_${scheduleID}`).val(data[`edit_${id}`])
-                    );
+          const statusSpan = $(`.game-${scheduleID} .span-completion-status`);
+          statusSpan.attr("class", `span-completion-status ${css}`);
+          statusSpan.data(
+            "completion-index",
+            data["edit_schedule_completion_status"]
+          );
+          $(`.game-${scheduleID} .status-icon`).attr("name", `${icon}-outline`);
 
-                    // Update each visual individually.
-                    $(`.game-${scheduleID} .home-score`).text(data["edit_schedule_home_score"]);
-                    $(`.game-${scheduleID} .away-score`).text(data["edit_schedule_away_score"]);
-                    $(`#schedule_date_${scheduleID}`).val(data["edit_schedule_date"]);
-
-                    const [css, icon] = getVisuals(data["edit_schedule_completion_status"]);
-
-                    const statusSpan = $(`.game-${scheduleID} .span-completion-status`);
-                    statusSpan.attr("class", `span-completion-status ${css}`);
-                    statusSpan.data("completion-index", data["edit_schedule_completion_status"]);
-                    $(`.game-${scheduleID} .status-icon`).attr("name", `${icon}-outline`);
-
-                    general.toggleElement(editPopup, popupOverlay);
-                }
-            },
-        });
+          general.toggleElement(editPopup, popupOverlay);
+        }
+      },
     });
+  });
 });
 
 // DELETE BUTTONS
 formDeleteBtns?.each((_, btn) => {
-    $(btn).click(function (clickEvent) {
-        clickEvent.preventDefault();
+  $(btn).click(function (clickEvent) {
+    clickEvent.preventDefault();
 
-        const editPopup = $(this.closest(".popup-edit"));
-        const form = $(this.closest("form"));
-        const url = form.attr("action");
-        const method = $(this).data("method");
-        const itemType = $(this).data("item-type");
+    const editPopup = $(this.closest(".popup-edit"));
+    const form = $(this.closest("form"));
+    const url = form.attr("action");
+    const method = $(this).data("method");
+    const itemType = $(this).data("item-type");
 
-        const data = {};
-        data["item_id"] = $(`#${itemType === "schedule" ? `edit_${itemType}` : itemType}_id`).val();
-        data["item_type"] = itemType;
+    const data = {};
+    data["item_id"] = $(
+      `#${itemType === "schedule" ? `edit_${itemType}` : itemType}_id`
+    ).val();
+    data["item_type"] = itemType;
 
-        $.ajax({
-            url: url,
-            type: method,
-            data: JSON.stringify(data),
-            success: function () {
-                if (itemType === "team") {
-                    $(".form-team-data").remove();
-                    scrollContainer.remove();
+    $.ajax({
+      url: url,
+      type: method,
+      data: JSON.stringify(data),
+      success: function () {
+        if (itemType === "team") {
+          $(".form-team-data").remove();
+          scrollContainer.remove();
 
-                    [teamInfoContainer, scheduleContainer].forEach((div) => {
-                        $(div).append(`
+          [teamInfoContainer, scheduleContainer].forEach((div) => {
+            $(div).append(`
                             <div class="div-none-selected-container">
                                 <ion-icon class="none-selected-icon" name="alert-circle-outline"></ion-icon>
                                 <div class="none-selected-text">
@@ -347,16 +358,16 @@ formDeleteBtns?.each((_, btn) => {
                                 </div>
                             </div>    
                         `);
-                    });
-                } else if (itemType === "schedule") {
-                    const delGame = $(`.game-${data["item_id"]}`);
-                    setCookie("last_deleted_game", delGame.data("schedule-id"));
-                    delGame.remove();
+          });
+        } else if (itemType === "schedule") {
+          const delGame = $(`.game-${data["item_id"]}`);
+          setCookie("last_deleted_game", delGame.data("schedule-id"));
+          delGame.remove();
 
-                    const remainingGames = getOnlyGames();
-                    if (remainingGames.length === 0) {
-                        scrollContainer.addClass("flex-center");
-                        scrollContainer.append(`
+          const remainingGames = getOnlyGames();
+          if (remainingGames.length === 0) {
+            scrollContainer.addClass("flex-center");
+            scrollContainer.append(`
                             <div class="div-none-available-container">
                                 <ion-icon class="none-available-icon" name="alert-circle-outline"></ion-icon>
                                 <div class="none-available-text">
@@ -365,11 +376,11 @@ formDeleteBtns?.each((_, btn) => {
                                 </div>
                             </div>
                         `);
-                    }
+          }
 
-                    general.toggleElement(editPopup, popupOverlay);
-                }
-            },
-        });
+          general.toggleElement(editPopup, popupOverlay);
+        }
+      },
     });
+  });
 });

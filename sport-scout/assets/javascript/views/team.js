@@ -1,5 +1,5 @@
-import * as general from "../helper/general.js";
-import { getCookie, setCookie } from "../helper/cookie.js";
+import * as general from "../helpers/general.js";
+import { getCookie, setCookie } from "../helpers/cookie.js";
 import { teamInputs } from "../data/inputs.js";
 
 // ***** DOM ELEMENTS ***** //
@@ -17,99 +17,101 @@ const deleteBtns = $(".btn-delete");
 
 // ***** VARIABLES ***** //
 const selectOptions = {
-    "Team Manager": "3|Team Manager",
-    "Team Coach": "4|Team Coach",
-    Fan: "5|Fan",
+  "Team Manager": "3|Team Manager",
+  "Team Coach": "4|Team Coach",
+  Fan: "5|Fan",
 };
 
 // ***** FUNCTIONS ***** //
 const getDataRowsOnly = function (scrollContainer) {
-    let games = [];
-    scrollContainer.children().each((_, div) => {
-        const divClass = $(div).attr("class").split(" ")[0];
-        if (divClass === "div-row-container") games.push(div);
-    });
+  let games = [];
+  scrollContainer.children().each((_, div) => {
+    const divClass = $(div).attr("class").split(" ")[0];
+    if (divClass === "div-row-container") games.push(div);
+  });
 
-    return games;
+  return games;
 };
 
 const ajaxAdd = function (clickEvent) {
-    clickEvent.preventDefault();
+  clickEvent.preventDefault();
 
-    const relPopup = $(this.closest(".popup-add"));
-    const form = $(this.closest(".form"));
-    const url = form.attr("action");
-    const method = form.attr("method");
-    const itemType = $(this).data("item-type");
+  const relPopup = $(this.closest(".popup-add"));
+  const form = $(this.closest(".form"));
+  const url = form.attr("action");
+  const method = form.attr("method");
+  const itemType = $(this).data("item-type");
 
-    const data = {};
-    data["item_type"] = itemType;
-    teamInputs["add"][itemType].forEach((id) => {
-        data[id] = $(`#${id}`).val();
-    });
+  const data = {};
+  data["item_type"] = itemType;
+  teamInputs["add"][itemType].forEach((id) => {
+    data[id] = $(`#${id}`).val();
+  });
 
-    $.ajax({
-        url: url,
-        type: method,
-        data: JSON.stringify(data),
-        success: function (response) {
-            console.log(response);
-            const data = JSON.parse(response);
-            const status = data["status"];
-            console.log(data);
+  $.ajax({
+    url: url,
+    type: method,
+    data: JSON.stringify(data),
+    success: function (response) {
+      console.log(response);
+      const data = JSON.parse(response);
+      const status = data["status"];
+      console.log(data);
 
-            if (status === "fail") {
-                general.warnInputs(data, status);
-                return;
-            }
+      if (status === "fail") {
+        general.warnInputs(data, status);
+        return;
+      }
 
-            // Back to white.
-            general.warnInputs(data, status);
-            general.resetInput(data);
+      // Back to white.
+      general.warnInputs(data, status);
+      general.resetInput(data);
 
-            let previousRowID;
+      let previousRowID;
 
-            if (itemType === "player") {
-                const scrollClass = scrollPlayers.attr("class").split(" ")[1];
-                const noneAvailableDiv = $(`.${scrollClass} .div-none-available-container`);
-                if (noneAvailableDiv) {
-                    scrollPlayers.removeClass("flex-center");
-                    noneAvailableDiv.remove();
-                }
+      if (itemType === "player") {
+        const scrollClass = scrollPlayers.attr("class").split(" ")[1];
+        const noneAvailableDiv = $(
+          `.${scrollClass} .div-none-available-container`
+        );
+        if (noneAvailableDiv) {
+          scrollPlayers.removeClass("flex-center");
+          noneAvailableDiv.remove();
+        }
 
-                previousRowID = +data["last_player_id"] || 0;
-                if (getCookie("last_team_player_id")) {
-                    if (+getCookie("last_team_player_id") < previousRowID) {
-                        previousRowID = +getCookie("last_team_player_id");
-                    }
-                }
+        previousRowID = +data["last_player_id"] || 0;
+        if (getCookie("last_team_player_id")) {
+          if (+getCookie("last_team_player_id") < previousRowID) {
+            previousRowID = +getCookie("last_team_player_id");
+          }
+        }
 
-                const sportID = data["sport_id"];
-                const teamID = data["team_id"];
-                const leagueName = data["league_name"];
-                const playerFirst = data["new_player_first"];
-                const playerLast = data["new_player_last"];
-                const fullName = `${playerFirst} ${playerLast}`;
-                const playerDOB = data["new_player_dob"];
-                const positionID = data["new_player_position_id"];
-                const positionName = data["new_player_position_name"];
-                const positionOption = `${positionID}|${positionName}`;
+        const sportID = data["sport_id"];
+        const teamID = data["team_id"];
+        const leagueName = data["league_name"];
+        const playerFirst = data["new_player_first"];
+        const playerLast = data["new_player_last"];
+        const fullName = `${playerFirst} ${playerLast}`;
+        const playerDOB = data["new_player_dob"];
+        const positionID = data["new_player_position_id"];
+        const positionName = data["new_player_position_name"];
+        const positionOption = `${positionID}|${positionName}`;
 
-                let distinctPositions = "";
-                for (const obj of data["distinct_positions"]) {
-                    const currOption = `${obj["position_id"]}|${obj["position_name"]}`;
-                    const selected = positionOption === currOption ? "selected" : "";
+        let distinctPositions = "";
+        for (const obj of data["distinct_positions"]) {
+          const currOption = `${obj["position_id"]}|${obj["position_name"]}`;
+          const selected = positionOption === currOption ? "selected" : "";
 
-                    distinctPositions += `
+          distinctPositions += `
                         <option value="${currOption}" ${selected}>
                             ${obj["position_name"]}
                         </option>
                     `;
-                }
+        }
 
-                const jerseyNumber = data["new_player_jersey_number"];
+        const jerseyNumber = data["new_player_jersey_number"];
 
-                scrollPlayers.append(`
+        scrollPlayers.append(`
                     <div class='div-row-container row-container-${++previousRowID}' data-row-id='${previousRowID}'>
                         <ul class='row-header-list custom-auto-3-column-grid'>
                             <li class='row-header-list-item'>
@@ -178,36 +180,38 @@ const ajaxAdd = function (clickEvent) {
                         </form>
                     </div>
                 `);
-            } else if (itemType === "user") {
-                const scrollClass = scrollStaff.attr("class").split(" ")[1];
-                const noneAvailableDiv = $(`.${scrollClass} .div-none-available-container`);
-                if (noneAvailableDiv) {
-                    scrollStaff.removeClass("flex-center");
-                    noneAvailableDiv.remove();
-                }
+      } else if (itemType === "user") {
+        const scrollClass = scrollStaff.attr("class").split(" ")[1];
+        const noneAvailableDiv = $(
+          `.${scrollClass} .div-none-available-container`
+        );
+        if (noneAvailableDiv) {
+          scrollStaff.removeClass("flex-center");
+          noneAvailableDiv.remove();
+        }
 
-                previousRowID = +data["last_user_id"] || 0;
-                if (getCookie("last_team_member_id")) {
-                    if (+getCookie("last_team_member_id") < previousRowID) {
-                        previousRowID = +getCookie("last_team_member_id");
-                    }
-                }
+        previousRowID = +data["last_user_id"] || 0;
+        if (getCookie("last_team_member_id")) {
+          if (+getCookie("last_team_member_id") < previousRowID) {
+            previousRowID = +getCookie("last_team_member_id");
+          }
+        }
 
-                const username = data["new_username"];
-                const roleID = data["new_user_role_id"];
-                const roleName = data["new_user_role_name"];
-                const roleOption = `${roleID}|${roleName}`;
-                const leagueName = data["new_user_league_name"];
-                const leagueID = data["new_user_league_id"];
-                const teamID = data["new_user_team_id"];
+        const username = data["new_username"];
+        const roleID = data["new_user_role_id"];
+        const roleName = data["new_user_role_name"];
+        const roleOption = `${roleID}|${roleName}`;
+        const leagueName = data["new_user_league_name"];
+        const leagueID = data["new_user_league_id"];
+        const teamID = data["new_user_team_id"];
 
-                let options = "";
-                for (const [key, value] of Object.entries(selectOptions)) {
-                    const selected = roleOption === value ? "selected" : "";
-                    options += `<option value="${value}" ${selected}>${key}</option>`;
-                }
+        let options = "";
+        for (const [key, value] of Object.entries(selectOptions)) {
+          const selected = roleOption === value ? "selected" : "";
+          options += `<option value="${value}" ${selected}>${key}</option>`;
+        }
 
-                scrollStaff.append(`
+        scrollStaff.append(`
                     <div class='div-row-container row-container-${++previousRowID}' data-row-id='${previousRowID}'>
                         <ul class='row-header-list custom-auto-3-column-grid'>
                             <li class='row-header-list-item'>
@@ -265,107 +269,119 @@ const ajaxAdd = function (clickEvent) {
                         </form>
                     </div>
                 `);
-            }
+      }
 
-            // Set NEW dropdown events.
-            general.attachEvent($(".row-header-list"), general.toggleDropdown);
+      // Set NEW dropdown events.
+      general.attachEvent($(".row-header-list"), general.toggleDropdown);
 
-            // Set NEW AJAX events.
-            general.attachEvent($(".btn-update"), ajaxUpdate);
-            general.attachEvent($(".btn-delete"), ajaxDelete);
+      // Set NEW AJAX events.
+      general.attachEvent($(".btn-update"), ajaxUpdate);
+      general.attachEvent($(".btn-delete"), ajaxDelete);
 
-            // Close popup.
-            general.toggleElement(relPopup, popupOverlay);
-        },
-    });
+      // Close popup.
+      general.toggleElement(relPopup, popupOverlay);
+    },
+  });
 };
 
 const ajaxUpdate = function (clickEvent) {
-    clickEvent.preventDefault();
+  clickEvent.preventDefault();
 
-    const relContainer = $(this.closest(".div-row-container"));
-    const relContainerClass = relContainer.attr("class").split(" ")[1];
-    const rowID = +relContainer.data("row-id");
-    const form = $(this.closest(".form"));
-    const url = form.attr("action");
-    const method = $(this).data("method");
-    const itemType = $(this).data("item-type");
+  const relContainer = $(this.closest(".div-row-container"));
+  const relContainerClass = relContainer.attr("class").split(" ")[1];
+  const rowID = +relContainer.data("row-id");
+  const form = $(this.closest(".form"));
+  const url = form.attr("action");
+  const method = $(this).data("method");
+  const itemType = $(this).data("item-type");
 
-    const data = {};
-    data["item_id"] = rowID;
-    data["item_type"] = itemType;
-    teamInputs["alter"][itemType].forEach((id) => {
-        data[`${id}_${rowID}`] = $(`#${id}_${rowID}`).val();
-    });
+  const data = {};
+  data["item_id"] = rowID;
+  data["item_type"] = itemType;
+  teamInputs["alter"][itemType].forEach((id) => {
+    data[`${id}_${rowID}`] = $(`#${id}_${rowID}`).val();
+  });
 
-    $.ajax({
-        url: url,
-        type: method,
-        data: JSON.stringify(data),
-        success: function (response) {
-            console.log(response);
-            const data = JSON.parse(response);
-            const status = data["status"];
+  $.ajax({
+    url: url,
+    type: method,
+    data: JSON.stringify(data),
+    success: function (response) {
+      console.log(response);
+      const data = JSON.parse(response);
+      const status = data["status"];
 
-            if (status === "fail") {
-                general.warnInputs(data, status);
-                return;
-            }
+      if (status === "fail") {
+        general.warnInputs(data, status);
+        return;
+      }
 
-            // Back to white.
-            general.warnInputs(data, status);
+      // Back to white.
+      general.warnInputs(data, status);
 
-            if (itemType === "player") {
-                const fullName = `${data[`player_first_${rowID}`]} ${data[`player_last_${rowID}`]}`;
-                $(`.${relContainerClass} .full-name`).text(fullName);
+      if (itemType === "player") {
+        const fullName = `${data[`player_first_${rowID}`]} ${
+          data[`player_last_${rowID}`]
+        }`;
+        $(`.${relContainerClass} .full-name`).text(fullName);
 
-                $(`.${relContainerClass} .position-name`).text(data["player_position_name"]);
-            } else if (itemType === "user") {
-                $(`.${relContainerClass} .staff-name`).text(data[`staff_username_${rowID}`]);
-                $(`.${relContainerClass} .staff-role`).text(data[`staff_role_name_${rowID}`]);
-            }
-        },
-    });
+        $(`.${relContainerClass} .position-name`).text(
+          data["player_position_name"]
+        );
+      } else if (itemType === "user") {
+        $(`.${relContainerClass} .staff-name`).text(
+          data[`staff_username_${rowID}`]
+        );
+        $(`.${relContainerClass} .staff-role`).text(
+          data[`staff_role_name_${rowID}`]
+        );
+      }
+    },
+  });
 };
 
 const ajaxDelete = function (clickEvent) {
-    clickEvent.preventDefault();
+  clickEvent.preventDefault();
 
-    const relContainer = $(this.closest(".div-row-container"));
-    const rowID = +relContainer.data("row-id");
-    const form = $(this.closest(".form"));
-    const url = form.attr("action");
-    const method = $(this).data("method");
-    const itemType = $(this).data("item-type");
+  const relContainer = $(this.closest(".div-row-container"));
+  const rowID = +relContainer.data("row-id");
+  const form = $(this.closest(".form"));
+  const url = form.attr("action");
+  const method = $(this).data("method");
+  const itemType = $(this).data("item-type");
 
-    const data = {};
-    data["item_id"] = rowID;
-    data["item_type"] = itemType;
+  const data = {};
+  data["item_id"] = rowID;
+  data["item_type"] = itemType;
 
-    $.ajax({
-        url: url,
-        type: method,
-        data: JSON.stringify(data),
-        success: function () {
-            let members = [];
-            const scrollContainer = itemType === "player" ? scrollPlayers : scrollStaff;
+  $.ajax({
+    url: url,
+    type: method,
+    data: JSON.stringify(data),
+    success: function () {
+      let members = [];
+      const scrollContainer =
+        itemType === "player" ? scrollPlayers : scrollStaff;
 
-            if (itemType === "user") {
-                if (+getCookie("user_id") === rowID) {
-                    window.open("logout", "_self");
-                }
-            }
+      if (itemType === "user") {
+        if (+getCookie("user_id") === rowID) {
+          window.open("logout", "_self");
+        }
+      }
 
-            members = getDataRowsOnly(scrollContainer);
-            setCookie(`last_team_${itemType}_id`, $(members[members.length - 1]).data("row-id"));
-            // Getting the last deleted row makes no sense... it kind of does.
+      members = getDataRowsOnly(scrollContainer);
+      setCookie(
+        `last_team_${itemType}_id`,
+        $(members[members.length - 1]).data("row-id")
+      );
+      // Getting the last deleted row makes no sense... it kind of does.
 
-            relContainer.remove();
+      relContainer.remove();
 
-            members = getDataRowsOnly(scrollContainer);
-            if (members.length === 0) {
-                scrollContainer.addClass("flex-center");
-                scrollContainer.append(`
+      members = getDataRowsOnly(scrollContainer);
+      if (members.length === 0) {
+        scrollContainer.addClass("flex-center");
+        scrollContainer.append(`
                     <div class='div-none-available-container'>
                         <ion-icon class='none-available-icon' name='alert-circle-outline'></ion-icon>
                         <div class='none-available-text'>
@@ -374,16 +390,16 @@ const ajaxDelete = function (clickEvent) {
                         </div>
                     </div>
                 `);
-            }
-        },
-    });
+      }
+    },
+  });
 };
 
 // ***** EVENT LISTENERS ***** //
 [...showPopupBtns, ...cancelBtns, ...closePopupBtns].forEach((btn) => {
-    $(btn)?.click(function () {
-        general.togglePopup(this, showPopups, popupOverlay);
-    });
+  $(btn)?.click(function () {
+    general.togglePopup(this, showPopups, popupOverlay);
+  });
 });
 
 // DROPDOWN EVENTS

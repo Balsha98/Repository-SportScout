@@ -1,5 +1,5 @@
-import * as general from "../helper/general.js";
-import { getCookie, setCookie } from "../helper/cookie.js";
+import * as general from "../helpers/general.js";
+import { getCookie, setCookie } from "../helpers/cookie.js";
 import { adminInputs } from "../data/inputs.js";
 
 // ***** DOM ELEMENTS ***** //
@@ -25,135 +25,135 @@ const deleteBtns = $(".btn-delete");
 
 // ***** FUNCTIONS ***** //
 const attachViewBtnEvent = function (btns) {
-    btns.each((_, btn) => {
-        $(btn).click(function () {
-            setCookie("view_team_by_id", +$(this).attr("href").split("/")[2]);
-        });
+  btns.each((_, btn) => {
+    $(btn).click(function () {
+      setCookie("view_team_by_id", +$(this).attr("href").split("/")[2]);
     });
+  });
 };
 
 const getDataRowsOnly = function (scrollContainer) {
-    let games = [];
-    scrollContainer.children().each((_, div) => {
-        const divClass = $(div).attr("class").split(" ")[0];
-        if (divClass === "div-row-container") games.push(div);
-    });
+  let games = [];
+  scrollContainer.children().each((_, div) => {
+    const divClass = $(div).attr("class").split(" ")[0];
+    if (divClass === "div-row-container") games.push(div);
+  });
 
-    return games;
+  return games;
 };
 
 const reloadWindow = function (seconds) {
-    setTimeout(() => {
-        location.reload();
-    }, seconds * 1000);
+  setTimeout(() => {
+    location.reload();
+  }, seconds * 1000);
 };
 
 const ajaxAdd = function (clickEvent) {
-    clickEvent.preventDefault();
+  clickEvent.preventDefault();
 
-    const relPopup = $(this.closest(".popup-show"));
-    const form = $(this.closest(".form"));
-    const url = form.attr("action");
-    const method = form.attr("method");
-    const itemType = $(this).data("item-type");
+  const relPopup = $(this.closest(".popup-show"));
+  const form = $(this.closest(".form"));
+  const url = form.attr("action");
+  const method = form.attr("method");
+  const itemType = $(this).data("item-type");
 
-    const data = {};
-    data["item_type"] = itemType;
-    adminInputs["add"][itemType].forEach((id) => {
-        data[id] = $(`#${id}`).val();
-    });
+  const data = {};
+  data["item_type"] = itemType;
+  adminInputs["add"][itemType].forEach((id) => {
+    data[id] = $(`#${id}`).val();
+  });
 
-    $.ajax({
-        url: url,
-        type: method,
-        data: JSON.stringify(data),
-        success: function (response) {
-            const data = JSON.parse(response);
-            const status = data["status"];
+  $.ajax({
+    url: url,
+    type: method,
+    data: JSON.stringify(data),
+    success: function (response) {
+      const data = JSON.parse(response);
+      const status = data["status"];
 
-            if (status === "fail") {
-                general.warnInputs(data, status);
-                return;
-            }
+      if (status === "fail") {
+        general.warnInputs(data, status);
+        return;
+      }
 
-            // Back to white.
-            general.warnInputs(data, status);
-            general.resetInput(data);
+      // Back to white.
+      general.warnInputs(data, status);
+      general.resetInput(data);
 
-            let previousRowID = 0;
+      let previousRowID = 0;
 
-            if (itemType === "user") {
-                // Checking for items.
-                const noneAvailable = $(".div-none-available-container");
-                if (noneAvailable) {
-                    scrollUsers.removeClass("flex-center");
-                    noneAvailable.remove();
-                }
+      if (itemType === "user") {
+        // Checking for items.
+        const noneAvailable = $(".div-none-available-container");
+        if (noneAvailable) {
+          scrollUsers.removeClass("flex-center");
+          noneAvailable.remove();
+        }
 
-                previousRowID = +data["last_user_id"] || 0;
-                if (getCookie("last_admin_user_id")) {
-                    if (+getCookie("last_admin_user_id") < previousRowID) {
-                        previousRowID = +getCookie("last_admin_user_id");
-                    }
-                }
+        previousRowID = +data["last_user_id"] || 0;
+        if (getCookie("last_admin_user_id")) {
+          if (+getCookie("last_admin_user_id") < previousRowID) {
+            previousRowID = +getCookie("last_admin_user_id");
+          }
+        }
 
-                const username = data["new_username"];
-                const roleID = data["new_user_role_id"];
-                const roleName = data["new_user_role_name"];
-                const roleOption = `${roleID}|${roleName}`;
+        const username = data["new_username"];
+        const roleID = data["new_user_role_id"];
+        const roleName = data["new_user_role_name"];
+        const roleOption = `${roleID}|${roleName}`;
 
-                let distinctRoles = "";
-                for (const obj of data["distinct_roles"]) {
-                    const currOption = `${obj["role_id"]}|${obj["role_name"]}`;
-                    const selected = roleOption === currOption ? "selected" : "";
+        let distinctRoles = "";
+        for (const obj of data["distinct_roles"]) {
+          const currOption = `${obj["role_id"]}|${obj["role_name"]}`;
+          const selected = roleOption === currOption ? "selected" : "";
 
-                    distinctRoles += `
+          distinctRoles += `
                         <option value="${currOption}" ${selected}>
                             ${obj["role_name"]}
                         </option>
                     `;
-                }
+        }
 
-                const leagueID = data["new_user_league_id"];
-                const leagueName = data["new_user_league_name"];
-                const leagueOption = `${leagueID}|${leagueName}`;
+        const leagueID = data["new_user_league_id"];
+        const leagueName = data["new_user_league_name"];
+        const leagueOption = `${leagueID}|${leagueName}`;
 
-                let distinctLeagues = "";
-                const leaguesArray = [];
-                leaguesArray.push({ league_id: 0, league_name: "All" });
-                data["distinct_leagues"].forEach((obj) => leaguesArray.push(obj));
-                for (const obj of leaguesArray) {
-                    const currOption = `${obj["league_id"]}|${obj["league_name"]}`;
-                    const selected = leagueOption === currOption ? "selected" : "";
+        let distinctLeagues = "";
+        const leaguesArray = [];
+        leaguesArray.push({ league_id: 0, league_name: "All" });
+        data["distinct_leagues"].forEach((obj) => leaguesArray.push(obj));
+        for (const obj of leaguesArray) {
+          const currOption = `${obj["league_id"]}|${obj["league_name"]}`;
+          const selected = leagueOption === currOption ? "selected" : "";
 
-                    distinctLeagues += `
+          distinctLeagues += `
                         <option value="${currOption}" ${selected}>
                             ${obj["league_name"]}
                         </option>
                     `;
-                }
+        }
 
-                const teamID = data["new_user_team_id"];
-                const teamName = data["new_user_team_name"];
-                const teamOption = `${teamID}|${teamName}`;
+        const teamID = data["new_user_team_id"];
+        const teamName = data["new_user_team_name"];
+        const teamOption = `${teamID}|${teamName}`;
 
-                let distinctTeams = "";
-                const teamsArray = [];
-                teamsArray.push({ team_id: 0, team_name: "All" });
-                teamsArray.push({ team_id: 0, team_name: "All Within The League" });
-                data["distinct_teams"].forEach((obj) => teamsArray.push(obj));
-                for (const obj of teamsArray) {
-                    const currOption = `${obj["team_id"]}|${obj["team_name"]}`;
-                    const selected = teamOption === currOption ? "selected" : "";
+        let distinctTeams = "";
+        const teamsArray = [];
+        teamsArray.push({ team_id: 0, team_name: "All" });
+        teamsArray.push({ team_id: 0, team_name: "All Within The League" });
+        data["distinct_teams"].forEach((obj) => teamsArray.push(obj));
+        for (const obj of teamsArray) {
+          const currOption = `${obj["team_id"]}|${obj["team_name"]}`;
+          const selected = teamOption === currOption ? "selected" : "";
 
-                    distinctTeams += `
+          distinctTeams += `
                         <option value="${currOption}" ${selected}>
                             ${obj["team_name"]}
                         </option>
                     `;
-                }
+        }
 
-                scrollUsers.append(`
+        scrollUsers.append(`
                     <div class='div-row-container user-row-container-${++previousRowID}' data-row-id='${previousRowID}'>
                         <ul class='row-header-list grid-4-columns'>
                             <li class='row-header-list-item'>
@@ -209,24 +209,24 @@ const ajaxAdd = function (clickEvent) {
                         </form>
                     </div>    
                 `);
-            } else if (itemType === "sport") {
-                // Checking for items.
-                const noneAvailable = $(".div-none-available-container");
-                if (noneAvailable) {
-                    scrollSports.removeClass("flex-center");
-                    noneAvailable.remove();
-                }
+      } else if (itemType === "sport") {
+        // Checking for items.
+        const noneAvailable = $(".div-none-available-container");
+        if (noneAvailable) {
+          scrollSports.removeClass("flex-center");
+          noneAvailable.remove();
+        }
 
-                previousRowID = +data["last_sport_id"] || 0;
-                if (getCookie("last_admin_sport_id")) {
-                    if (+getCookie("last_admin_sport_id") < previousRowID) {
-                        previousRowID = +getCookie("last_admin_sport_id");
-                    }
-                }
+        previousRowID = +data["last_sport_id"] || 0;
+        if (getCookie("last_admin_sport_id")) {
+          if (+getCookie("last_admin_sport_id") < previousRowID) {
+            previousRowID = +getCookie("last_admin_sport_id");
+          }
+        }
 
-                const sportName = data["new_sport_name"];
+        const sportName = data["new_sport_name"];
 
-                scrollSports.append(`
+        scrollSports.append(`
                     <div class='div-row-container sport-row-container-${++previousRowID}' data-row-id='${previousRowID}'>
                         <ul class='row-header-list grid-3-columns'>
                             <li class='row-header-list-item'>
@@ -259,39 +259,39 @@ const ajaxAdd = function (clickEvent) {
                         </form>
                     </div>
                 `);
-            } else if (itemType === "league") {
-                // Checking for items.
-                const noneAvailable = $(".div-none-available-container");
-                if (noneAvailable) {
-                    scrollLeagues.removeClass("flex-center");
-                    noneAvailable.remove();
-                }
+      } else if (itemType === "league") {
+        // Checking for items.
+        const noneAvailable = $(".div-none-available-container");
+        if (noneAvailable) {
+          scrollLeagues.removeClass("flex-center");
+          noneAvailable.remove();
+        }
 
-                previousRowID = +data["last_league_id"] || 0;
-                if (getCookie("last_admin_league_id")) {
-                    if (+getCookie("last_admin_league_id") < previousRowID) {
-                        previousRowID = +getCookie("last_admin_league_id");
-                    }
-                }
+        previousRowID = +data["last_league_id"] || 0;
+        if (getCookie("last_admin_league_id")) {
+          if (+getCookie("last_admin_league_id") < previousRowID) {
+            previousRowID = +getCookie("last_admin_league_id");
+          }
+        }
 
-                const leagueName = data["new_league_name"];
-                const sportID = data["new_league_sport_id"];
-                const sportName = data["league_sport_name"];
-                const sportOption = `${sportID}|${sportName}`;
+        const leagueName = data["new_league_name"];
+        const sportID = data["new_league_sport_id"];
+        const sportName = data["league_sport_name"];
+        const sportOption = `${sportID}|${sportName}`;
 
-                let distinctSports = "";
-                for (const obj of data["distinct_sports"]) {
-                    const currOption = `${obj["sport_id"]}|${obj["sport_name"]}`;
-                    const selected = sportOption === currOption ? "selected" : "";
+        let distinctSports = "";
+        for (const obj of data["distinct_sports"]) {
+          const currOption = `${obj["sport_id"]}|${obj["sport_name"]}`;
+          const selected = sportOption === currOption ? "selected" : "";
 
-                    distinctSports += `
+          distinctSports += `
                         <option value="${currOption}" ${selected}>
                             ${obj["sport_name"]}
                         </option>
                     `;
-                }
+        }
 
-                scrollLeagues.append(`
+        scrollLeagues.append(`
                     <div class='div-row-container league-row-container-${++previousRowID}' data-row-id='${previousRowID}'>
                         <ul class='row-header-list grid-3-columns'>
                             <li class='row-header-list-item'>
@@ -328,57 +328,57 @@ const ajaxAdd = function (clickEvent) {
                         </form>
                     </div>
                 `);
-            } else if (itemType === "season") {
-                // Checking for items.
-                const noneAvailable = $(".div-none-available-container");
-                if (noneAvailable) {
-                    scrollSeasons.removeClass("flex-center");
-                    noneAvailable.remove();
-                }
+      } else if (itemType === "season") {
+        // Checking for items.
+        const noneAvailable = $(".div-none-available-container");
+        if (noneAvailable) {
+          scrollSeasons.removeClass("flex-center");
+          noneAvailable.remove();
+        }
 
-                previousRowID = +data["last_season_id"] || 0;
-                if (getCookie("last_admin_season_id")) {
-                    if (+getCookie("last_admin_season_id") < previousRowID) {
-                        previousRowID = +getCookie("last_admin_season_id");
-                    }
-                }
+        previousRowID = +data["last_season_id"] || 0;
+        if (getCookie("last_admin_season_id")) {
+          if (+getCookie("last_admin_season_id") < previousRowID) {
+            previousRowID = +getCookie("last_admin_season_id");
+          }
+        }
 
-                const seasonYear = data["new_season_year"];
-                const sportID = data["new_season_sport_id"];
-                const sportName = data["season_sport_name"];
-                const sportOption = `${sportID}|${sportName}`;
+        const seasonYear = data["new_season_year"];
+        const sportID = data["new_season_sport_id"];
+        const sportName = data["season_sport_name"];
+        const sportOption = `${sportID}|${sportName}`;
 
-                let distinctSports = "";
-                for (const obj of data["distinct_sports"]) {
-                    const currOption = `${obj["sport_id"]}|${obj["sport_name"]}`;
-                    const selected = sportOption === currOption ? "selected" : "";
+        let distinctSports = "";
+        for (const obj of data["distinct_sports"]) {
+          const currOption = `${obj["sport_id"]}|${obj["sport_name"]}`;
+          const selected = sportOption === currOption ? "selected" : "";
 
-                    distinctSports += `
+          distinctSports += `
                         <option value="${currOption}" ${selected}>
                             ${obj["sport_name"]}
                         </option>
                     `;
-                }
+        }
 
-                const leagueID = data["new_season_league_id"];
-                const leagueName = data["season_league_name"];
-                const leagueOption = `${leagueID}|${leagueName}`;
+        const leagueID = data["new_season_league_id"];
+        const leagueName = data["season_league_name"];
+        const leagueOption = `${leagueID}|${leagueName}`;
 
-                let distinctLeagues = "";
-                for (const obj of data["distinct_leagues"]) {
-                    const currOption = `${obj["league_id"]}|${obj["league_name"]}`;
-                    const selected = leagueOption === currOption ? "selected" : "";
+        let distinctLeagues = "";
+        for (const obj of data["distinct_leagues"]) {
+          const currOption = `${obj["league_id"]}|${obj["league_name"]}`;
+          const selected = leagueOption === currOption ? "selected" : "";
 
-                    distinctLeagues += `
+          distinctLeagues += `
                         <option value="${currOption}" ${selected}>
                             ${obj["league_name"]}
                         </option>
                     `;
-                }
+        }
 
-                const seasonDesc = data["new_season_desc"];
+        const seasonDesc = data["new_season_desc"];
 
-                scrollSeasons.append(`
+        scrollSeasons.append(`
                     <div class='div-row-container season-row-container-${++previousRowID}' data-row-id='${previousRowID}'>
                         <ul class='row-header-list grid-4-columns'>
                             <li class='row-header-list-item'>
@@ -431,61 +431,61 @@ const ajaxAdd = function (clickEvent) {
                         </form>
                     </div>
                 `);
-            } else if (itemType === "team") {
-                // Checking for items.
-                const noneAvailable = $(".div-none-available-container");
-                if (noneAvailable) {
-                    scrollTeams.removeClass("flex-center");
-                    noneAvailable.remove();
-                }
+      } else if (itemType === "team") {
+        // Checking for items.
+        const noneAvailable = $(".div-none-available-container");
+        if (noneAvailable) {
+          scrollTeams.removeClass("flex-center");
+          noneAvailable.remove();
+        }
 
-                previousRowID = +data["last_team_id"] || 0;
-                if (getCookie("last_admin_team_id")) {
-                    if (+getCookie("last_admin_team_id") < previousRowID) {
-                        previousRowID = +getCookie("last_admin_team_id");
-                    }
-                }
+        previousRowID = +data["last_team_id"] || 0;
+        if (getCookie("last_admin_team_id")) {
+          if (+getCookie("last_admin_team_id") < previousRowID) {
+            previousRowID = +getCookie("last_admin_team_id");
+          }
+        }
 
-                const teamName = data["new_team_name"];
-                const sportID = data["new_team_sport_id"];
-                const sportName = data["team_sport_name"];
-                const leagueID = data["new_team_league_id"];
-                const leagueName = data["team_league_name"];
-                const leagueOption = `${leagueID}|${leagueName}`;
+        const teamName = data["new_team_name"];
+        const sportID = data["new_team_sport_id"];
+        const sportName = data["team_sport_name"];
+        const leagueID = data["new_team_league_id"];
+        const leagueName = data["team_league_name"];
+        const leagueOption = `${leagueID}|${leagueName}`;
 
-                let distinctLeagues = "";
-                for (const obj of data["distinct_leagues"]) {
-                    const currOption = `${obj["league_id"]}|${obj["league_name"]}`;
-                    const selected = leagueOption === currOption ? "selected" : "";
+        let distinctLeagues = "";
+        for (const obj of data["distinct_leagues"]) {
+          const currOption = `${obj["league_id"]}|${obj["league_name"]}`;
+          const selected = leagueOption === currOption ? "selected" : "";
 
-                    distinctLeagues += `
+          distinctLeagues += `
                         <option value="${currOption}" ${selected}>
                             ${obj["league_name"]}
                         </option>
                     `;
-                }
+        }
 
-                const seasonID = data["new_team_season_id"];
-                const seasonYear = data["team_season_year"];
-                const seasonOption = `${seasonID}|${seasonYear}`;
+        const seasonID = data["new_team_season_id"];
+        const seasonYear = data["team_season_year"];
+        const seasonOption = `${seasonID}|${seasonYear}`;
 
-                let distinctSeasons = "";
-                for (const obj of data["distinct_seasons"]) {
-                    const currOption = `${obj["season_id"]}|${obj["season_year"]}`;
-                    const selected = seasonOption === currOption ? "selected" : "";
+        let distinctSeasons = "";
+        for (const obj of data["distinct_seasons"]) {
+          const currOption = `${obj["season_id"]}|${obj["season_year"]}`;
+          const selected = seasonOption === currOption ? "selected" : "";
 
-                    distinctSeasons += `
+          distinctSeasons += `
                         <option value="${currOption}" ${selected}>
                             ${obj["season_year"]}
                         </option>
                     `;
-                }
+        }
 
-                const maxPlayers = data["new_team_max_players"];
-                const homeColors = data["new_team_home_color"];
-                const awayColors = data["new_team_away_color"];
+        const maxPlayers = data["new_team_max_players"];
+        const homeColors = data["new_team_home_color"];
+        const awayColors = data["new_team_away_color"];
 
-                scrollTeams.append(`
+        scrollTeams.append(`
                     <div class='div-row-container team-row-container-${++previousRowID}' data-row-id='${previousRowID}'>
                         <ul class='row-header-list grid-5-columns'>
                             <li class='row-header-list-item'>
@@ -562,40 +562,40 @@ const ajaxAdd = function (clickEvent) {
                     </div>
                 `);
 
-                attachViewBtnEvent($(".btn-view"));
-            } else if (itemType === "position") {
-                // Checking for items.
-                const noneAvailable = $(".div-none-available-container");
-                if (noneAvailable) {
-                    scrollTeams.removeClass("flex-center");
-                    noneAvailable.remove();
-                }
+        attachViewBtnEvent($(".btn-view"));
+      } else if (itemType === "position") {
+        // Checking for items.
+        const noneAvailable = $(".div-none-available-container");
+        if (noneAvailable) {
+          scrollTeams.removeClass("flex-center");
+          noneAvailable.remove();
+        }
 
-                previousRowID = +data["last_position_id"] || 0;
-                if (getCookie("last_admin_position_id")) {
-                    if (+getCookie("last_admin_position_id") < previousRowID) {
-                        previousRowID = +getCookie("last_admin_position_id");
-                    }
-                }
+        previousRowID = +data["last_position_id"] || 0;
+        if (getCookie("last_admin_position_id")) {
+          if (+getCookie("last_admin_position_id") < previousRowID) {
+            previousRowID = +getCookie("last_admin_position_id");
+          }
+        }
 
-                const positionName = data["new_position_name"];
-                const sportID = data["new_position_sport_id"];
-                const sportName = data["position_sport_name"];
-                const sportOption = `${sportID}|${sportName}`;
+        const positionName = data["new_position_name"];
+        const sportID = data["new_position_sport_id"];
+        const sportName = data["position_sport_name"];
+        const sportOption = `${sportID}|${sportName}`;
 
-                let distinctSports = "";
-                for (const obj of data["distinct_sports"]) {
-                    const currOption = `${obj["sport_id"]}|${obj["sport_name"]}`;
-                    const selected = sportOption === currOption ? "selected" : "";
+        let distinctSports = "";
+        for (const obj of data["distinct_sports"]) {
+          const currOption = `${obj["sport_id"]}|${obj["sport_name"]}`;
+          const selected = sportOption === currOption ? "selected" : "";
 
-                    distinctSports += `
+          distinctSports += `
                         <option value="${currOption}" ${selected}>
                             ${obj["sport_name"]}
                         </option>
                     `;
-                }
+        }
 
-                scrollPositions.append(`
+        scrollPositions.append(`
                     <div class='div-row-container position-row-container-${++previousRowID}' data-row-id='${previousRowID}'>
                         <ul class='row-header-list grid-3-columns'>
                             <li class='row-header-list-item'>
@@ -632,153 +632,174 @@ const ajaxAdd = function (clickEvent) {
                         </form>
                     </div>
                 `);
-            }
+      }
 
-            general.attachEvent($(".row-header-list"), general.toggleDropdown);
+      general.attachEvent($(".row-header-list"), general.toggleDropdown);
 
-            // Reattach ajax events.
-            general.attachEvent($(".btn-update"), ajaxUpdate);
-            general.attachEvent($(".btn-delete"), ajaxDelete);
+      // Reattach ajax events.
+      general.attachEvent($(".btn-update"), ajaxUpdate);
+      general.attachEvent($(".btn-delete"), ajaxDelete);
 
-            // Hide popup.
-            general.toggleElement(relPopup, popupOverlay);
-        },
-    });
+      // Hide popup.
+      general.toggleElement(relPopup, popupOverlay);
+    },
+  });
 };
 
 const ajaxUpdate = function (clickEvent) {
-    clickEvent.preventDefault();
+  clickEvent.preventDefault();
 
-    const relContainer = $(this.closest(".div-row-container"));
-    const relContainerClass = relContainer.attr("class").split(" ")[1];
-    const rowID = +relContainer.data("row-id");
-    const form = $(this.closest(".form"));
-    const url = form.attr("action");
-    const method = $(this).data("method");
-    const itemType = $(this).data("item-type");
+  const relContainer = $(this.closest(".div-row-container"));
+  const relContainerClass = relContainer.attr("class").split(" ")[1];
+  const rowID = +relContainer.data("row-id");
+  const form = $(this.closest(".form"));
+  const url = form.attr("action");
+  const method = $(this).data("method");
+  const itemType = $(this).data("item-type");
 
-    const data = {};
-    data["item_type"] = itemType;
-    data["item_id"] = rowID;
-    adminInputs["alter"][itemType].forEach((id) => {
-        data[`${id}_${rowID}`] = $(`#${id}_${rowID}`).val();
-    });
+  const data = {};
+  data["item_type"] = itemType;
+  data["item_id"] = rowID;
+  adminInputs["alter"][itemType].forEach((id) => {
+    data[`${id}_${rowID}`] = $(`#${id}_${rowID}`).val();
+  });
 
-    $.ajax({
-        url: url,
-        type: method,
-        data: JSON.stringify(data),
-        success: function (response) {
-            console.log(response);
-            const data = JSON.parse(response);
-            const status = data["status"];
+  $.ajax({
+    url: url,
+    type: method,
+    data: JSON.stringify(data),
+    success: function (response) {
+      console.log(response);
+      const data = JSON.parse(response);
+      const status = data["status"];
 
-            // Guard clause.
-            if (status === "fail") {
-                general.warnInputs(data, status);
-                return;
-            }
+      // Guard clause.
+      if (status === "fail") {
+        general.warnInputs(data, status);
+        return;
+      }
 
-            // Back to white.
-            general.warnInputs(data, status);
+      // Back to white.
+      general.warnInputs(data, status);
 
-            if (itemType === "user") {
-                const username = data[`username_${rowID}`];
-                $(`.${relContainerClass} .username`).text(username);
-                if (rowID === +getCookie("user_id")) {
-                    setCookie("new_username", username);
-                    $(".span-username").text(username);
-                }
+      if (itemType === "user") {
+        const username = data[`username_${rowID}`];
+        $(`.${relContainerClass} .username`).text(username);
+        if (rowID === +getCookie("user_id")) {
+          setCookie("new_username", username);
+          $(".span-username").text(username);
+        }
 
-                const newRoleID = +data["role_id"];
-                const oldRoleID = $(`.${relContainerClass} .role-name`).data("old-role-id");
-                $(`.${relContainerClass} .role-name`).data("old-role-id", newRoleID);
+        const newRoleID = +data["role_id"];
+        const oldRoleID = $(`.${relContainerClass} .role-name`).data(
+          "old-role-id"
+        );
+        $(`.${relContainerClass} .role-name`).data("old-role-id", newRoleID);
 
-                if (rowID === +getCookie("user_id")) {
-                    if (oldRoleID !== newRoleID) {
-                        setCookie("new_role_id", newRoleID);
-                        reloadWindow(1);
-                    }
-                }
+        if (rowID === +getCookie("user_id")) {
+          if (oldRoleID !== newRoleID) {
+            setCookie("new_role_id", newRoleID);
+            reloadWindow(1);
+          }
+        }
 
-                $(`.${relContainerClass} .role-name`).text(data[`user_role_name_${rowID}`]);
-            } else if (itemType === "sport") {
-                $(`.${relContainerClass} .sport-name`).text(data[`sport_name_${rowID}`]);
-                reloadWindow(1);
-            } else if (itemType === "league") {
-                $(`.${relContainerClass} .league-name`).text(data[`league_name_${rowID}`]);
-                reloadWindow(1);
-            } else if (itemType === "season") {
-                $(`.${relContainerClass} .season-year`).text(data[`season_year_${rowID}`]);
-                $(`.${relContainerClass} .season-desc`).text(data[`season_desc_${rowID}`]);
-                reloadWindow(1);
-            } else if (itemType === "team") {
-                $(`.${relContainerClass} .team-name`).text(data[`team_name_${rowID}`]);
-                $(`.${relContainerClass} .league-name`).text(data[`team_league_name_${rowID}`]);
-                $(`.${relContainerClass} .season-year`).text(data[`team_season_year_${rowID}`]);
-                reloadWindow(1);
-            } else if (itemType === "position") {
-                $(`.${relContainerClass} .position-name`).text(data[`position_name_${rowID}`]);
-            }
-        },
-    });
+        $(`.${relContainerClass} .role-name`).text(
+          data[`user_role_name_${rowID}`]
+        );
+      } else if (itemType === "sport") {
+        $(`.${relContainerClass} .sport-name`).text(
+          data[`sport_name_${rowID}`]
+        );
+        reloadWindow(1);
+      } else if (itemType === "league") {
+        $(`.${relContainerClass} .league-name`).text(
+          data[`league_name_${rowID}`]
+        );
+        reloadWindow(1);
+      } else if (itemType === "season") {
+        $(`.${relContainerClass} .season-year`).text(
+          data[`season_year_${rowID}`]
+        );
+        $(`.${relContainerClass} .season-desc`).text(
+          data[`season_desc_${rowID}`]
+        );
+        reloadWindow(1);
+      } else if (itemType === "team") {
+        $(`.${relContainerClass} .team-name`).text(data[`team_name_${rowID}`]);
+        $(`.${relContainerClass} .league-name`).text(
+          data[`team_league_name_${rowID}`]
+        );
+        $(`.${relContainerClass} .season-year`).text(
+          data[`team_season_year_${rowID}`]
+        );
+        reloadWindow(1);
+      } else if (itemType === "position") {
+        $(`.${relContainerClass} .position-name`).text(
+          data[`position_name_${rowID}`]
+        );
+      }
+    },
+  });
 };
 
 const ajaxDelete = function (clickEvent) {
-    clickEvent.preventDefault();
+  clickEvent.preventDefault();
 
-    const relContainer = $(this.closest(".div-row-container"));
-    const rowID = +relContainer.data("row-id");
-    const form = $(this.closest(".form"));
-    const url = form.attr("action");
-    const method = $(this).data("method");
-    const itemType = $(this).data("item-type");
+  const relContainer = $(this.closest(".div-row-container"));
+  const rowID = +relContainer.data("row-id");
+  const form = $(this.closest(".form"));
+  const url = form.attr("action");
+  const method = $(this).data("method");
+  const itemType = $(this).data("item-type");
 
-    const data = {};
-    data["item_type"] = itemType;
-    data["item_id"] = rowID;
+  const data = {};
+  data["item_type"] = itemType;
+  data["item_id"] = rowID;
 
-    $.ajax({
-        url: url,
-        type: method,
-        data: JSON.stringify(data),
-        success: function (response) {
-            console.log(response);
-            let scrollContainer;
-            let members = [];
+  $.ajax({
+    url: url,
+    type: method,
+    data: JSON.stringify(data),
+    success: function (response) {
+      console.log(response);
+      let scrollContainer;
+      let members = [];
 
-            if (itemType === "user") {
-                if (rowID === +getCookie("user_id")) {
-                    window.open("logout", "_self");
-                    return;
-                }
+      if (itemType === "user") {
+        if (rowID === +getCookie("user_id")) {
+          window.open("logout", "_self");
+          return;
+        }
 
-                scrollContainer = scrollUsers;
-            } else if (itemType === "sport") {
-                scrollContainer = scrollSports;
-            } else if (itemType === "league") {
-                scrollContainer = scrollLeagues;
-            } else if (itemType === "season") {
-                scrollContainer = scrollSeasons;
-            } else if (itemType === "team") {
-                scrollContainer = scrollTeams;
-            } else if (itemType === "position") {
-                scrollContainer = scrollPositions;
-            }
+        scrollContainer = scrollUsers;
+      } else if (itemType === "sport") {
+        scrollContainer = scrollSports;
+      } else if (itemType === "league") {
+        scrollContainer = scrollLeagues;
+      } else if (itemType === "season") {
+        scrollContainer = scrollSeasons;
+      } else if (itemType === "team") {
+        scrollContainer = scrollTeams;
+      } else if (itemType === "position") {
+        scrollContainer = scrollPositions;
+      }
 
-            if (itemType !== "user" && itemType !== "position") reloadWindow(1);
+      if (itemType !== "user" && itemType !== "position") reloadWindow(1);
 
-            members = getDataRowsOnly(scrollContainer);
-            setCookie(`last_admin_${itemType}_id`, $(members[members.length - 1]).data("row-id"));
-            // setCookie(`last_${cookieKey}_id`, relContainer.data("row-id"));
-            // Getting the last deleted row makes no sense... it kind of does.
+      members = getDataRowsOnly(scrollContainer);
+      setCookie(
+        `last_admin_${itemType}_id`,
+        $(members[members.length - 1]).data("row-id")
+      );
+      // setCookie(`last_${cookieKey}_id`, relContainer.data("row-id"));
+      // Getting the last deleted row makes no sense... it kind of does.
 
-            relContainer.remove();
+      relContainer.remove();
 
-            members = getDataRowsOnly(scrollContainer);
-            if (members.length === 0) {
-                scrollContainer.addClass("flex-center");
-                scrollContainer.append(`
+      members = getDataRowsOnly(scrollContainer);
+      if (members.length === 0) {
+        scrollContainer.addClass("flex-center");
+        scrollContainer.append(`
                     <div class='div-none-available-container'>
                         <ion-icon class='none-available-icon' name='alert-circle-outline'></ion-icon>
                         <div class='none-available-text'>
@@ -787,42 +808,42 @@ const ajaxDelete = function (clickEvent) {
                         </div>
                     </div>
                 `);
-            }
-        },
-    });
+      }
+    },
+  });
 };
 
 // ***** EVENT LISTENERS ***** //
 [...showPopupBtns, ...cancelBtns, ...popupCloseBtns].forEach((btn) => {
-    $(btn).click(function () {
-        general.togglePopup(this, showPopups, popupOverlay);
-    });
+  $(btn).click(function () {
+    general.togglePopup(this, showPopups, popupOverlay);
+  });
 });
 
 sidebarBtns.each((_, btn) => {
-    $(btn).click(function () {
-        if (!noneSelectedDiv.hasClass("hide-element")) {
-            noneSelectedDiv.addClass("hide-element");
-        }
+  $(btn).click(function () {
+    if (!noneSelectedDiv.hasClass("hide-element")) {
+      noneSelectedDiv.addClass("hide-element");
+    }
 
-        sidebarBtns.each((_, btn) => {
-            $(btn).removeClass("active-btn");
-        });
-
-        $(this).addClass("active-btn");
-
-        const currContainerIndex = +$(this).data("container-index");
-        dataContainerDivs.each((_, div) => {
-            const relContainerIndex = +$(div).data("container-index");
-            if (relContainerIndex === currContainerIndex) {
-                $(div).removeClass("hide-element");
-            } else {
-                if (!$(div).hasClass("hide-element")) {
-                    $(div).addClass("hide-element");
-                }
-            }
-        });
+    sidebarBtns.each((_, btn) => {
+      $(btn).removeClass("active-btn");
     });
+
+    $(this).addClass("active-btn");
+
+    const currContainerIndex = +$(this).data("container-index");
+    dataContainerDivs.each((_, div) => {
+      const relContainerIndex = +$(div).data("container-index");
+      if (relContainerIndex === currContainerIndex) {
+        $(div).removeClass("hide-element");
+      } else {
+        if (!$(div).hasClass("hide-element")) {
+          $(div).addClass("hide-element");
+        }
+      }
+    });
+  });
 });
 
 // Dropdown event.
