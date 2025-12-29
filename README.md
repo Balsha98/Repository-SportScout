@@ -92,7 +92,7 @@ mysql -u root -p sport_scout < assets/sql/sportscout.sql
 6. Access the application:
 
 ```
-http://localhost/your-directory
+http://localhost/local-repository-directory
 ```
 
 ## Getting Started
