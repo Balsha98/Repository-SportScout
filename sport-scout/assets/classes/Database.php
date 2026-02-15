@@ -15,7 +15,7 @@ class Database
     public static function getInstance()
     {
         if (!isset(self::$instance)) {
-            self::$instance = new Database('sql108.infinityfree.com', 'if0_41165957_sport_scout', 'if0_41165957', 'personalprojects');
+            self::$instance = new Database('localhost', 'sport_scout', 'root', '');
         }
 
         return self::$instance;
